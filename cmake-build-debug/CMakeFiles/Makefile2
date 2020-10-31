@@ -94,12 +94,12 @@ clean: CMakeFiles/teninrow.dir/clean
 CMakeFiles/teninrow.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/alex/code/ten-in-row/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4 "Built target teninrow"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/alex/code/ten-in-row/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9 "Built target teninrow"
 .PHONY : CMakeFiles/teninrow.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/teninrow.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/alex/code/ten-in-row/cmake-build-debug/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/alex/code/ten-in-row/cmake-build-debug/CMakeFiles 9
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/teninrow.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/alex/code/ten-in-row/cmake-build-debug/CMakeFiles 0
 .PHONY : CMakeFiles/teninrow.dir/rule

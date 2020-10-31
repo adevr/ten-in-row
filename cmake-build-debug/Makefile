@@ -143,6 +143,60 @@ teninrow/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/build
 .PHONY : teninrow/fast
 
+Administrador.o: Administrador.c.o
+
+.PHONY : Administrador.o
+
+# target to build an object file
+Administrador.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/Administrador.c.o
+.PHONY : Administrador.c.o
+
+Administrador.i: Administrador.c.i
+
+.PHONY : Administrador.i
+
+# target to preprocess a source file
+Administrador.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/Administrador.c.i
+.PHONY : Administrador.c.i
+
+Administrador.s: Administrador.c.s
+
+.PHONY : Administrador.s
+
+# target to generate assembly for a file
+Administrador.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/Administrador.c.s
+.PHONY : Administrador.c.s
+
+Arbitro.o: Arbitro.c.o
+
+.PHONY : Arbitro.o
+
+# target to build an object file
+Arbitro.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/Arbitro.c.o
+.PHONY : Arbitro.c.o
+
+Arbitro.i: Arbitro.c.i
+
+.PHONY : Arbitro.i
+
+# target to preprocess a source file
+Arbitro.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/Arbitro.c.i
+.PHONY : Arbitro.c.i
+
+Arbitro.s: Arbitro.c.s
+
+.PHONY : Arbitro.s
+
+# target to generate assembly for a file
+Arbitro.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/Arbitro.c.s
+.PHONY : Arbitro.c.s
+
 Campeonato.o: Campeonato.c.o
 
 .PHONY : Campeonato.o
@@ -170,6 +224,33 @@ Campeonato.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/Campeonato.c.s
 .PHONY : Campeonato.c.s
 
+Cliente.o: Cliente.c.o
+
+.PHONY : Cliente.o
+
+# target to build an object file
+Cliente.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/Cliente.c.o
+.PHONY : Cliente.c.o
+
+Cliente.i: Cliente.c.i
+
+.PHONY : Cliente.i
+
+# target to preprocess a source file
+Cliente.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/Cliente.c.i
+.PHONY : Cliente.c.i
+
+Cliente.s: Cliente.c.s
+
+.PHONY : Cliente.s
+
+# target to generate assembly for a file
+Cliente.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/Cliente.c.s
+.PHONY : Cliente.c.s
+
 Jogador.o: Jogador.c.o
 
 .PHONY : Jogador.o
@@ -196,6 +277,60 @@ Jogador.s: Jogador.c.s
 Jogador.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/Jogador.c.s
 .PHONY : Jogador.c.s
+
+Jogo.o: Jogo.c.o
+
+.PHONY : Jogo.o
+
+# target to build an object file
+Jogo.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/Jogo.c.o
+.PHONY : Jogo.c.o
+
+Jogo.i: Jogo.c.i
+
+.PHONY : Jogo.i
+
+# target to preprocess a source file
+Jogo.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/Jogo.c.i
+.PHONY : Jogo.c.i
+
+Jogo.s: Jogo.c.s
+
+.PHONY : Jogo.s
+
+# target to generate assembly for a file
+Jogo.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/Jogo.c.s
+.PHONY : Jogo.c.s
+
+JogosCliente.o: JogosCliente.c.o
+
+.PHONY : JogosCliente.o
+
+# target to build an object file
+JogosCliente.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/JogosCliente.c.o
+.PHONY : JogosCliente.c.o
+
+JogosCliente.i: JogosCliente.c.i
+
+.PHONY : JogosCliente.i
+
+# target to preprocess a source file
+JogosCliente.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/JogosCliente.c.i
+.PHONY : JogosCliente.c.i
+
+JogosCliente.s: JogosCliente.c.s
+
+.PHONY : JogosCliente.s
+
+# target to generate assembly for a file
+JogosCliente.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/JogosCliente.c.s
+.PHONY : JogosCliente.c.s
 
 main.o: main.c.o
 
@@ -233,12 +368,27 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... teninrow"
+	@echo "... Administrador.o"
+	@echo "... Administrador.i"
+	@echo "... Administrador.s"
+	@echo "... Arbitro.o"
+	@echo "... Arbitro.i"
+	@echo "... Arbitro.s"
 	@echo "... Campeonato.o"
 	@echo "... Campeonato.i"
 	@echo "... Campeonato.s"
+	@echo "... Cliente.o"
+	@echo "... Cliente.i"
+	@echo "... Cliente.s"
 	@echo "... Jogador.o"
 	@echo "... Jogador.i"
 	@echo "... Jogador.s"
+	@echo "... Jogo.o"
+	@echo "... Jogo.i"
+	@echo "... Jogo.s"
+	@echo "... JogosCliente.o"
+	@echo "... JogosCliente.i"
+	@echo "... JogosCliente.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

@@ -8,6 +8,6 @@
 struct Jogador {
     char nome[50];
     int pontuacao;
-} jogador;
+} Jogador;
 
 #endif //TENINROW_JOGADOR_H

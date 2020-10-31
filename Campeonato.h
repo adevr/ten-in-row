@@ -5,11 +5,7 @@
 #ifndef TENINROW_CAMPEONATO_H
 #define TENINROW_CAMPEONATO_H
 
-#include "Jogador.h"
-
-struct Campeonato{
-    struct Jogador jogadores[30];
-} campeonato;
-
+struct Campeonato {
+} Campeonato;
 
 #endif //TENINROW_CAMPEONATO_H

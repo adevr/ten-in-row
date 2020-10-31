@@ -78,16 +78,46 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/home/alex/code/ten-in-row/Administrador.c">
+			<Option target="teninrow"/>
+		</Unit>
+		<Unit filename="/home/alex/code/ten-in-row/Administrador.h">
+			<Option target="teninrow"/>
+		</Unit>
+		<Unit filename="/home/alex/code/ten-in-row/Arbitro.c">
+			<Option target="teninrow"/>
+		</Unit>
+		<Unit filename="/home/alex/code/ten-in-row/Arbitro.h">
+			<Option target="teninrow"/>
+		</Unit>
 		<Unit filename="/home/alex/code/ten-in-row/Campeonato.c">
 			<Option target="teninrow"/>
 		</Unit>
 		<Unit filename="/home/alex/code/ten-in-row/Campeonato.h">
 			<Option target="teninrow"/>
 		</Unit>
+		<Unit filename="/home/alex/code/ten-in-row/Cliente.c">
+			<Option target="teninrow"/>
+		</Unit>
+		<Unit filename="/home/alex/code/ten-in-row/Cliente.h">
+			<Option target="teninrow"/>
+		</Unit>
 		<Unit filename="/home/alex/code/ten-in-row/Jogador.c">
 			<Option target="teninrow"/>
 		</Unit>
 		<Unit filename="/home/alex/code/ten-in-row/Jogador.h">
+			<Option target="teninrow"/>
+		</Unit>
+		<Unit filename="/home/alex/code/ten-in-row/Jogo.c">
+			<Option target="teninrow"/>
+		</Unit>
+		<Unit filename="/home/alex/code/ten-in-row/Jogo.h">
+			<Option target="teninrow"/>
+		</Unit>
+		<Unit filename="/home/alex/code/ten-in-row/JogosCliente.c">
+			<Option target="teninrow"/>
+		</Unit>
+		<Unit filename="/home/alex/code/ten-in-row/JogosCliente.h">
 			<Option target="teninrow"/>
 		</Unit>
 		<Unit filename="/home/alex/code/ten-in-row/main.c">
