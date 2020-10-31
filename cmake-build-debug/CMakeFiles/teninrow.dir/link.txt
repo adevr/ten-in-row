@@ -1,0 +1,1 @@
+/usr/bin/cc -g   CMakeFiles/teninrow.dir/main.c.o CMakeFiles/teninrow.dir/Jogador.c.o CMakeFiles/teninrow.dir/Campeonato.c.o  -o teninrow 
