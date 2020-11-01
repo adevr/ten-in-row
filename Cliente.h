@@ -5,6 +5,7 @@
 #ifndef TENINROW_CLIENTE_H
 #define TENINROW_CLIENTE_H
 
+#include "stdio.h"
 #include "Jogador.h"
 
 struct Cliente {

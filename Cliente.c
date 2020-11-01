@@ -3,8 +3,6 @@
 //
 
 #include "Cliente.h"
-#include "stdio.h"
-
 void getInput(int *linha)
 {
     scanf("%d", linha);
