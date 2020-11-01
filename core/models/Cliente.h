@@ -14,5 +14,7 @@ struct Cliente {
 } Cliente;
 
 void getInput(int *linha);
+
 void sendInput(int input);
+
 #endif //TENINROW_CLIENTE_H
