@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Jogo.h
+
+/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/main.c
+stdio.h
+-
+core/models/Jogo.h
+/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Jogo.h
+

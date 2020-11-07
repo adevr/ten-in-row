@@ -90,119 +90,119 @@ CMakeFiles/teninrow.dir/main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/teninrow.dir/main.c.s"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/main.c -o CMakeFiles/teninrow.dir/main.c.s
 
-CMakeFiles/teninrow.dir/Jogador.c.o: CMakeFiles/teninrow.dir/flags.make
-CMakeFiles/teninrow.dir/Jogador.c.o: ../Jogador.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/teninrow.dir/Jogador.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/teninrow.dir/Jogador.c.o   -c /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Jogador.c
+CMakeFiles/teninrow.dir/core/models/Jogador.c.o: CMakeFiles/teninrow.dir/flags.make
+CMakeFiles/teninrow.dir/core/models/Jogador.c.o: ../core/models/Jogador.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/teninrow.dir/core/models/Jogador.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/teninrow.dir/core/models/Jogador.c.o   -c /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Jogador.c
 
-CMakeFiles/teninrow.dir/Jogador.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/teninrow.dir/Jogador.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Jogador.c > CMakeFiles/teninrow.dir/Jogador.c.i
+CMakeFiles/teninrow.dir/core/models/Jogador.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/teninrow.dir/core/models/Jogador.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Jogador.c > CMakeFiles/teninrow.dir/core/models/Jogador.c.i
 
-CMakeFiles/teninrow.dir/Jogador.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/teninrow.dir/Jogador.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Jogador.c -o CMakeFiles/teninrow.dir/Jogador.c.s
+CMakeFiles/teninrow.dir/core/models/Jogador.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/teninrow.dir/core/models/Jogador.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Jogador.c -o CMakeFiles/teninrow.dir/core/models/Jogador.c.s
 
-CMakeFiles/teninrow.dir/Campeonato.c.o: CMakeFiles/teninrow.dir/flags.make
-CMakeFiles/teninrow.dir/Campeonato.c.o: ../Campeonato.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/teninrow.dir/Campeonato.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/teninrow.dir/Campeonato.c.o   -c /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Campeonato.c
+CMakeFiles/teninrow.dir/core/models/Campeonato.c.o: CMakeFiles/teninrow.dir/flags.make
+CMakeFiles/teninrow.dir/core/models/Campeonato.c.o: ../core/models/Campeonato.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/teninrow.dir/core/models/Campeonato.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/teninrow.dir/core/models/Campeonato.c.o   -c /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Campeonato.c
 
-CMakeFiles/teninrow.dir/Campeonato.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/teninrow.dir/Campeonato.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Campeonato.c > CMakeFiles/teninrow.dir/Campeonato.c.i
+CMakeFiles/teninrow.dir/core/models/Campeonato.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/teninrow.dir/core/models/Campeonato.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Campeonato.c > CMakeFiles/teninrow.dir/core/models/Campeonato.c.i
 
-CMakeFiles/teninrow.dir/Campeonato.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/teninrow.dir/Campeonato.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Campeonato.c -o CMakeFiles/teninrow.dir/Campeonato.c.s
+CMakeFiles/teninrow.dir/core/models/Campeonato.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/teninrow.dir/core/models/Campeonato.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Campeonato.c -o CMakeFiles/teninrow.dir/core/models/Campeonato.c.s
 
-CMakeFiles/teninrow.dir/Cliente.c.o: CMakeFiles/teninrow.dir/flags.make
-CMakeFiles/teninrow.dir/Cliente.c.o: ../Cliente.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/teninrow.dir/Cliente.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/teninrow.dir/Cliente.c.o   -c /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Cliente.c
+CMakeFiles/teninrow.dir/core/models/Cliente.c.o: CMakeFiles/teninrow.dir/flags.make
+CMakeFiles/teninrow.dir/core/models/Cliente.c.o: ../core/models/Cliente.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/teninrow.dir/core/models/Cliente.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/teninrow.dir/core/models/Cliente.c.o   -c /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Cliente.c
 
-CMakeFiles/teninrow.dir/Cliente.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/teninrow.dir/Cliente.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Cliente.c > CMakeFiles/teninrow.dir/Cliente.c.i
+CMakeFiles/teninrow.dir/core/models/Cliente.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/teninrow.dir/core/models/Cliente.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Cliente.c > CMakeFiles/teninrow.dir/core/models/Cliente.c.i
 
-CMakeFiles/teninrow.dir/Cliente.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/teninrow.dir/Cliente.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Cliente.c -o CMakeFiles/teninrow.dir/Cliente.c.s
+CMakeFiles/teninrow.dir/core/models/Cliente.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/teninrow.dir/core/models/Cliente.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Cliente.c -o CMakeFiles/teninrow.dir/core/models/Cliente.c.s
 
-CMakeFiles/teninrow.dir/Arbitro.c.o: CMakeFiles/teninrow.dir/flags.make
-CMakeFiles/teninrow.dir/Arbitro.c.o: ../Arbitro.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/teninrow.dir/Arbitro.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/teninrow.dir/Arbitro.c.o   -c /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Arbitro.c
+CMakeFiles/teninrow.dir/core/models/Arbitro.c.o: CMakeFiles/teninrow.dir/flags.make
+CMakeFiles/teninrow.dir/core/models/Arbitro.c.o: ../core/models/Arbitro.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/teninrow.dir/core/models/Arbitro.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/teninrow.dir/core/models/Arbitro.c.o   -c /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Arbitro.c
 
-CMakeFiles/teninrow.dir/Arbitro.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/teninrow.dir/Arbitro.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Arbitro.c > CMakeFiles/teninrow.dir/Arbitro.c.i
+CMakeFiles/teninrow.dir/core/models/Arbitro.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/teninrow.dir/core/models/Arbitro.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Arbitro.c > CMakeFiles/teninrow.dir/core/models/Arbitro.c.i
 
-CMakeFiles/teninrow.dir/Arbitro.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/teninrow.dir/Arbitro.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Arbitro.c -o CMakeFiles/teninrow.dir/Arbitro.c.s
+CMakeFiles/teninrow.dir/core/models/Arbitro.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/teninrow.dir/core/models/Arbitro.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Arbitro.c -o CMakeFiles/teninrow.dir/core/models/Arbitro.c.s
 
-CMakeFiles/teninrow.dir/Jogo.c.o: CMakeFiles/teninrow.dir/flags.make
-CMakeFiles/teninrow.dir/Jogo.c.o: ../Jogo.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/teninrow.dir/Jogo.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/teninrow.dir/Jogo.c.o   -c /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Jogo.c
+CMakeFiles/teninrow.dir/core/models/Jogo.c.o: CMakeFiles/teninrow.dir/flags.make
+CMakeFiles/teninrow.dir/core/models/Jogo.c.o: ../core/models/Jogo.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/teninrow.dir/core/models/Jogo.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/teninrow.dir/core/models/Jogo.c.o   -c /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Jogo.c
 
-CMakeFiles/teninrow.dir/Jogo.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/teninrow.dir/Jogo.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Jogo.c > CMakeFiles/teninrow.dir/Jogo.c.i
+CMakeFiles/teninrow.dir/core/models/Jogo.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/teninrow.dir/core/models/Jogo.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Jogo.c > CMakeFiles/teninrow.dir/core/models/Jogo.c.i
 
-CMakeFiles/teninrow.dir/Jogo.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/teninrow.dir/Jogo.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Jogo.c -o CMakeFiles/teninrow.dir/Jogo.c.s
+CMakeFiles/teninrow.dir/core/models/Jogo.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/teninrow.dir/core/models/Jogo.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Jogo.c -o CMakeFiles/teninrow.dir/core/models/Jogo.c.s
 
-CMakeFiles/teninrow.dir/JogosCliente.c.o: CMakeFiles/teninrow.dir/flags.make
-CMakeFiles/teninrow.dir/JogosCliente.c.o: ../JogosCliente.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/teninrow.dir/JogosCliente.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/teninrow.dir/JogosCliente.c.o   -c /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/JogosCliente.c
+CMakeFiles/teninrow.dir/core/models/JogosCliente.c.o: CMakeFiles/teninrow.dir/flags.make
+CMakeFiles/teninrow.dir/core/models/JogosCliente.c.o: ../core/models/JogosCliente.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/teninrow.dir/core/models/JogosCliente.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/teninrow.dir/core/models/JogosCliente.c.o   -c /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/JogosCliente.c
 
-CMakeFiles/teninrow.dir/JogosCliente.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/teninrow.dir/JogosCliente.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/JogosCliente.c > CMakeFiles/teninrow.dir/JogosCliente.c.i
+CMakeFiles/teninrow.dir/core/models/JogosCliente.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/teninrow.dir/core/models/JogosCliente.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/JogosCliente.c > CMakeFiles/teninrow.dir/core/models/JogosCliente.c.i
 
-CMakeFiles/teninrow.dir/JogosCliente.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/teninrow.dir/JogosCliente.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/JogosCliente.c -o CMakeFiles/teninrow.dir/JogosCliente.c.s
+CMakeFiles/teninrow.dir/core/models/JogosCliente.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/teninrow.dir/core/models/JogosCliente.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/JogosCliente.c -o CMakeFiles/teninrow.dir/core/models/JogosCliente.c.s
 
-CMakeFiles/teninrow.dir/Administrador.c.o: CMakeFiles/teninrow.dir/flags.make
-CMakeFiles/teninrow.dir/Administrador.c.o: ../Administrador.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/teninrow.dir/Administrador.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/teninrow.dir/Administrador.c.o   -c /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Administrador.c
+CMakeFiles/teninrow.dir/core/models/Administrador.c.o: CMakeFiles/teninrow.dir/flags.make
+CMakeFiles/teninrow.dir/core/models/Administrador.c.o: ../core/models/Administrador.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/teninrow.dir/core/models/Administrador.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/teninrow.dir/core/models/Administrador.c.o   -c /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Administrador.c
 
-CMakeFiles/teninrow.dir/Administrador.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/teninrow.dir/Administrador.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Administrador.c > CMakeFiles/teninrow.dir/Administrador.c.i
+CMakeFiles/teninrow.dir/core/models/Administrador.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/teninrow.dir/core/models/Administrador.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Administrador.c > CMakeFiles/teninrow.dir/core/models/Administrador.c.i
 
-CMakeFiles/teninrow.dir/Administrador.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/teninrow.dir/Administrador.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Administrador.c -o CMakeFiles/teninrow.dir/Administrador.c.s
+CMakeFiles/teninrow.dir/core/models/Administrador.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/teninrow.dir/core/models/Administrador.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Administrador.c -o CMakeFiles/teninrow.dir/core/models/Administrador.c.s
 
 # Object files for target teninrow
 teninrow_OBJECTS = \
 "CMakeFiles/teninrow.dir/main.c.o" \
-"CMakeFiles/teninrow.dir/Jogador.c.o" \
-"CMakeFiles/teninrow.dir/Campeonato.c.o" \
-"CMakeFiles/teninrow.dir/Cliente.c.o" \
-"CMakeFiles/teninrow.dir/Arbitro.c.o" \
-"CMakeFiles/teninrow.dir/Jogo.c.o" \
-"CMakeFiles/teninrow.dir/JogosCliente.c.o" \
-"CMakeFiles/teninrow.dir/Administrador.c.o"
+"CMakeFiles/teninrow.dir/core/models/Jogador.c.o" \
+"CMakeFiles/teninrow.dir/core/models/Campeonato.c.o" \
+"CMakeFiles/teninrow.dir/core/models/Cliente.c.o" \
+"CMakeFiles/teninrow.dir/core/models/Arbitro.c.o" \
+"CMakeFiles/teninrow.dir/core/models/Jogo.c.o" \
+"CMakeFiles/teninrow.dir/core/models/JogosCliente.c.o" \
+"CMakeFiles/teninrow.dir/core/models/Administrador.c.o"
 
 # External object files for target teninrow
 teninrow_EXTERNAL_OBJECTS =
 
 teninrow: CMakeFiles/teninrow.dir/main.c.o
-teninrow: CMakeFiles/teninrow.dir/Jogador.c.o
-teninrow: CMakeFiles/teninrow.dir/Campeonato.c.o
-teninrow: CMakeFiles/teninrow.dir/Cliente.c.o
-teninrow: CMakeFiles/teninrow.dir/Arbitro.c.o
-teninrow: CMakeFiles/teninrow.dir/Jogo.c.o
-teninrow: CMakeFiles/teninrow.dir/JogosCliente.c.o
-teninrow: CMakeFiles/teninrow.dir/Administrador.c.o
+teninrow: CMakeFiles/teninrow.dir/core/models/Jogador.c.o
+teninrow: CMakeFiles/teninrow.dir/core/models/Campeonato.c.o
+teninrow: CMakeFiles/teninrow.dir/core/models/Cliente.c.o
+teninrow: CMakeFiles/teninrow.dir/core/models/Arbitro.c.o
+teninrow: CMakeFiles/teninrow.dir/core/models/Jogo.c.o
+teninrow: CMakeFiles/teninrow.dir/core/models/JogosCliente.c.o
+teninrow: CMakeFiles/teninrow.dir/core/models/Administrador.c.o
 teninrow: CMakeFiles/teninrow.dir/build.make
 teninrow: CMakeFiles/teninrow.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking C executable teninrow"

@@ -76,46 +76,46 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Administrador.c">
+		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Administrador.c">
 			<Option target="teninrow"/>
 		</Unit>
-		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Administrador.h">
+		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Administrador.h">
 			<Option target="teninrow"/>
 		</Unit>
-		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Arbitro.c">
+		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Arbitro.c">
 			<Option target="teninrow"/>
 		</Unit>
-		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Arbitro.h">
+		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Arbitro.h">
 			<Option target="teninrow"/>
 		</Unit>
-		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Campeonato.c">
+		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Campeonato.c">
 			<Option target="teninrow"/>
 		</Unit>
-		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Campeonato.h">
+		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Campeonato.h">
 			<Option target="teninrow"/>
 		</Unit>
-		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Cliente.c">
+		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Cliente.c">
 			<Option target="teninrow"/>
 		</Unit>
-		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Cliente.h">
+		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Cliente.h">
 			<Option target="teninrow"/>
 		</Unit>
-		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Jogador.c">
+		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Jogador.c">
 			<Option target="teninrow"/>
 		</Unit>
-		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Jogador.h">
+		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Jogador.h">
 			<Option target="teninrow"/>
 		</Unit>
-		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Jogo.c">
+		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Jogo.c">
 			<Option target="teninrow"/>
 		</Unit>
-		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/Jogo.h">
+		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/Jogo.h">
 			<Option target="teninrow"/>
 		</Unit>
-		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/JogosCliente.c">
+		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/JogosCliente.c">
 			<Option target="teninrow"/>
 		</Unit>
-		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/JogosCliente.h">
+		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/core/models/JogosCliente.h">
 			<Option target="teninrow"/>
 		</Unit>
 		<Unit filename="/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/main.c">
