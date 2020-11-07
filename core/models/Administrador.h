@@ -7,8 +7,8 @@
 
 #include "Arbitro.h"
 
-struct Administrador {
-    struct Arbitro arbitro;
-} administrador;
+typedef struct Administrador {
+    Arbitro *arbitro;
+} Administrador;
 
 #endif //TENINROW_ADMINISTRADOR_H

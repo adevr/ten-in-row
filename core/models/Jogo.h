@@ -5,9 +5,13 @@
 #ifndef TENINROW_JOGO_H
 #define TENINROW_JOGO_H
 
+#define nrDeColunas 10
+#define nrDeLinhas 10
+
+//const int nrDeColunas = 10;
+//const int nrDeLinhas= 10;
+
 typedef struct Jogo {
-
-
     int pontos;
 
     /*
@@ -17,8 +21,10 @@ typedef struct Jogo {
      */
     int estado;
 
+    int linhas;
+    int colunas;
 
-    int tabelaDoJogo[10][10]
+    char tabelaDoJogo[10][10];
 } Jogo;
 
 Jogo *criaJogo();

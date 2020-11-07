@@ -7,10 +7,11 @@
 
 #include "stdio.h"
 #include "Jogador.h"
+#include "Arbitro.h"
 
-struct Cliente {
-    struct Jogador *jogador;
-    struct Arbitro *arbitro;
+typedef struct Cliente {
+    Jogador *jogador;
+    Arbitro *arbitro;
 } Cliente;
 
 void getInput(int *linha);

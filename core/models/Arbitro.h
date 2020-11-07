@@ -7,14 +7,14 @@
 
 #include "Cliente.h"
 #include "Jogo.h"
-#include "JogosCliente.h"
 #include "Administrador.h"
+#include "JogosCliente.h"
 
-struct Arbitro {
-    struct Clientes *clientes;
-    struct Jogo *jogos;
-    struct Administrador *administrador;
-    struct JogosCliente *jogosCliente
+typedef struct Arbitro {
+    Cliente *cliente;
+    Jogo *jogos;
+    Administrador *administrador;
+    JogosCliente *jogosCliente;
 } Arbitro;
 
 

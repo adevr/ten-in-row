@@ -8,10 +8,10 @@
 #include "Cliente.h"
 #include "Jogo.h"
 
-struct JogosCliente {
-    struct Cliente cliente;
-    struct Jogo* jogos;
-} jogosCliente;
+typedef struct JogosCliente {
+    Cliente cliente;
+    Jogo* jogos;
+} JogosCliente;
 
 
 #endif //TENINROW_JOGOSCLIENTE_H

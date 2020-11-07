@@ -7,9 +7,9 @@
 
 #include "Jogo.h"
 
-struct Campeonato {
+typedef struct Campeonato {
     int duracao;
-    struct Jogo* jogos;
+    Jogo* jogos;
 } Campeonato;
 
 #endif //TENINROW_CAMPEONATO_H
