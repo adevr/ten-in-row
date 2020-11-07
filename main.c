@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "core/models/Jogo.h"
+#include "application/Jogo.h"
 
 int main(int argc, char *argv[]) {
 

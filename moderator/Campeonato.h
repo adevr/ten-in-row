@@ -5,7 +5,7 @@
 #ifndef TENINROW_CAMPEONATO_H
 #define TENINROW_CAMPEONATO_H
 
-#include "Jogo.h"
+#include "../application/Jogo.h"
 
 typedef struct Campeonato {
     int duracao;

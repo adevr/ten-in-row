@@ -6,8 +6,8 @@
 #define TENINROW_CLIENTE_H
 
 #include "stdio.h"
-#include "Jogador.h"
-#include "Arbitro.h"
+#include "../moderator/Jogador.h"
+#include "../moderator/Arbitro.h"
 
 typedef struct Cliente {
     Jogador *jogador;
