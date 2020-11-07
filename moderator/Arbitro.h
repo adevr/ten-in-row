@@ -5,10 +5,6 @@
 #ifndef TENINROW_ARBITRO_H
 #define TENINROW_ARBITRO_H
 
-#include "../client/Cliente.h"
-#include "Administrador.h"
-#include "../core/models/JogosCliente.h"
-
 #define USER_SIZE 25
 #define MAX_PLAYERS 30
 
@@ -17,9 +13,8 @@ char *gameDir;
 typedef struct Arbitro {
     int pid;
     int jogo_pid;
+    int client_pid;
     char user[USER_SIZE];
-    Cliente *cliente;
-    Administrador *administrador;
 } Arbitro;
 
 

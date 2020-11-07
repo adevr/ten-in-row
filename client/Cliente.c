@@ -8,5 +8,11 @@ void getInput(int *linha)
     scanf("%d", linha);
 }
 
+void startClient()
+{
+    printf("hello to the ten in row game");
+}
+
+
 
 
