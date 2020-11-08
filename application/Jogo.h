@@ -34,9 +34,9 @@ void iniciaJogo(Jogo *jogo);
 
 void executaJogada(Jogo *jogo, char pieceToVerify, int coluna);
 
-void verifyLines(Jogo *jogo, char pieceToVerify);
+void verifyLines(Jogo *jogo, int line);
 
-void addPoints(Jogo *jogo, int points);
+void addPoints(Jogo *jogo);
 
 void apresentaTabuleiro(Jogo *jogo);
 

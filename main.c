@@ -1,7 +1,7 @@
 #include <stdio.h>
-#include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 
 int main(int argc, char *argv[])
@@ -12,15 +12,24 @@ int main(int argc, char *argv[])
     printf("\t 1 -> Arbitro\n");
     printf("\t 0 -> SAIR\n");
 
-    execl("exportVars", "exportVars", NULL);
+    system("./exportVars.sh");
+
     while (1) {
         printf("\nOPCAO $: ");
         scanf("%1s", opcao);
 
         if (!strcmp(opcao, "1")) {
-            // colocar aqui argumentos ou iniciar o moderator de outra forma
-            execl("moderator/moderator", "moderator", NULL);
-            continue;
+            char duration[12];
+            char waitTime[12];
+
+            printf("\nIntroduzir duracao do campeonato: ");
+            scanf("%s", duration);
+
+            printf("\nIntroduzir tempo de espera do campeonato: ");
+            scanf("%s", waitTime);
+
+            execl("./moderator/moderator", "moderator", duration, waitTime, NULL);
+            exit(0);
         }
 
         if (!strcmp(opcao, "0")) {
@@ -30,8 +39,5 @@ int main(int argc, char *argv[])
 
         printf("escolha outra opcao\n");
     }
-    // int pid = getpid();
-    // printf("\nprocessPID: %i\n", pid);
-    //execl("moderator/moderator", "moderator", "-e", NULL);
 }
 

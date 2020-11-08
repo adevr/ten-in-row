@@ -29,7 +29,6 @@ void iniciaJogo(Jogo *jogo) {
     jogo->estado = 1;
 }
 
-// TODO retornar 1 se a jogada for executada com sucesso e 0 no caso contrário
 void executaJogada(Jogo *jogo, char piece, int coluna) {
     if (jogo == NULL) return;
 
@@ -37,28 +36,29 @@ void executaJogada(Jogo *jogo, char piece, int coluna) {
 
         if (jogo->tabelaDoJogo[i][coluna] == EMPTY_CELL_CHAR) {
             jogo->tabelaDoJogo[i][coluna] = piece;
+
+            verifyLines(jogo, i);
             return;
         }
-
     }
 
     printf("\n-> Coluna cheia. Selecione outra coluna.\n");
 }
 
-void verifyLines(Jogo *jogo, char pieceToVerify) {
-    //char firstRowPiece = jogo->tabelaDoJogo[]
-    for (int indiceDaLinha = 0; indiceDaLinha < NR_DE_LINHAS; indiceDaLinha++) {
-        printf("|");
-
-        for(int indiceDaColuna = 0; indiceDaColuna < NR_DE_COLUNAS; indiceDaColuna++){
-            printf("%c", jogo->tabelaDoJogo[indiceDaLinha][indiceDaColuna]);
-        }
-
-        printf("|\n");
-    }
+void addPoints(Jogo *jogo) {
+    jogo->pontos += jogo->pointsPerRow;
 }
 
-void addPoints(Jogo *jogo, int points);
+void verifyLines(Jogo *jogo, int line) {
+    char firstRowPiece = jogo->tabelaDoJogo[line][0];
+
+    for(int i = NR_DE_COLUNAS; i >= 0; i--){
+        if (firstRowPiece != jogo->tabelaDoJogo[line][i] || jogo->tabelaDoJogo[line][i] == EMPTY_CELL_CHAR)
+            return;
+    }
+    addPoints(jogo);
+    printf("\nPONTOS %i\n", jogo->pontos);
+}
 
 void apresentaTabuleiro(Jogo *jogo) {
     for (int indiceDaLinha = 0; indiceDaLinha < NR_DE_LINHAS; indiceDaLinha++) {
@@ -70,5 +70,4 @@ void apresentaTabuleiro(Jogo *jogo) {
 
         printf("|\n");
     }
-
 }

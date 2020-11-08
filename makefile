@@ -10,9 +10,7 @@ cliente:
 	gcc -o client/client client/Client.c client/main.c
 
 jogo:
-	gcc -o application/game application/main.c
-game:
-	gcc -o application/Jogo application/Jogo.c application/main.c
+	gcc -o application/game application/Jogo.c application/main.c
 
 clean:
 	rm application/Jogo

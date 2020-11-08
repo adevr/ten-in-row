@@ -9,6 +9,8 @@
 #include <unistd.h>
 #include "Moderator.h"
 
+extern char **environ;
+
 void readEnvVariables() {
     char *tempMaxPlayer = getenv("MAXPLAYERS"), *tempGameDir = getenv("GAMEDIR");
 
