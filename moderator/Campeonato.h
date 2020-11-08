@@ -9,6 +9,8 @@
 
 typedef struct Campeonato {
     int duracao;
+    int horaInicio;
+    int horaFim;
     Jogo* jogos;
 } Campeonato;
 

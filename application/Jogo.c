@@ -11,11 +11,11 @@ Jogo *criaJogo() {
 
     jogo->pontos = 0;
     jogo->estado = 0;
-    jogo->linhas = nrDeLinhas;
-    jogo->colunas = nrDeColunas;
+    jogo->linhas = NR_DE_LINHAS;
+    jogo->colunas = NR_DE_COLUNAS;
 
-    for (int indiceDaLinha = 0; indiceDaLinha < nrDeLinhas; indiceDaLinha++)
-        for(int indiceDaColuna = 0; indiceDaColuna < nrDeColunas; indiceDaColuna++)
+    for (int indiceDaLinha = 0; indiceDaLinha < NR_DE_LINHAS; indiceDaLinha++)
+        for(int indiceDaColuna = 0; indiceDaColuna < NR_DE_COLUNAS; indiceDaColuna++)
             jogo->tabelaDoJogo[indiceDaLinha][indiceDaColuna] = '_';
 
     return jogo;
@@ -33,10 +33,10 @@ void executaJogada(Jogo *jogo, int linha, int coluna) {
 }
 
 void apresentaTabuleiro(Jogo *jogo) {
-    for (int indiceDaLinha = 0; indiceDaLinha < nrDeLinhas; indiceDaLinha++) {
+    for (int indiceDaLinha = 0; indiceDaLinha < NR_DE_LINHAS; indiceDaLinha++) {
         printf("|");
 
-        for(int indiceDaColuna = 0; indiceDaColuna < nrDeColunas; indiceDaColuna++){
+        for(int indiceDaColuna = 0; indiceDaColuna < NR_DE_COLUNAS; indiceDaColuna++){
             printf("%c", jogo->tabelaDoJogo[indiceDaLinha][indiceDaColuna]);
         }
 

@@ -1,21 +1,37 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <string.h>
+#include <stdlib.h>
 
 
 int main(int argc, char *argv[])
 {
-    execl("moderator/moderator", "moderator", "-e", NULL);
+    char opcao[2];
+    printf("\t########## SISTEMA CHAMPION ##########\n");
+    printf("Iniciar: \n");
+    printf("\t 1 -> Arbitro\n");
+    printf("\t 0 -> SAIR\n");
+
+    while (1) {
+        printf("\nOPCAO $: ");
+        scanf("%1s", opcao);
+
+        if (!strcmp(opcao, "1")) {
+            execl("moderator/moderator", "moderator", NULL);
+            continue;
+        }
+
+        if (!strcmp(opcao, "0")) {
+            printf("sair\n");
+            exit(0);
+        }
+
+        printf("escolha outra opcao\n");
+    }
+
+
+    int pid = getpid();
+    printf("\nprocessPID: %i\n", pid);
+    //execl("moderator/moderator", "moderator", "-e", NULL);
 }
 
-/*
-int main(int argc, char *argv[]) {
-
-    Jogo *jogo = criaJogo();
-    iniciaJogo(jogo);
-
-    apresentaTabuleiro(jogo);
-    executaJogada(jogo, 1, 1);
-    printf("\n\n");
-    apresentaTabuleiro(jogo);
-    return 0;
-}*/
