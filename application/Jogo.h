@@ -5,39 +5,39 @@
 #ifndef TENINROW_JOGO_H
 #define TENINROW_JOGO_H
 
-#define NR_DE_COLUNAS 10
-#define NR_DE_LINHAS 10
+#define NR_OF_COLUMNS 10
+#define NR_OF_LINES 5
 
 #define PIECE_X 'X'
 #define PIECE_O 'O'
 #define EMPTY_CELL_CHAR '_'
 
-typedef struct Jogo {
+typedef struct Game {
     int PID;
-    int pontos;
+    int points;
     int pointsPerRow;
     /*
      * 1  -> Em execução
      * 0  -> Criado
      * -1 -> Terminado
      */
-    int estado;
-    int linhas;
-    int colunas;
+    int state;
+    int lines;
+    int columns;
 
-    char tabelaDoJogo[NR_DE_LINHAS][NR_DE_COLUNAS];
-} Jogo;
+    char gameTable[NR_OF_LINES][NR_OF_COLUMNS];
+} Game;
 
-Jogo *criaJogo(int PID);
+Game *createGame(int PID);
 
-void iniciaJogo(Jogo *jogo);
+void initGame(Game *game);
 
-void executaJogada(Jogo *jogo, char pieceToVerify, int coluna);
+void executaJogada(Game *game, char pieceToVerify, int column);
 
-void verifyLines(Jogo *jogo, int line);
+void verifyLines(Game *game, int line);
 
-void addPoints(Jogo *jogo);
+void addPoints(Game *game);
 
-void apresentaTabuleiro(Jogo *jogo);
+void apresentaTabuleiro(Game *game);
 
 #endif //TENINROW_JOGO_H

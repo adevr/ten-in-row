@@ -7,37 +7,37 @@
 #include <stdlib.h>
 #include <string.h>
 
-Jogo *criaJogo(int PID) {
-    Jogo *jogo = malloc(sizeof(Jogo));
+Game *createGame(int PID) {
+    Game *game = malloc(sizeof(Game));
 
-    jogo->PID = PID;
-    jogo->pontos = 0;
-    jogo->estado = 0;
-    jogo->pointsPerRow = 10;
-    jogo->linhas = NR_DE_LINHAS;
-    jogo->colunas = NR_DE_COLUNAS;
+    game->PID = PID;
+    game->points = 0;
+    game->state = 0;
+    game->pointsPerRow = 10;
+    game->lines = NR_OF_LINES;
+    game->columns = NR_OF_COLUMNS;
 
-    for (int indiceDaLinha = 0; indiceDaLinha < NR_DE_LINHAS; indiceDaLinha++)
-        for(int indiceDaColuna = 0; indiceDaColuna < NR_DE_COLUNAS; indiceDaColuna++)
-            jogo->tabelaDoJogo[indiceDaLinha][indiceDaColuna] = EMPTY_CELL_CHAR;
+    for (int i = 0; i < NR_OF_LINES; i++)
+        for(int ii = 0; ii < NR_OF_COLUMNS; ii++)
+            game->gameTable[i][ii] = EMPTY_CELL_CHAR;
 
-    return jogo;
+    return game;
 }
 
-void iniciaJogo(Jogo *jogo) {
-    if (jogo == NULL) return;
-    jogo->estado = 1;
+void initGame(Game *game) {
+    if (game == NULL) return;
+    game->state = 1;
 }
 
-void executaJogada(Jogo *jogo, char piece, int coluna) {
-    if (jogo == NULL) return;
+void executaJogada(Game *game, char piece, int column) {
+    if (game == NULL) return;
 
-    for (int i = NR_DE_LINHAS - 1; i >= 0; i--) {
+    for (int i = NR_OF_LINES - 1; i >= 0; i--) {
 
-        if (jogo->tabelaDoJogo[i][coluna] == EMPTY_CELL_CHAR) {
-            jogo->tabelaDoJogo[i][coluna] = piece;
+        if (game->gameTable[i][column] == EMPTY_CELL_CHAR) {
+            game->gameTable[i][column] = piece;
 
-            verifyLines(jogo, i);
+            verifyLines(game, i);
             return;
         }
     }
@@ -45,27 +45,27 @@ void executaJogada(Jogo *jogo, char piece, int coluna) {
     printf("\n-> Coluna cheia. Selecione outra coluna.\n");
 }
 
-void addPoints(Jogo *jogo) {
-    jogo->pontos += jogo->pointsPerRow;
+void addPoints(Game *game) {
+    game->points += game->pointsPerRow;
 }
 
-void verifyLines(Jogo *jogo, int line) {
-    char firstRowPiece = jogo->tabelaDoJogo[line][0];
+void verifyLines(Game *game, int line) {
+    char firstRowPiece = game->gameTable[line][0];
 
-    for(int i = NR_DE_COLUNAS; i >= 0; i--){
-        if (firstRowPiece != jogo->tabelaDoJogo[line][i] || jogo->tabelaDoJogo[line][i] == EMPTY_CELL_CHAR)
+    for(int i = 0; i < NR_OF_COLUMNS; i++){
+        if (firstRowPiece != game->gameTable[line][i] || game->gameTable[line][i] == EMPTY_CELL_CHAR)
             return;
     }
-    addPoints(jogo);
-    printf("\nPONTOS %i\n", jogo->pontos);
+    addPoints(game);
+    printf("\npoints %i\n", game->points);
 }
 
-void apresentaTabuleiro(Jogo *jogo) {
-    for (int indiceDaLinha = 0; indiceDaLinha < NR_DE_LINHAS; indiceDaLinha++) {
+void apresentaTabuleiro(Game *game) {
+    for (int i = 0; i < NR_OF_LINES; i++) {
         printf("|");
 
-        for(int indiceDaColuna = 0; indiceDaColuna < NR_DE_COLUNAS; indiceDaColuna++){
-            printf("%c", jogo->tabelaDoJogo[indiceDaLinha][indiceDaColuna]);
+        for(int ii = 0; ii < NR_OF_COLUMNS; ii++){
+            printf("%c", game->gameTable[i][ii]);
         }
 
         printf("|\n");
