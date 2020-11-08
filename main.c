@@ -12,7 +12,8 @@ int main(int argc, char *argv[])
     printf("\t 1 -> Arbitro\n");
     printf("\t 0 -> SAIR\n");
 
-    system("./exportVars.sh");
+    setenv("GAMEDIR", "application/", 0);
+    setenv("MAXPLAYERS", "15", 0);
 
     while (1) {
         printf("\nOPCAO $: ");

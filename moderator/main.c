@@ -10,7 +10,7 @@
 #include "Moderator.h"
 
 int main(int argc, char *argv[]) {
-    int championship_duration, waiting_time;
+    int op, championship_duration, waiting_time;
 
     if (argc < 2) {
         printf("Incorrect set of arguments passed to the program. Must use: \n");
@@ -18,8 +18,19 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    championship_duration = atoi(argv[1]);
-    waiting_time = atoi(argv[2]);
+    while ((op = getopt(argc, argv, "ce:")) != -1) {
+        switch (op) {
+            case 'c':
+                championship_duration = atoi(argv[1]);
+                break;
+            case 'e':
+                waiting_time = atoi(argv[2]);
+                break;
+        }
+    }
+
+//    championship_duration = atoi(argv[1]);
+//    waiting_time = atoi(argv[2]);
 
     system("clear");
     readEnvVariables();
