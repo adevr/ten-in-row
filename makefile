@@ -11,8 +11,11 @@ cliente:
 
 jogo:
 	gcc -o application/game application/main.c
+game:
+	gcc -o application/Jogo application/Jogo.c application/main.c
 
 clean:
+	rm application/Jogo
 	rm client/client
 	rm moderator/moderator
 	rm teninrow

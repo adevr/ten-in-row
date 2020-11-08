@@ -4,15 +4,13 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/home/alex/code/ten-in-row/application/Jogo.c" "/home/alex/code/ten-in-row/cmake-build-debug/CMakeFiles/teninrow.dir/application/Jogo.c.o"
-  "/home/alex/code/ten-in-row/application/main.c" "/home/alex/code/ten-in-row/cmake-build-debug/CMakeFiles/teninrow.dir/application/main.c.o"
-  "/home/alex/code/ten-in-row/client/Cliente.c" "/home/alex/code/ten-in-row/cmake-build-debug/CMakeFiles/teninrow.dir/client/Cliente.c.o"
-  "/home/alex/code/ten-in-row/client/main.c" "/home/alex/code/ten-in-row/cmake-build-debug/CMakeFiles/teninrow.dir/client/main.c.o"
-  "/home/alex/code/ten-in-row/main.c" "/home/alex/code/ten-in-row/cmake-build-debug/CMakeFiles/teninrow.dir/main.c.o"
-  "/home/alex/code/ten-in-row/moderator/Arbitro.c" "/home/alex/code/ten-in-row/cmake-build-debug/CMakeFiles/teninrow.dir/moderator/Arbitro.c.o"
-  "/home/alex/code/ten-in-row/moderator/Campeonato.c" "/home/alex/code/ten-in-row/cmake-build-debug/CMakeFiles/teninrow.dir/moderator/Campeonato.c.o"
-  "/home/alex/code/ten-in-row/moderator/Jogador.c" "/home/alex/code/ten-in-row/cmake-build-debug/CMakeFiles/teninrow.dir/moderator/Jogador.c.o"
-  "/home/alex/code/ten-in-row/moderator/main.c" "/home/alex/code/ten-in-row/cmake-build-debug/CMakeFiles/teninrow.dir/moderator/main.c.o"
+  "/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/application/Jogo.c" "/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/cmake-build-debug/CMakeFiles/teninrow.dir/application/Jogo.c.o"
+  "/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/application/main.c" "/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/cmake-build-debug/CMakeFiles/teninrow.dir/application/main.c.o"
+  "/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/client/Client.c" "/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/cmake-build-debug/CMakeFiles/teninrow.dir/client/Client.c.o"
+  "/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/client/main.c" "/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/cmake-build-debug/CMakeFiles/teninrow.dir/client/main.c.o"
+  "/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/main.c" "/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/cmake-build-debug/CMakeFiles/teninrow.dir/main.c.o"
+  "/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/moderator/Moderator.c" "/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/cmake-build-debug/CMakeFiles/teninrow.dir/moderator/Moderator.c.o"
+  "/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/moderator/main.c" "/home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/cmake-build-debug/CMakeFiles/teninrow.dir/moderator/main.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 
