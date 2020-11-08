@@ -1,6 +1,7 @@
-//
-// Created by ubuntu on 07/11/20.
-//
+/**
+ * Alexandre Reis - 2018019414
+ * Diogo Barbosa - 2018012425
+ */
 
 #include <stdio.h>
 #include <unistd.h>
@@ -31,12 +32,12 @@ int main(int argc, char *argv[]) {
     while (1) {
         char pieceToPlay = (playsCounter % 2 == 0) ? PIECE_O : PIECE_X;
 
-        apresentaTabuleiro(game);
+        showGameTable(game);
 
         printf("\nPeça em jogo %c. Jogar na coluna (1 - %i): ", pieceToPlay, NR_OF_COLUMNS);
         scanf("%i", &column);
 
-        executaJogada(game, pieceToPlay,column - 1);
+        doPlay(game, pieceToPlay,column - 1);
 
         playsCounter ++;
         system("clear");

@@ -1,3 +1,8 @@
+/**
+ * Alexandre Reis - 2018019414
+ * Diogo Barbosa - 2018012425
+ */
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

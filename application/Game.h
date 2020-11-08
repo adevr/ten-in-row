@@ -1,6 +1,7 @@
-//
-// Created by alex on 31/10/20.
-//
+/**
+ * Alexandre Reis - 2018019414
+ * Diogo Barbosa - 2018012425
+ */
 
 #ifndef TENINROW_GAME_H
 #define TENINROW_GAME_H
@@ -29,15 +30,10 @@ typedef struct Game {
 } Game;
 
 Game *createGame(int PID);
-
 void initGame(Game *game);
-
-void executaJogada(Game *game, char pieceToVerify, int column);
-
+void doPlay(Game *game, char pieceToVerify, int column);
 void verifyLines(Game *game, int line);
-
 void addPoints(Game *game);
-
-void apresentaTabuleiro(Game *game);
+void showGameTable(Game *game);
 
 #endif //TENINROW_GAME_H

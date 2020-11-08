@@ -1,6 +1,7 @@
-//
-// Created by alex on 31/10/20.
-//
+/**
+ * Alexandre Reis - 2018019414
+ * Diogo Barbosa - 2018012425
+ */
 
 #include "Game.h"
 #include <stdio.h>
@@ -29,7 +30,7 @@ void initGame(Game *game) {
     game->state = 1;
 }
 
-void executaJogada(Game *game, char piece, int column) {
+void doPlay(Game *game, char piece, int column) {
     if (game == NULL) return;
 
     for (int i = NR_OF_LINES - 1; i >= 0; i--) {
@@ -60,7 +61,7 @@ void verifyLines(Game *game, int line) {
     printf("\npoints %i\n", game->points);
 }
 
-void apresentaTabuleiro(Game *game) {
+void showGameTable(Game *game) {
     for (int i = 0; i < NR_OF_LINES; i++) {
         printf("|");
 
