@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include "Jogo.h"
+#include "Game.h"
 
 #define GAME_PID getpid()
 
@@ -40,6 +40,8 @@ int main(int argc, char *argv[]) {
 
         playsCounter ++;
         system("clear");
+
+        if(playsCounter == 10){break;}
     }
     return 0;
 }

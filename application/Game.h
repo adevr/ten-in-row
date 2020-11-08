@@ -2,8 +2,8 @@
 // Created by alex on 31/10/20.
 //
 
-#ifndef TENINROW_JOGO_H
-#define TENINROW_JOGO_H
+#ifndef TENINROW_GAME_H
+#define TENINROW_GAME_H
 
 #define NR_OF_COLUMNS 10
 #define NR_OF_LINES 5
@@ -40,4 +40,4 @@ void addPoints(Game *game);
 
 void apresentaTabuleiro(Game *game);
 
-#endif //TENINROW_JOGO_H
+#endif //TENINROW_GAME_H

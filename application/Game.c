@@ -2,7 +2,7 @@
 // Created by alex on 31/10/20.
 //
 
-#include "Jogo.h"
+#include "Game.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -68,6 +68,6 @@ void apresentaTabuleiro(Game *game) {
             printf("%c", game->gameTable[i][ii]);
         }
 
-        printf("|\n");
+        printf("| \n");
     }
 }

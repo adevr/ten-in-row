@@ -11,7 +11,7 @@ add_executable(
         client/Client.c
         client/Client.h
         client/main.c
-        application/Jogo.c
-        application/Jogo.h
+        application/Game.c
+        application/Game.h
         application/main.c
         )
