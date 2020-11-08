@@ -19,24 +19,8 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    while ((op = getopt(argc, argv, "ce:")) != -1) {
-        switch (op) {
-            case 'c':
-                if (strcmp(argv[1], "-c") == 0) {
-                    championship_duration = atoi(argv[2]);
-                } else {
-                    championship_duration = atoi(argv[4]);
-                }
-                break;
-            case 'e':
-                if (strcmp(argv[1], "-e") == 0) {
-                    waiting_time = atoi(argv[2]);
-                } else {
-                    waiting_time = atoi(argv[4]);
-                }
-                break;
-        }
-    }
+    championship_duration = atoi(argv[1]);
+    waiting_time = atoi(argv[2]);
 
     system("clear");
     readEnvVariables();

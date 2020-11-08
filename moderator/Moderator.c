@@ -10,31 +10,30 @@
 #include "Moderator.h"
 
 void readEnvVariables() {
-    char *tempM = NULL, *tempG = NULL;
+    char *tempMaxPlayer = getenv("MAXPLAYERS"), *tempGameDir = getenv("GAMEDIR");
 
-    if ((tempM = getenv("MAXPLAYERS")) == NULL || (tempG = getenv("GAMEDIR")) == NULL) {
-        printf("********************************** \n");
-        tempM == NULL ? printf("** [NOTICE] MAXPLAYERS env variable not defined **\n") : (maxPlayers = atoi(tempM));
+    if (tempGameDir == NULL || tempMaxPlayer == NULL) {
+        tempM == NULL ? printf("Notice: MAXPLAYERS env variable not defined **\n") : (maxPlayers = atoi(tempM));
 
         if (tempG == NULL) {
-            printf("** [NOTICE] GAMEDIR env variable not defined **\n");
+            printf("Notice: GAMEDIR env variable not defined **\n");
         } else {
             gameDir = tempG;
         }
+
         printf("********************************** \n");
+        exit(0);
     } else {
-        maxPlayers = atoi(tempM);
-        gameDir = tempG;
+        maxPlayers = atoi(tempMaxPlayer);
+        gameDir = tempGameDir;
     }
 }
 
 void printInitialInformation(int waiting_time, int duration)
 {
-    printf("**************************************\n");
     printf("*  MAXPLAYER    = %d\n",maxPlayers);
     printf("*  GAMEDIR      = %s\n",gameDir);
     printf("*  Moderator PID = %d\n\n",getpid());
     printf("*  Championship duration = %d\n",duration);
     printf("*  Waiting time = %d\n",waiting_time);
-    printf("**************************************\n");
 }
