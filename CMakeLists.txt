@@ -5,13 +5,11 @@ set(CMAKE_C_STANDARD 99)
 
 add_executable(
         teninrow main.c
-        moderator/Campeonato.c
-        moderator/Campeonato.h
-        moderator/Arbitro.c
-        moderator/Arbitro.h
+        moderator/Moderator.c
+        moderator/Moderator.h
         moderator/main.c
-        client/Cliente.c
-        client/Cliente.h
+        client/Client.c
+        client/Client.h
         client/main.c
         application/Jogo.c
         application/Jogo.h

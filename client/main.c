@@ -1,9 +1,10 @@
-//
-// Created by ubuntu on 07/11/20.
-//
+/**
+ * Alexandre Reis - 2018019414
+ * Diogo Barbosa - 2018012425
+ */
 
 #include <unistd.h>
-#include "Cliente.h"
+#include "Client.h"
 
 int main(int argc, char *argv[]) {
     int pid = getpid();

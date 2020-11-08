@@ -12,11 +12,13 @@ int main(int argc, char *argv[])
     printf("\t 1 -> Arbitro\n");
     printf("\t 0 -> SAIR\n");
 
+    execl("exportVars", "exportVars", NULL);
     while (1) {
         printf("\nOPCAO $: ");
         scanf("%1s", opcao);
 
         if (!strcmp(opcao, "1")) {
+            // colocar aqui argumentos ou iniciar o moderator de outra forma
             execl("moderator/moderator", "moderator", NULL);
             continue;
         }
@@ -28,10 +30,8 @@ int main(int argc, char *argv[])
 
         printf("escolha outra opcao\n");
     }
-
-
-    int pid = getpid();
-    printf("\nprocessPID: %i\n", pid);
+    // int pid = getpid();
+    // printf("\nprocessPID: %i\n", pid);
     //execl("moderator/moderator", "moderator", "-e", NULL);
 }
 
