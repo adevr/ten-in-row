@@ -5,8 +5,6 @@ set(CMAKE_C_STANDARD 99)
 
 add_executable(
         teninrow main.c
-        moderator/Jogador.c
-        moderator/Jogador.h
         moderator/Campeonato.c
         moderator/Campeonato.h
         moderator/Arbitro.c

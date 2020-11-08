@@ -4,7 +4,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/teninrow.dir/client/Cliente.c.o"
   "CMakeFiles/teninrow.dir/client/main.c.o"
   "CMakeFiles/teninrow.dir/main.c.o"
-  "CMakeFiles/teninrow.dir/moderator/Administrador.c.o"
   "CMakeFiles/teninrow.dir/moderator/Arbitro.c.o"
   "CMakeFiles/teninrow.dir/moderator/Campeonato.c.o"
   "CMakeFiles/teninrow.dir/moderator/Jogador.c.o"
