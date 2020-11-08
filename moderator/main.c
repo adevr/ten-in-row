@@ -10,10 +10,9 @@
 #include "Moderator.h"
 
 int main(int argc, char *argv[]) {
-    int op;
     int championship_duration, waiting_time;
 
-    if (argc < 3) {
+    if (argc < 2) {
         printf("Incorrect set of arguments passed to the program. Must use: \n");
         printf("./moderator {championship duration} {waiting time}\n");
         return 0;

@@ -68,10 +68,10 @@ RM = /snap/clion/129/bin/cmake/linux/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/alex/code/ten-in-row
+CMAKE_SOURCE_DIR = /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/alex/code/ten-in-row/cmake-build-debug
+CMAKE_BINARY_DIR = /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -100,9 +100,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/alex/code/ten-in-row/cmake-build-debug/CMakeFiles /home/alex/code/ten-in-row/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/cmake-build-debug/CMakeFiles /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/alex/code/ten-in-row/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/Desktop/SO/trabalho_pratico/ten-in-row/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -197,32 +197,32 @@ application/main.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/application/main.c.s
 .PHONY : application/main.c.s
 
-client/Cliente.o: client/Cliente.c.o
+client/Client.o: client/Client.c.o
 
-.PHONY : client/Cliente.o
+.PHONY : client/Client.o
 
 # target to build an object file
-client/Cliente.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/client/Cliente.c.o
-.PHONY : client/Cliente.c.o
+client/Client.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/client/Client.c.o
+.PHONY : client/Client.c.o
 
-client/Cliente.i: client/Cliente.c.i
+client/Client.i: client/Client.c.i
 
-.PHONY : client/Cliente.i
+.PHONY : client/Client.i
 
 # target to preprocess a source file
-client/Cliente.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/client/Cliente.c.i
-.PHONY : client/Cliente.c.i
+client/Client.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/client/Client.c.i
+.PHONY : client/Client.c.i
 
-client/Cliente.s: client/Cliente.c.s
+client/Client.s: client/Client.c.s
 
-.PHONY : client/Cliente.s
+.PHONY : client/Client.s
 
 # target to generate assembly for a file
-client/Cliente.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/client/Cliente.c.s
-.PHONY : client/Cliente.c.s
+client/Client.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/client/Client.c.s
+.PHONY : client/Client.c.s
 
 client/main.o: client/main.c.o
 
@@ -278,86 +278,32 @@ main.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/main.c.s
 .PHONY : main.c.s
 
-moderator/Arbitro.o: moderator/Arbitro.c.o
+moderator/Moderator.o: moderator/Moderator.c.o
 
-.PHONY : moderator/Arbitro.o
-
-# target to build an object file
-moderator/Arbitro.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/moderator/Arbitro.c.o
-.PHONY : moderator/Arbitro.c.o
-
-moderator/Arbitro.i: moderator/Arbitro.c.i
-
-.PHONY : moderator/Arbitro.i
-
-# target to preprocess a source file
-moderator/Arbitro.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/moderator/Arbitro.c.i
-.PHONY : moderator/Arbitro.c.i
-
-moderator/Arbitro.s: moderator/Arbitro.c.s
-
-.PHONY : moderator/Arbitro.s
-
-# target to generate assembly for a file
-moderator/Arbitro.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/moderator/Arbitro.c.s
-.PHONY : moderator/Arbitro.c.s
-
-moderator/Campeonato.o: moderator/Campeonato.c.o
-
-.PHONY : moderator/Campeonato.o
+.PHONY : moderator/Moderator.o
 
 # target to build an object file
-moderator/Campeonato.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/moderator/Campeonato.c.o
-.PHONY : moderator/Campeonato.c.o
+moderator/Moderator.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/moderator/Moderator.c.o
+.PHONY : moderator/Moderator.c.o
 
-moderator/Campeonato.i: moderator/Campeonato.c.i
+moderator/Moderator.i: moderator/Moderator.c.i
 
-.PHONY : moderator/Campeonato.i
-
-# target to preprocess a source file
-moderator/Campeonato.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/moderator/Campeonato.c.i
-.PHONY : moderator/Campeonato.c.i
-
-moderator/Campeonato.s: moderator/Campeonato.c.s
-
-.PHONY : moderator/Campeonato.s
-
-# target to generate assembly for a file
-moderator/Campeonato.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/moderator/Campeonato.c.s
-.PHONY : moderator/Campeonato.c.s
-
-moderator/Jogador.o: moderator/Jogador.c.o
-
-.PHONY : moderator/Jogador.o
-
-# target to build an object file
-moderator/Jogador.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/moderator/Jogador.c.o
-.PHONY : moderator/Jogador.c.o
-
-moderator/Jogador.i: moderator/Jogador.c.i
-
-.PHONY : moderator/Jogador.i
+.PHONY : moderator/Moderator.i
 
 # target to preprocess a source file
-moderator/Jogador.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/moderator/Jogador.c.i
-.PHONY : moderator/Jogador.c.i
+moderator/Moderator.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/moderator/Moderator.c.i
+.PHONY : moderator/Moderator.c.i
 
-moderator/Jogador.s: moderator/Jogador.c.s
+moderator/Moderator.s: moderator/Moderator.c.s
 
-.PHONY : moderator/Jogador.s
+.PHONY : moderator/Moderator.s
 
 # target to generate assembly for a file
-moderator/Jogador.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/moderator/Jogador.c.s
-.PHONY : moderator/Jogador.c.s
+moderator/Moderator.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/teninrow.dir/build.make CMakeFiles/teninrow.dir/moderator/Moderator.c.s
+.PHONY : moderator/Moderator.c.s
 
 moderator/main.o: moderator/main.c.o
 
@@ -401,24 +347,18 @@ help:
 	@echo "... application/main.o"
 	@echo "... application/main.i"
 	@echo "... application/main.s"
-	@echo "... client/Cliente.o"
-	@echo "... client/Cliente.i"
-	@echo "... client/Cliente.s"
+	@echo "... client/Client.o"
+	@echo "... client/Client.i"
+	@echo "... client/Client.s"
 	@echo "... client/main.o"
 	@echo "... client/main.i"
 	@echo "... client/main.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
-	@echo "... moderator/Arbitro.o"
-	@echo "... moderator/Arbitro.i"
-	@echo "... moderator/Arbitro.s"
-	@echo "... moderator/Campeonato.o"
-	@echo "... moderator/Campeonato.i"
-	@echo "... moderator/Campeonato.s"
-	@echo "... moderator/Jogador.o"
-	@echo "... moderator/Jogador.i"
-	@echo "... moderator/Jogador.s"
+	@echo "... moderator/Moderator.o"
+	@echo "... moderator/Moderator.i"
+	@echo "... moderator/Moderator.s"
 	@echo "... moderator/main.o"
 	@echo "... moderator/main.i"
 	@echo "... moderator/main.s"
