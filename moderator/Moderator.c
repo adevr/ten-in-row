@@ -13,15 +13,13 @@ void readEnvVariables() {
     char *tempMaxPlayer = getenv("MAXPLAYERS"), *tempGameDir = getenv("GAMEDIR");
 
     if (tempGameDir == NULL || tempMaxPlayer == NULL) {
-        tempM == NULL ? printf("Notice: MAXPLAYERS env variable not defined **\n") : (maxPlayers = atoi(tempM));
+        tempMaxPlayer == NULL ? printf("Notice: MAXPLAYERS env variable not defined **\n") : (maxPlayers = atoi(tempMaxPlayer));
 
-        if (tempG == NULL) {
+        if (tempGameDir == NULL) {
             printf("Notice: GAMEDIR env variable not defined **\n");
         } else {
-            gameDir = tempG;
+            gameDir = tempGameDir;
         }
-
-        printf("********************************** \n");
         exit(0);
     } else {
         maxPlayers = atoi(tempMaxPlayer);
