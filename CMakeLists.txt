@@ -9,8 +9,6 @@ add_executable(
         moderator/Jogador.h
         moderator/Campeonato.c
         moderator/Campeonato.h
-        moderator/Administrador.c
-        moderator/Administrador.h
         moderator/Arbitro.c
         moderator/Arbitro.h
         moderator/main.c

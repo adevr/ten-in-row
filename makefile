@@ -4,6 +4,6 @@ all:
 	gcc -o teninrow main.c
 
 clean:
-	$(RM) client/client
-	$(RM) moderator/moderator
-	$(RM) teninrow
+	rm client/client
+	rm moderator/moderator
+	rm teninrow
