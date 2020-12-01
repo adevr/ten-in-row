@@ -9,8 +9,8 @@
 #define NR_OF_COLUMNS 10
 #define NR_OF_LINES 5
 
-#define PIECE_X 'X'
-#define PIECE_O 'O'
+#define PIECE_X 'x'
+#define PIECE_O 'o'
 #define EMPTY_CELL_CHAR '_'
 
 typedef struct Game {

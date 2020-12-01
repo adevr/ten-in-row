@@ -11,13 +11,20 @@
 #define GAME_PID getpid()
 
 void welcomeMenu() {
-    printf("\n\t ###### Bem vindo ao jogo 10-em-linha! ###### \n");
-    printf("\nO 10-em-linha é um jogo conhecido da nossa infancia que consiste em deixar cair moedinhas\n"
-           "de modo a formar uma linha no tabuleiro.");
-    printf("\nEste jogo é baseado num sistema de pontuação: quantas mais linhas forem feitas com o mesmo caracter, maior será a pontuação final.");
-    printf("\nExistem 2 tipos de caracteres: X e O.");
-    printf("\nCada caracter será lançado à vez numa coluna escolhida pelo utilizador.");
-    printf("\nO jogo termina quando o tempo chegar ao fim.\n\n");
+    printf("\n\t ############################################ \n");
+    printf("\t ###### Bem vindo ao jogo 10-em-linha! ###### \n");
+    printf("\t ##### O jogo favorito da tua infancia ###### \n");
+    printf("\t ############################################ \n");
+    printf("\t ################## Regras ################## \n");
+    printf("\t #      -> 1 Linha completa = 1 ponto       # \n");
+    printf("\t #      -> Maximo de 2 utilizadores         # \n");
+    printf("\t #      -> 2 tipos de caracteres: `x` `o`   # \n");
+    printf("\t #      -> Uma jogada de cada vez           # \n");
+    printf("\t ############################################ \n");
+    printf("\t # O jogo termina, assim que acabar o tempo # \n");
+    printf("\t ############################################ \n");
+    printf("\t ##### (A) Avançar ########## (S) Sair ###### \n");
+    printf("\t ############################################ \n");
 }
 
 int main(int argc, char *argv[]) {

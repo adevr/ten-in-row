@@ -12,6 +12,7 @@
 
 int main(int argc, char *argv[])
 {
+
     char opcao[2];
 
     setenv("GAMEDIR", "application/", 0);
@@ -44,7 +45,6 @@ int main(int argc, char *argv[])
             printf("sair\n");
             exit(0);
         }
-
         printf("Escolha outra opcao\n");
     }
 }
