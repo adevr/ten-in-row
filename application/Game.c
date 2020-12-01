@@ -63,12 +63,12 @@ void verifyLines(Game *game, int line) {
 
 void showGameTable(Game *game) {
     for (int i = 0; i < NR_OF_LINES; i++) {
-        printf("|");
+        printf("\t\t #");
 
         for(int ii = 0; ii < NR_OF_COLUMNS; ii++){
-            printf("%c", game->gameTable[i][ii]);
+            printf("_%c_", game->gameTable[i][ii]);
         }
 
-        printf("| \n");
+        printf("#\n");
     }
 }
