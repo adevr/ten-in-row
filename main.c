@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     char opcao[2];
 
     setenv("GAMEDIR", "application/", 0);
-    setenv("MAXPLAYERS", "15", 0);
+    setenv("MAXPLAYERS", "30", 0);
 
     printf("\t########## SISTEMA CHAMPION ##########\n");
     printf("Iniciar: \n");
@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
             printf("\nIntroduzir tempo de espera do campeonato: ");
             scanf("%s", waitTime);
 
-            execl("./moderator/moderator", "moderator", "d", duration, "w", waitTime, NULL);
+            execl("./moderator/moderator", "moderator", "-d", duration, "-w", waitTime, NULL);
             exit(0);
         }
 
@@ -45,8 +45,7 @@ int main(int argc, char *argv[])
             printf("sair\n");
             exit(0);
         }
-
-        printf("escolha outra opcao\n");
-
+        printf("Escolha outra opcao\n");
+    }
 }
 

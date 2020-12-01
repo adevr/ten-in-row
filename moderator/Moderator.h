@@ -5,20 +5,45 @@
 
 #ifndef TENINROW_MODERATOR_H
 #define TENINROW_MODERATOR_H
-#define USER_SIZE 25
+
+#include "Models/Client/Client.h"
+#include "Models/Application/Game.h"
+
+#define STRING_BUFFER 40
 
 int maxPlayers;
 char *gameDir;
 
+typedef struct RunningGame {
+    Client client;
+    Game game;
+} RunningGame;
+
+typedef struct Connections {
+    RunningGame *prev, *RunningGame, *prox;
+    int length;
+} Connections;
+
 typedef struct Moderator {
     int pid;
-    int game_pid;
-    int client_pid;
-    int points;
-    char user[USER_SIZE];
+    char pipeLocation[STRING_BUFFER];
+    int pipeDescriptor;
+    Connections *Connections;
 } Moderator;
+
+Moderator initModerator();
 
 void readEnvVariables();
 void printInitialInformation(int waiting_time, int duration);
 
-#endif //TENINROW_MODERATOR_H
+void onClientConnectionAttempt(Connections *Connections);
+
+void makeConnection(Connections *Connections, Client *client, Game *game);
+void disconnectClients(Connections *Connections);
+void interruptGames(Connections *Connections);
+
+void sendSignal(int PID);
+
+// TODO pesquisar sobre os handlers de sinais
+void signalHandler();
+#endif
