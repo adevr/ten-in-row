@@ -15,20 +15,23 @@ int maxPlayers;
 char *gameDir;
 
 typedef struct RunningGame {
-    Client client;
-    Game game;
+    struct RunningGame *prev;
+    Client Client;
+    Game Game;
+    struct RunningGame *prox;
 } RunningGame;
 
 typedef struct Connections {
-    RunningGame *prev, *RunningGame, *prox;
+    // Pointer to the first connection node
+    RunningGame *RunningGames;
     int length;
 } Connections;
 
 typedef struct Moderator {
     int pid;
-    char pipeLocation[STRING_BUFFER];
+    char *pipeName;
     int pipeDescriptor;
-    Connections *Connections;
+    Connections Connections;
 } Moderator;
 
 Moderator initModerator();
@@ -36,13 +39,22 @@ Moderator initModerator();
 void readEnvVariables();
 void printInitialInformation(int waiting_time, int duration);
 
+char *createModeratorPipe(Moderator *Moderator, char *TEMP_MODERATOR_PATH);
+
+void makeConnection(Connections *Connections, Client Client, Game Game);
+
+/*
+ * TODO
+ * Check the num max of connected clients
+ * Validate the username (if the request username is already exist, send the proper feedback message)
+ * If the none of the above validations is triggered, make a connection (new game must be linked to the client)
+ */
 void onClientConnectionAttempt(Connections *Connections);
 
-void makeConnection(Connections *Connections, Client *client, Game *game);
 void disconnectClients(Connections *Connections);
 void interruptGames(Connections *Connections);
 
-void sendSignal(int PID);
+void sendSignal(int targetPID);
 
 // TODO pesquisar sobre os handlers de sinais
 void signalHandler();

@@ -1,5 +1,5 @@
 all:
-	gcc -o moderator/moderator moderator/Moderator.c moderator/main.c
+	gcc -o moderator/moderator moderator/Moderator.c moderator/Models/Application/Game.c moderator/Models/Client/Client.c moderator/main.c
 	gcc -o client/client client/Client.c client/main.c
 	gcc -o application/game application/Game.c application/main.c
 	gcc -o teninrow main.c
