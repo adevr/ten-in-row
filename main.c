@@ -12,7 +12,6 @@
 
 int main(int argc, char *argv[])
 {
-
     char opcao[2];
 
     setenv("GAMEDIR", "application/", 0);

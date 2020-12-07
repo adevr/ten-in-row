@@ -6,6 +6,8 @@
 #ifndef TENINROW_CLIENT_H
 #define TENINROW_CLIENT_H
 
+#define TEMP_CLIENTS_PATH "/tmp/ten-in-row/clients"
+
 #include "stdio.h"
 
 #define USER_SIZE 25
