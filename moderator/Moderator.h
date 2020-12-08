@@ -6,10 +6,8 @@
 #ifndef TENINROW_MODERATOR_H
 #define TENINROW_MODERATOR_H
 
-#include "Models/Client/Client.h"
-#include "Models/Application/Game.h"
-
-#define STRING_BUFFER 40
+#include "models/Client/Client.h"
+#include "models/Application/Game.h"
 
 int maxPlayers;
 char *gameDir;
