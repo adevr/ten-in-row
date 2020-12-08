@@ -19,7 +19,7 @@ void welcomeMenu() {
     printf("\t ################## Regras ################## \n");
     printf("\t #      -> 1 Linha completa = 1 ponto       # \n");
     printf("\t #      -> Maximo de 2 utilizadores         # \n");
-    printf("\t #      -> 2 tipos de caracteres: `x` `o`   # \n");
+    printf("\t #      -> 2 tipos de caracteres: `*` `º`   # \n");
     printf("\t #      -> Uma jogada de cada vez           # \n");
     printf("\t ############################################ \n");
     printf("\t # O jogo termina, assim que acabar o tempo # \n");
