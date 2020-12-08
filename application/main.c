@@ -10,7 +10,7 @@
 #include <signal.h>
 #include "Game.h"
 
-#define GAME_PID getpid()
+Game *game;
 
 void welcomeMenu() {
     printf("\n\t ############################################ \n");
@@ -31,10 +31,14 @@ void welcomeMenu() {
 
 
 void gameSig_handler(int signo){
-      if (signo == SIGUSR1){
-
-      }
-        printf("received SIGINT\n");
+    if (signo == SIGUSR1){
+        // todo: get sig user 1
+        // send the points to the client
+        printf("\n PID: %i", game->PID);
+        printf("\n POINTS: %i \n", game->points);
+        exit(game->points);
+    }
+    printf("received SIGINT\n");
 }
 
 int main(int argc, char *argv[]) {
@@ -42,9 +46,11 @@ int main(int argc, char *argv[]) {
     int playsCounter = 1;
 
     welcomeMenu();
-
-    Game *game = createGame(GAME_PID);
+    game = createGame();
     initGame(game);
+    
+    if (signal(SIGUSR1, gameSig_handler) == (sig_t)SIG_ERR)
+        printf("\ncan't catch SIGINT\n");
 
     printf("%i", game->PID);
 

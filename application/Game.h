@@ -29,11 +29,12 @@ typedef struct Game {
     char *gameTable[NR_OF_LINES][NR_OF_COLUMNS];
 } Game;
 
-Game *createGame(int PID);
+Game *createGame();
 void initGame(Game *game);
 void doPlay(Game *game, char *pieceToVerify, int column);
 void verifyLines(Game *game, int line);
 void addPoints(Game *game);
 void showGameTable(Game *game);
+
 
 #endif //TENINROW_GAME_H

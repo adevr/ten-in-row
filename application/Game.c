@@ -10,11 +10,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
-Game *createGame(int PID) {
+Game *createGame() {
     Game *game = malloc(sizeof(Game));
 
-    game->PID = PID;
+    game->PID = getpid();
     game->points = 0;
     game->state = 0;
     game->pointsPerRow = 10;
