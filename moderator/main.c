@@ -9,6 +9,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include "../helpers/helpers.h"
 #include "Moderator.h"
 
 #define TEMP_ROOT_PATH "/tmp/ten-in-row"
@@ -88,14 +89,15 @@ int main(int argc, char *argv[]) {
     char *moderatorPipePath = createModeratorPipe(&Moderator, TEMP_MODERATOR_PATH);
     Moderator.pipeDescriptor = open(moderatorPipePath, O_RDWR);
 
-    while (1) {
+
+    /*while (1) {
         char responseBuffer[STRING_BUFFER];
 
         // The loop waits until the pipe receives a new message
         read(Moderator.pipeDescriptor, responseBuffer, sizeof(responseBuffer));
 
         printf("Reponse: %s \n", responseBuffer);
-    }
+    }*/
 
     return 0;
 }
