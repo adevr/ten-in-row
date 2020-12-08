@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <string.h>
 #include "Game.h"
 
 #define GAME_PID getpid()
@@ -37,19 +38,30 @@ int main(int argc, char *argv[]) {
     initGame(game);
 
     while (1) {
-        char pieceToPlay = (playsCounter % 2 == 0) ? PIECE_O : PIECE_X;
+        char* pieceToPlay = (playsCounter % 2 == 0) ? PIECE_O : PIECE_X;
 
         showGameTable(game);
 
-        printf("\nPeça em jogo %c. Jogar na coluna (1 - %i): ", pieceToPlay, NR_OF_COLUMNS);
+        if(strcmp (pieceToPlay, PIECE_X) == 0){
+            printf("\t # Peça: "); 
+            printf("\e[38;5;82m");
+            printf("%s", pieceToPlay);
+            printf("\033[0m|");
+            printf(". Coluna (1 - %i): ", NR_OF_COLUMNS);
+        }else{
+            printf("\t # Peça: "); 
+            printf("\033[22;34m");
+            printf("%s", pieceToPlay);
+            printf("\033[0m|");
+            printf(". Coluna (1 - %i): ", NR_OF_COLUMNS);
+        }
+
+        
         scanf("%i", &column);
 
         doPlay(game, pieceToPlay,column - 1);
 
         playsCounter ++;
-        system("clear");
-
-        if(playsCounter == 10){break;}
     }
     return 0;
 }
