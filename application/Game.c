@@ -3,6 +3,9 @@
  * Diogo Barbosa - 2018012425
  */
 
+// handle do sinal que o arbitro manda e efetuar ações
+
+
 #include "Game.h"
 #include <stdio.h>
 #include <stdlib.h>

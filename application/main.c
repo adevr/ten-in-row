@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <signal.h>
 #include "Game.h"
 
 #define GAME_PID getpid()
@@ -28,6 +29,14 @@ void welcomeMenu() {
     printf("\t ############################################ \n");
 }
 
+
+void gameSig_handler(int signo){
+      if (signo == SIGUSR1){
+
+      }
+        printf("received SIGINT\n");
+}
+
 int main(int argc, char *argv[]) {
     int column = 0;
     int playsCounter = 1;
@@ -37,7 +46,14 @@ int main(int argc, char *argv[]) {
     Game *game = createGame(GAME_PID);
     initGame(game);
 
+    printf("%i", game->PID);
+
+    if (signal(SIGINT, gameSig_handler) == (sig_t)SIG_ERR)
+        printf("\ncan't catch SIGINT\n");
+
+
     while (1) {
+        
         char* pieceToPlay = (playsCounter % 2 == 0) ? PIECE_O : PIECE_X;
 
         showGameTable(game);
