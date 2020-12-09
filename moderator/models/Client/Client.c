@@ -3,6 +3,7 @@
 //
 
 #include "Client.h"
+#include "../../../constants/constants.h"
 
 Client initClient(int clientPid, char *user, char *pipeLocation) {
     Client client;

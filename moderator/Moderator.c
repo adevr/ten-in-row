@@ -11,7 +11,7 @@
 #include <ftw.h>
 #include "Moderator.h"
 
-#define SERVER_PIPE_PATH "/moderatorPipe"
+#include "../constants/constants.h"
 
 extern char **environ;
 
@@ -20,7 +20,7 @@ Moderator initModerator(){
     Connections Connections;
 
     Moderator.pid = getpid();
-    Moderator.pipeName = strdup(SERVER_PIPE_PATH);
+    Moderator.pipeName = strdup(MODERATOR_NAMED_PIPE);
     Moderator.pipeDescriptor = -1;
     Moderator.Connections = Connections;
 
@@ -29,7 +29,7 @@ Moderator initModerator(){
     return Moderator;
 }
 
-char *createModeratorPipe(Moderator *Moderator, char *TEMP_MODERATOR_PATH) {
+char *createModeratorPipe(Moderator *Moderator) {
     char *moderatorPipeNamePath = strdup(TEMP_MODERATOR_PATH);
     strcat(moderatorPipeNamePath, Moderator->pipeName);
 

@@ -7,10 +7,16 @@
 
 #endif //TEN_IN_ROW_COMMUNICATION_H
 
+enum MESSAGE_CODE_TYPES {
+    GAME_MOVE,
+    COMMAND
+};
 
-enum CommunicationPrototypeEnum {
-    PID,
+enum COMMUNICATION_PROTOTYPE_ENUM {
+    PROCESS_ID,
     ERROR,
     MESSAGE_CODE,
     MESSAGE
 };
+
+char *getStringToSend(int PID, int error, int messageCode, char *message);

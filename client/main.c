@@ -3,16 +3,31 @@
  * Diogo Barbosa - 2018012425
  */
 
+#include <stdio.h>
+#include <fcntl.h>
 #include <unistd.h>
 #include "Client.h"
+#include "../constants/constants.h"
 
+// TODO
+//  Initialize every string outside of loops (to get scans fs, ....)
+//  ON SIGTERM OR KILL unlink pipes and close connections
 int main(int argc, char *argv[]) {
-    int pid = getpid();
+    printf("%i\n", getpid());
 
-    if (argc <= 0) {
-        printf("\nÉ necessário passar o pid do arbitro como parametro.\n");
-        return 0;
+    char moderatorMessage[STRING_BUFFER];
+    Client client = initClient();
+
+    createClientPipe(&client);
+
+    while (1) {
+        //client.pipeModeratorDescriptor = open(TEMP_MODERATOR_NAMED_PIPE, O_WRONLY);
+        //client.pipeDescriptor = open(client.pipePath, O_RDONLY | O_NONBLOCK);
+
+        executeGameMove(&client);
+        //read(client.pipeDescriptor, moderatorMessage, sizeof(moderatorMessage));
+        //printf("%s\n", moderatorMessage);
+
+        //close(client.pipeModeratorDescriptor);
     }
-    printf("\nPid do cliente: %i", pid);
-    printf("\nPid do arbitro: %s", argv[0]);
 }

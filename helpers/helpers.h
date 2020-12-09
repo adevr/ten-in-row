@@ -5,14 +5,16 @@
 #ifndef TEN_IN_ROW_HELPERS_H
 #define TEN_IN_ROW_HELPERS_H
 
-#endif
-
 typedef struct Array {
-    void **array;
+    char **array;
     int length;
 } Array;
 
 
-Array splitString(char *string, char *dividerChar);
-
+Array splitString(char *string);
+int getNumberDigits(int number);
+char *getNumberInString(int number);
 void freeTheArrayAllocatedMemory(Array *array);
+
+#endif
+
