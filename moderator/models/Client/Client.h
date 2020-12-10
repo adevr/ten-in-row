@@ -5,8 +5,6 @@
 #ifndef TEN_IN_ROW_CLIENT_H
 #define TEN_IN_ROW_CLIENT_H
 
-#define STRING_BUFFER 40
-
 typedef struct Client {
     int pid;
     char *userName;

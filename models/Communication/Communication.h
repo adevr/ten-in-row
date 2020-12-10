@@ -7,10 +7,19 @@
 
 #endif //TEN_IN_ROW_COMMUNICATION_H
 
-
-enum CommunicationPrototypeEnum {
-    PID,
+enum COMMUNICATION_PROTOTYPE_ENUM {
+    PROCESS_ID,
     ERROR,
     MESSAGE_CODE,
     MESSAGE
 };
+
+enum MESSAGE_CODE_TYPES {
+    GAME_MOVE,
+    COMMAND
+};
+
+char *initMessageModel(int PID, int messageCode, char *message);
+
+void listeningResponse(int descriptor, char *buffer);
+void sendMessage(int destDescriptor, char *message);

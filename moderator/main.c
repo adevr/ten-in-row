@@ -9,12 +9,11 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include "../helpers/helpers.h"
-#include "Moderator.h"
 
-#define TEMP_ROOT_PATH "/tmp/ten-in-row"
-#define TEMP_MODERATOR_PATH "/tmp/ten-in-row/moderator"
-#define TEMP_CLIENTS_PATH "/tmp/ten-in-row/clients"
+#include "Moderator.h"
+#include "../helpers/helpers.h"
+#include "../constants/constants.h"
+#include "../models/Communication/Communication.h"
 
 void setTempPaths() {
     mkdir(TEMP_ROOT_PATH, 0777);
@@ -48,6 +47,30 @@ void getArgsValues(int argc, char *argv[]) {
     printInitialInformation(waiting_time, championship_duration);
 }
 
+// TODO
+//  Validate the clients already connected (max 25)
+//  If there is a free space, create a client connection (new node), add the descriptor and send the feedback message(success or not and why)
+void handleClientRequest(char *message) {
+    Array messageSplited = splitString(strdup(message));
+
+    char clientPid[strlen(messageSplited.array[PROCESS_ID])];
+    strcpy(clientPid, messageSplited.array[PROCESS_ID]);
+
+    char clientsTempPath[strlen(TEMP_CLIENTS_PATH)];
+    strcpy(clientsTempPath, TEMP_CLIENTS_PATH);
+
+    char clientNamedPipe[strlen(clientPid) + strlen(clientsTempPath)];
+    strcpy(clientNamedPipe, clientsTempPath);
+    strcat(clientNamedPipe, clientPid);
+
+    // TODO adapt. Follow the TODO above ^
+    int fd = open(clientNamedPipe, O_WRONLY);
+    sendMessage(fd, "ARBITRO: Pedido recebido");
+    close(fd);
+    
+    freeTheArrayAllocatedMemory(&messageSplited);
+}
+
 // TODO DELETE
 // ONLY FOR TEST PROPOSE
 void connectionsTester(Moderator *Moderator) {
@@ -79,25 +102,39 @@ void connectionsTester(Moderator *Moderator) {
  *      -> to send the inputs received from a client to the related game
  *      -> ...
  *
- * The read isn't working well. Check the class videos to create a proper reader
+ * On exit status(SIGTERM or SIGKILL), close the opened pipes and unlink(remove)
  */
 int main(int argc, char *argv[]) {
+    char responseBuffer[STRING_BUFFER] = "\0";
+    int requestMessageSize = 0;
+
     //getArgsValues(argc, argv);
     setTempPaths();
 
     Moderator Moderator = initModerator();
-    char *moderatorPipePath = createModeratorPipe(&Moderator, TEMP_MODERATOR_PATH);
-    Moderator.pipeDescriptor = open(moderatorPipePath, O_RDWR);
 
+    char *moderatorPipePath = createModeratorPipe(&Moderator);
 
-    /*while (1) {
-        char responseBuffer[STRING_BUFFER];
+    //Moderator.pipeDescriptor = open(moderatorPipePath, O_RDONLY);
+    while (1) {
+        Moderator.pipeDescriptor = open(moderatorPipePath, O_RDWR);
 
-        // The loop waits until the pipe receives a new message
-        read(Moderator.pipeDescriptor, responseBuffer, sizeof(responseBuffer));
+        if (read(Moderator.pipeDescriptor, &requestMessageSize, sizeof(int)) == 0) {
+            puts("INFO: Client closed a connection.");
+            continue;
+        }
 
-        printf("Reponse: %s \n", responseBuffer);
-    }*/
+        if (read(Moderator.pipeDescriptor, responseBuffer, requestMessageSize) == 0) {
+            puts("INFO: Client closed a connection.");
+            continue;
+        }
+        printf("Reponse: %s %i\n", responseBuffer, requestMessageSize);
+
+        close(Moderator.pipeDescriptor);
+
+        handleClientRequest(responseBuffer);
+        memset(responseBuffer, 0, sizeof(responseBuffer));
+    }
 
     return 0;
 }

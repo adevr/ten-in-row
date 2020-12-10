@@ -37,7 +37,7 @@ Moderator initModerator();
 void readEnvVariables();
 void printInitialInformation(int waiting_time, int duration);
 
-char *createModeratorPipe(Moderator *Moderator, char *TEMP_MODERATOR_PATH);
+char *createModeratorPipe(Moderator *Moderator);
 
 void makeConnection(Connections *Connections, Client Client, Game Game);
 

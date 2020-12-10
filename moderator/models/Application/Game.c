@@ -3,6 +3,7 @@
 //
 
 #include "Game.h"
+#include "../../../constants/constants.h"
 
 Game initGame(int gamePid, int readDescriptor, int writeDescriptor) {
     Game game;

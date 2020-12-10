@@ -6,18 +6,25 @@
 #ifndef TENINROW_CLIENT_H
 #define TENINROW_CLIENT_H
 
-#define TEMP_CLIENTS_PATH "/tmp/ten-in-row/clients"
-
-#include "stdio.h"
-
-#define USER_SIZE 25
-
 typedef struct Client {
     int pid;
-    char user[USER_SIZE];
-    int points;
-} Cliente;
+    char *user;
+    char *pipePath;
+    int pipeDescriptor;
+    int pipeModeratorDescriptor;
 
-void startClient();
+    /*
+     * 0 - Unconnected
+     * 1 - Connected with the moderator
+     * */
+    int status;
+} Client;
 
-#endif //TENINROW_CLIENT_H
+Client initClient();
+
+void createClientPipe(Client *client);
+
+void executeGameMove(Client client, char *movementString);
+
+
+#endif
