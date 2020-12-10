@@ -9,9 +9,9 @@
 #define NR_OF_COLUMNS 10
 #define NR_OF_LINES 5
 
-#define PIECE_X 'x'
-#define PIECE_O 'o'
-#define EMPTY_CELL_CHAR '_'
+#define PIECE_X "***"
+#define PIECE_O "ººº"
+#define EMPTY_CELL_CHAR "___"
 
 typedef struct Game {
     int PID;
@@ -26,14 +26,15 @@ typedef struct Game {
     int lines;
     int columns;
 
-    char gameTable[NR_OF_LINES][NR_OF_COLUMNS];
+    char *gameTable[NR_OF_LINES][NR_OF_COLUMNS];
 } Game;
 
-Game *createGame(int PID);
+Game *createGame();
 void initGame(Game *game);
-void doPlay(Game *game, char pieceToVerify, int column);
+void doPlay(Game *game, char *pieceToVerify, int column);
 void verifyLines(Game *game, int line);
 void addPoints(Game *game);
 void showGameTable(Game *game);
+
 
 #endif //TENINROW_GAME_H

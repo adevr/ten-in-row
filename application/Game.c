@@ -3,15 +3,19 @@
  * Diogo Barbosa - 2018012425
  */
 
+// handle do sinal que o arbitro manda e efetuar ações
+
+
 #include "Game.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
-Game *createGame(int PID) {
+Game *createGame() {
     Game *game = malloc(sizeof(Game));
 
-    game->PID = PID;
+    game->PID = getpid();
     game->points = 0;
     game->state = 0;
     game->pointsPerRow = 10;
@@ -30,7 +34,7 @@ void initGame(Game *game) {
     game->state = 1;
 }
 
-void doPlay(Game *game, char piece, int column) {
+void doPlay(Game *game, char *piece, int column) {
     if (game == NULL) return;
 
     for (int i = NR_OF_LINES - 1; i >= 0; i--) {
@@ -51,7 +55,7 @@ void addPoints(Game *game) {
 }
 
 void verifyLines(Game *game, int line) {
-    char firstRowPiece = game->gameTable[line][0];
+    char *firstRowPiece = game->gameTable[line][0];
 
     for(int i = 0; i < NR_OF_COLUMNS; i++){
         if (firstRowPiece != game->gameTable[line][i] || game->gameTable[line][i] == EMPTY_CELL_CHAR)
@@ -63,12 +67,20 @@ void verifyLines(Game *game, int line) {
 
 void showGameTable(Game *game) {
     for (int i = 0; i < NR_OF_LINES; i++) {
-        printf("\t\t #");
-
+        printf("\t ##");
         for(int ii = 0; ii < NR_OF_COLUMNS; ii++){
-            printf("_%c_", game->gameTable[i][ii]);
+            if(strcmp (PIECE_O, game->gameTable[i][ii]) == 0){
+                printf("\033[22;34m");
+                printf("%s", game->gameTable[i][ii]);
+                printf("\033[0m|");
+            }else if (strcmp (PIECE_X, game->gameTable[i][ii]) == 0){
+                printf("\e[38;5;82m");
+                printf("%s", game->gameTable[i][ii]);
+                printf("\033[0m|");
+            }else 
+                printf("%s|", game->gameTable[i][ii]);                
         }
 
-        printf("#\n");
+        printf("##\n");
     }
 }
