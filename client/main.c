@@ -12,7 +12,7 @@
 #include "../models/Communication/Communication.h"
 
 // TODO
-//  Initialize every string outside of loops (to get scans fs, ....)
+//  if moderator accept the client, change status to 1 (fetched or connected)
 //  ON SIGTERM OR KILL unlink pipes and close connections
 int main(int argc, char *argv[]) {
     char moderatorResponseMessage[STRING_BUFFER], movementString[STRING_BUFFER];

@@ -10,9 +10,14 @@ typedef struct Client {
     int pid;
     char *user;
     char *pipePath;
-    int points;
     int pipeDescriptor;
     int pipeModeratorDescriptor;
+
+    /*
+     * 0 - Unconnected
+     * 1 - Connected with the moderator
+     * */
+    int status;
 } Client;
 
 Client initClient();

@@ -23,9 +23,10 @@ Client initClient() {
     client.pid = getpid();
     client.user = NULL;
     client.pipePath = NULL;
-    client.points = 0;
+
     client.pipeDescriptor = -1;
     client.pipeModeratorDescriptor = -1;
+    client.status = 0;
 
     puts("Insira o seu nome de jogador: ");
     scanf("%s", userName);
