@@ -44,8 +44,15 @@ int getNumberDigits(int number) {
 
 char *getNumberInString(int number) {
     char pidString[getNumberDigits(number) + 1];
-
     snprintf(pidString, sizeof(pidString),"%d", number);
 
     return strdup(pidString);
+}
+
+void freeTheArrayAllocatedMemory(Array *array) {
+    //for (int i = 0; i < array->length; i++) {
+    //    free(*(array->array + i));
+    //}
+    free(array->array);
+    array->length = 0;
 }

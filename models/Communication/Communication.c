@@ -3,21 +3,40 @@
 //
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include "../../helpers/helpers.h"
 #include "../../constants/constants.h"
 
 #include "Communication.h"
 
-char *getStringToSend(int PID, int error, int messageCode, char *message) {
-    char *string;
+char *initMessageModel(int PID, int messageCode, char *message) {
+    char string[STRING_BUFFER];
+    memset(string, 0, sizeof(string));
 
-    strcat(string, getNumberInString(PID));
-    strcat(string, DIVIDER_CHAR);
-    strcat(string, getNumberInString(error));
+    strcpy(string, getNumberInString(PID));
     strcat(string, DIVIDER_CHAR);
     strcat(string, getNumberInString(messageCode));
     strcat(string, DIVIDER_CHAR);
-    strcat(string, message);
+    strcat(string, strdup(message));
 
-    return string;
+    return strdup(string);
+}
+
+void listeningResponse(int fileDescriptor, char *buffer) {
+    int messageLength = 0;
+
+    read(fileDescriptor, &messageLength, sizeof(int));
+    read(fileDescriptor, buffer, messageLength);
+
+    printf("\n### ListenMessage: %s | Size:  %i ###\n", buffer, messageLength);
+}
+
+void sendMessage(int fileDescriptor, char *message) {
+    int messageLength = strlen(message);
+
+    printf("\n### Message Writted: %s | Size:  %i ###\n", message, messageLength);
+
+    write(fileDescriptor, &messageLength, sizeof(int));
+    write(fileDescriptor, message, messageLength);
 }

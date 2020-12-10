@@ -49,22 +49,10 @@ void createClientPipe(Client *client) {
     client->pipePath = clientNamedPipePath;
 }
 
-void executeGameMove(Client *client){
-    char *moveToExecute, *stringToSend;
-    puts("Jogada: ");
-    scanf("%s", moveToExecute);
+void executeGameMove(Client client, char *movementString){
+    char *messageToSend = initMessageModel(client.pid,1, movementString);
 
-    stringToSend = getStringToSend(client->pid,0,COMMAND, moveToExecute);
-
-    client->pipeModeratorDescriptor = open(TEMP_MODERATOR_NAMED_PIPE, O_WRONLY);
-    write(
-        client->pipeModeratorDescriptor,
-        stringToSend,
-        strlen(stringToSend) + 1
-    );
-
-    printf("Asdds2asdasd %s\n", stringToSend);
-    close(client->pipeModeratorDescriptor);
+    sendMessage(client.pipeModeratorDescriptor, messageToSend);
 }
 
 

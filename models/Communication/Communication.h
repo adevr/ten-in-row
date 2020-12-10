@@ -7,11 +7,6 @@
 
 #endif //TEN_IN_ROW_COMMUNICATION_H
 
-enum MESSAGE_CODE_TYPES {
-    GAME_MOVE,
-    COMMAND
-};
-
 enum COMMUNICATION_PROTOTYPE_ENUM {
     PROCESS_ID,
     ERROR,
@@ -19,4 +14,12 @@ enum COMMUNICATION_PROTOTYPE_ENUM {
     MESSAGE
 };
 
-char *getStringToSend(int PID, int error, int messageCode, char *message);
+enum MESSAGE_CODE_TYPES {
+    GAME_MOVE,
+    COMMAND
+};
+
+char *initMessageModel(int PID, int messageCode, char *message);
+
+void listeningResponse(int descriptor, char *buffer);
+void sendMessage(int destDescriptor, char *message);

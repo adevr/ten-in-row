@@ -51,19 +51,24 @@ void getArgsValues(int argc, char *argv[]) {
 //  Validate the clients already connected (max 25)
 //  If there is a free space, create a client connection (new node), add the descriptor and send the feedback message(success or not and why)
 void handleClientRequest(char *message) {
-    Array messageSplited = splitString(message);
+    Array messageSplited = splitString(strdup(message));
 
-    char *clientPid = messageSplited.array[PROCESS_ID];
-    char *clientsTempPath = strdup(TEMP_CLIENTS_PATH);
-    char *clientNamedPipe = malloc(sizeof(clientPid) + sizeof(clientsTempPath));
+    char clientPid[strlen(messageSplited.array[PROCESS_ID])];
+    strcpy(clientPid, messageSplited.array[PROCESS_ID]);
 
+    char clientsTempPath[strlen(TEMP_CLIENTS_PATH)];
+    strcpy(clientsTempPath, TEMP_CLIENTS_PATH);
+
+    char clientNamedPipe[strlen(clientPid) + strlen(clientsTempPath)];
     strcpy(clientNamedPipe, clientsTempPath);
-    strcpy(clientNamedPipe, clientPid);
+    strcat(clientNamedPipe, clientPid);
 
     // TODO adapt. Follow the TODO above ^
     int fd = open(clientNamedPipe, O_WRONLY);
-    write(fd, "ARBITRO: REcebido", strlen("ARBITRO: REcebido"));
+    sendMessage(fd, "ARBITRO: Pedido recebido");
     close(fd);
+    
+    freeTheArrayAllocatedMemory(&messageSplited);
 }
 
 // TODO DELETE
@@ -100,9 +105,10 @@ void connectionsTester(Moderator *Moderator) {
  * On exit status(SIGTERM or SIGKILL), close the opened pipes and unlink(remove)
  */
 int main(int argc, char *argv[]) {
-    //getArgsValues(argc, argv);
-    char responseBuffer[STRING_BUFFER];
+    char responseBuffer[STRING_BUFFER] = "\0";
+    int requestMessageSize = 0;
 
+    //getArgsValues(argc, argv);
     setTempPaths();
 
     Moderator Moderator = initModerator();
@@ -110,16 +116,24 @@ int main(int argc, char *argv[]) {
     char *moderatorPipePath = createModeratorPipe(&Moderator);
 
     //Moderator.pipeDescriptor = open(moderatorPipePath, O_RDONLY);
-
     while (1) {
-        Moderator.pipeDescriptor = open(moderatorPipePath, O_RDONLY);
+        Moderator.pipeDescriptor = open(moderatorPipePath, O_RDWR);
 
-        read(Moderator.pipeDescriptor, responseBuffer, sizeof(responseBuffer));
-        printf("Reponse: %s\n", responseBuffer);
+        if (read(Moderator.pipeDescriptor, &requestMessageSize, sizeof(int)) == 0) {
+            puts("INFO: Client closed a connection.");
+            continue;
+        }
 
-        //handleClientRequest(responseBuffer);
+        if (read(Moderator.pipeDescriptor, responseBuffer, requestMessageSize) == 0) {
+            puts("INFO: Client closed a connection.");
+            continue;
+        }
+        printf("Reponse: %s %i\n", responseBuffer, requestMessageSize);
 
         close(Moderator.pipeDescriptor);
+
+        handleClientRequest(responseBuffer);
+        memset(responseBuffer, 0, sizeof(responseBuffer));
     }
 
     return 0;

@@ -19,7 +19,7 @@ Client initClient();
 
 void createClientPipe(Client *client);
 
-void executeGameMove();
+void executeGameMove(Client client, char *movementString);
 
 
 #endif
