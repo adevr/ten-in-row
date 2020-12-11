@@ -50,12 +50,16 @@ void createClientPipe(Client *client) {
     client->pipePath = clientNamedPipePath;
 }
 
-void executeGameMove(Client client, char *movementString){
-    char *messageToSend = initMessageModel(client.pid,1, movementString);
+void handleUserInput(Client client, char *userInput) {
+    int messageCode = GAME_MOVE;
 
+    if (userInput[0] == COMMANDS_PREFIX) {
+        messageCode = COMMAND;
+    }
+
+    char *messageToSend = initMessageModel(client.pid, messageCode, userInput);
     sendMessage(client.pipeModeratorDescriptor, messageToSend);
 }
-
 
 
 

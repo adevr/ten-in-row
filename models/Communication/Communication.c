@@ -29,7 +29,7 @@ void listeningResponse(int fileDescriptor, char *buffer) {
     read(fileDescriptor, &messageLength, sizeof(int));
     read(fileDescriptor, buffer, messageLength);
 
-    //printf("\n### ListenMessage: %s | Size:  %i ###\n", buffer, messageLength);
+    printf("\n### ListenMessage:\n %s\tSize:  %i ###\n", buffer, messageLength);
 }
 
 void sendMessage(int fileDescriptor, char *message) {
