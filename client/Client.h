@@ -24,7 +24,7 @@ Client initClient();
 
 void createClientPipe(Client *client);
 
-void executeGameMove(Client client, char *movementString);
+void handleUserInput(Client client, char *userInput);
 
 
 #endif

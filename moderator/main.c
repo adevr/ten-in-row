@@ -47,30 +47,6 @@ void getArgsValues(int argc, char *argv[]) {
     printInitialInformation(waiting_time, championship_duration);
 }
 
-// TODO
-//  Validate the clients already connected (max 25)
-//  If there is a free space, create a client connection (new node), add the descriptor and send the feedback message(success or not and why)
-void handleClientRequest(char *message) {
-    Array messageSplited = splitString(strdup(message));
-
-    char clientPid[strlen(messageSplited.array[PROCESS_ID])];
-    strcpy(clientPid, messageSplited.array[PROCESS_ID]);
-
-    char clientsTempPath[strlen(TEMP_CLIENTS_PATH)];
-    strcpy(clientsTempPath, TEMP_CLIENTS_PATH);
-
-    char clientNamedPipe[strlen(clientPid) + strlen(clientsTempPath)];
-    strcpy(clientNamedPipe, clientsTempPath);
-    strcat(clientNamedPipe, clientPid);
-
-    // TODO adapt. Follow the TODO above ^
-    int fd = open(clientNamedPipe, O_WRONLY);
-    sendMessage(fd, "ARBITRO: Pedido recebido");
-    close(fd);
-    
-    freeTheArrayAllocatedMemory(&messageSplited);
-}
-
 // TODO DELETE
 // ONLY FOR TEST PROPOSE
 void connectionsTester(Moderator *Moderator) {
@@ -95,14 +71,12 @@ void connectionsTester(Moderator *Moderator) {
 }
 
 /* TODO
- * Create a specific buffer to carry the messages info
  * Create the threads to:
- *      -> handle the CHAMPION duration and interrupt the games
- *      -> send info in a json format to the clients (data structure to be defined)
- *      -> to send the inputs received from a client to the related game
- *      -> ...
+ *      -> handle the communications between the clients and games
+ *      -> handle the CHAMPION duration and interrupt the games when the counter finishes.
+ *      -> handle the administrator commands
  *
- * On exit status(SIGTERM or SIGKILL), close the opened pipes and unlink(remove)
+ * On exit status(SIGTERM or SIGKILL), close the opened pipes and unlink(remove) them
  */
 int main(int argc, char *argv[]) {
     char responseBuffer[STRING_BUFFER] = "\0";
@@ -112,13 +86,9 @@ int main(int argc, char *argv[]) {
     setTempPaths();
 
     Moderator Moderator = initModerator();
+    Moderator.pipeDescriptor = open(Moderator.pipePath, O_RDWR);
 
-    char *moderatorPipePath = createModeratorPipe(&Moderator);
-
-    //Moderator.pipeDescriptor = open(moderatorPipePath, O_RDONLY);
     while (1) {
-        Moderator.pipeDescriptor = open(moderatorPipePath, O_RDWR);
-
         if (read(Moderator.pipeDescriptor, &requestMessageSize, sizeof(int)) == 0) {
             puts("INFO: Client closed a connection.");
             continue;
@@ -130,9 +100,7 @@ int main(int argc, char *argv[]) {
         }
         printf("Reponse: %s %i\n", responseBuffer, requestMessageSize);
 
-        close(Moderator.pipeDescriptor);
-
-        handleClientRequest(responseBuffer);
+        handleClientRequest(&Moderator, responseBuffer);
         memset(responseBuffer, 0, sizeof(responseBuffer));
     }
 

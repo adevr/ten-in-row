@@ -9,14 +9,15 @@
 
 enum COMMUNICATION_PROTOTYPE_ENUM {
     PROCESS_ID,
-    ERROR,
     MESSAGE_CODE,
     MESSAGE
 };
 
 enum MESSAGE_CODE_TYPES {
     GAME_MOVE,
-    COMMAND
+    COMMAND,
+    CONNECTION_REQUEST,
+    CONNECTION_REFUSED
 };
 
 char *initMessageModel(int PID, int messageCode, char *message);

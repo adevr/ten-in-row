@@ -7,8 +7,6 @@
 
 #define STRING_BUFFER 40
 
-#define MODERATOR_NAMED_PIPE "moderatorPipe"
-
 #define TEMP_ROOT_PATH "/tmp/ten-in-row"
 #define TEMP_MODERATOR_PATH "/tmp/ten-in-row/moderator/"
 #define TEMP_CLIENTS_PATH "/tmp/ten-in-row/clients/"

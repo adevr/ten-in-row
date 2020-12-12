@@ -27,7 +27,7 @@ typedef struct Connections {
 
 typedef struct Moderator {
     int pid;
-    char *pipeName;
+    char *pipePath;
     int pipeDescriptor;
     Connections Connections;
 } Moderator;
@@ -37,10 +37,8 @@ Moderator initModerator();
 void readEnvVariables();
 void printInitialInformation(int waiting_time, int duration);
 
-char *createModeratorPipe(Moderator *Moderator);
-
 void makeConnection(Connections *Connections, Client Client, Game Game);
-
+void handleClientRequest(Moderator *Moderator, char *message);
 /*
  * TODO
  * Check the num max of connected clients
