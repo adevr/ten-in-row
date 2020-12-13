@@ -3,12 +3,12 @@
 //
 
 #include "Game.h"
-#include "../../../constants/constants.h"
 
-Game initGame(int gamePid, int readDescriptor, int writeDescriptor) {
+Game initGame(int gamePid, char* name, int readDescriptor, int writeDescriptor) {
     Game game;
 
     game.pid = gamePid;
+    game.name = name;
     game.readDescriptor = readDescriptor;
     game.writeDescriptor = writeDescriptor;
 
