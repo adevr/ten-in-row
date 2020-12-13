@@ -84,6 +84,7 @@ int main(int argc, char *argv[]) {
         doPlay(game, pieceToPlay,column - 1);
 
         playsCounter ++;
+        system("clear");
     }
     return 0;
 }
