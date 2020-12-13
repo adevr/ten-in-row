@@ -27,6 +27,7 @@ void welcomeMenu() {
     printf("\t ############################################ \n");
     printf("\t ##### (A) Avançar ########## (S) Sair ###### \n");
     printf("\t ############################################ \n");
+    printf("\t ##### Selecione opção: ");
 }
 
 
@@ -44,15 +45,22 @@ void gameSig_handler(int signo){
 int main(int argc, char *argv[]) {
     int column = 0;
     int playsCounter = 1;
+    char selection;
 
     welcomeMenu();
+
+    scanf("%c", &selection);
+    if(selection != 'A'){
+        exit(1);
+    }
+
     game = createGame();
     initGame(game);
     
     if (signal(SIGUSR1, gameSig_handler) == (sig_t)SIG_ERR)
         printf("\ncan't catch SIGINT\n");
 
-    printf("%i", game->PID);
+    //printf("%i", game->PID);
 
     if (signal(SIGINT, gameSig_handler) == (sig_t)SIG_ERR)
         printf("\ncan't catch SIGINT\n");
