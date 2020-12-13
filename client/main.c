@@ -7,6 +7,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdlib.h>
 #include "Client.h"
 #include "../constants/constants.h"
 #include "../models/Communication/Communication.h"
@@ -16,7 +17,8 @@
 //  ON SIGTERM OR KILL unlink pipes and close connections
 int main(int argc, char *argv[]) {
     char moderatorResponseMessage[STRING_BUFFER], userInput[INPUT_BUFFER];
-    printf("%i\n", getpid());
+
+    system("clear");
 
     Client client = initClient();
 

@@ -12,6 +12,7 @@
 #include <pthread.h>
 
 #include "Moderator.h"
+#include "../helpers/helpers.h"
 #include "../constants/constants.h"
 #include "../models/Communication/Communication.h"
 
@@ -33,18 +34,38 @@ void getArgsValues(int argc, char *argv[]) {
     for (int i = 0; i < argc; i++) {
         if (!strcmp(argv[i], "-d")) {
             i++;
-            championship_duration = atoi(argv[i]);
+            championship_duration = stringToNumber(argv[i]);
         }
 
         if (!strcmp(argv[i], "-w")) {
             i++;
-            waiting_time = atoi(argv[i]);
+            waiting_time = stringToNumber(argv[i]);
         }
     }
 
     system("clear");
     readEnvVariables();
     printInitialInformation(waiting_time, championship_duration);
+}
+
+void displayClients(Moderator *Moderator) {
+    ConnectedClients *auxConnectedClients;
+    auxConnectedClients = Moderator->connectedClients;
+
+    printf("\n##### Clientes Conectados #####\n");
+
+    while (Moderator->connectedClients != NULL) {
+
+        printf("PID: %i \t|\t Username: %s \t|\t Named Pipe: %s\n",
+           Moderator->connectedClients->client.pid,
+           Moderator->connectedClients->client.userName,
+           Moderator->connectedClients->client.pipeLocation
+        );
+
+        Moderator->connectedClients = Moderator->connectedClients->prox;
+    }
+
+    Moderator->connectedClients = auxConnectedClients;
 }
 
 // TODO DELETE
@@ -91,35 +112,50 @@ void connectionsTester(Moderator *Moderator) {
 }
 
 void *commandReaderListener(void *pointerToData) {
+    Moderator *Moderator = pointerToData;
     char command[INPUT_BUFFER];
 
     while (1) {
         printf("\n$ ->: ");
         scanf("%29s", command);
-        printf("\n$$$: %s", command);
+
+        if (!strcmp(command, "players")) {
+            displayClients(Moderator);
+        }
+        else if (!strcmp(command, "games")) {
+            printf("Jogos\n");
+        }
+        else if (!strcmp(command, "quit")) {
+            printf("Sair\n");
+        }
+        else if (command[0] == 'k') {
+            printf("Kickar jogador\n");
+        }
+        else {
+            printf("Comando indisponivel\n");
+        }
     }
 }
 
 /* TODO
  * Create the threads to:
  *      -> handle the communications between the clients and games
- *      -> handle the CHAMPION duration and interrupt the games when the counter finishes.
+ *      -> handle the CHAMPION duration and interrupt the games when the counter fisnishes.
  *      -> handle the administrator commands
  *
  * On exit status(SIGTERM or SIGKILL), close the opened pipes and unlink(remove) them
  */
 int main(int argc, char *argv[]) {
     char responseBuffer[STRING_BUFFER] = "\0";
-
     pthread_t administratorCommandsReaderThread;
 
-    //getArgsValues(argc, argv);
+    getArgsValues(argc, argv);
     setTempPaths();
 
     Moderator Moderator = initModerator();
     Moderator.pipeDescriptor = open(Moderator.pipePath, O_RDWR);
 
-    pthread_create(&administratorCommandsReaderThread, NULL, commandReaderListener, NULL);
+    pthread_create(&administratorCommandsReaderThread, NULL, commandReaderListener, &Moderator);
 
     while (1) {
         listeningResponse(Moderator.pipeDescriptor, responseBuffer);

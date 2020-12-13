@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#define BUFFER_SIZE 12
+#include "constants/constants.h"
 
 int main(int argc, char *argv[])
 {
@@ -27,8 +27,8 @@ int main(int argc, char *argv[])
         scanf("%1s", opcao);
 
         if (!strcmp(opcao, "1")) {
-            char duration[BUFFER_SIZE];
-            char waitTime[BUFFER_SIZE];
+            char duration[INPUT_BUFFER];
+            char waitTime[INPUT_BUFFER];
 
             printf("\nIntroduzir duracao do campeonato: ");
             scanf("%29s", duration);
@@ -46,5 +46,6 @@ int main(int argc, char *argv[])
         }
         printf("Escolha outra opcao\n");
     }
+
 }
 

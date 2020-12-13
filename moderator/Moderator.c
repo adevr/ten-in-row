@@ -154,10 +154,22 @@ void makeConnection(Connections *Connections, Client *Client, Game *Game){
     Connections->length++;
 }
 
-// TODO if accepted, create a new running game
+void handleCommand(Moderator *moderator, Array messageSplited, int clientFileDescriptor) {
+    char *command = messageSplited.array[MESSAGE];
+    char *response;
+
+    if (!strcmp(command, "#mygame")){
+        response = "ARBITRO: Comando ainda em desenvolvimento";
+    } else {
+        response = "ARBITRO: Comando indisponivel";
+    }
+
+    sendMessage(clientFileDescriptor, initMessageModel(moderator->pid, INFO, response));
+}
+
+// TODO get a random game and connect to a client with "makeConnection"
 void handleConnectionRequest(Moderator *moderator, Array messageSplited, char *clientNamedPipe, int clientFileDesciptor) {
-    // TODO change 25 to the global var maxPlayers (getted from env)
-    if (moderator->Connections.length >= 25) {
+    if (moderator->Connections.length >= maxPlayers) {
         sendMessage(
             clientFileDesciptor,
             initMessageModel(moderator->pid, CONNECTION_REFUSED, "Capacidade maxima de jogadores atingida")
@@ -180,6 +192,7 @@ void handleConnectionRequest(Moderator *moderator, Array messageSplited, char *c
         clientNamedPipe
     );
 
+    // TODO HERE
     makeConnection(&moderator->Connections, client, NULL);
 
     sendMessage(
@@ -196,7 +209,7 @@ void handleMessageByCode(Moderator *moderator, Array messageSplited, char *clien
 
     switch (messageCode) {
         case COMMAND:
-            sendMessage(fd, initMessageModel(moderator->pid, INFO, "ARBITRO: Comando recebido"));
+            handleCommand(moderator, messageSplited, fd);
             break;
         case CONNECTION_REQUEST:
             handleConnectionRequest(moderator, messageSplited, clientNamedPipe, fd);
@@ -217,8 +230,7 @@ void handleMessageByCode(Moderator *moderator, Array messageSplited, char *clien
 }
 
 // TODO
-//  Validate the clients already connected (max 25)
-//  If there is a free space, create a client connection (new node), add the descriptor and send the feedback message(success or not and why)
+//  Delete the node when the client request to exit
 void handleClientRequest(Moderator *Moderator, char *message) {
     Array messageSplited = splitString(strdup(message));
 

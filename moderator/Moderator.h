@@ -52,6 +52,7 @@ void makeConnection(Connections *Connections, Client *Client, Game *Game);
 
 void handleClientRequest(Moderator *Moderator, char *message);
 void handleMessageByCode(Moderator *moderator, Array messageSplited, char *clientNamedPipe);
+void handleCommand(Moderator *moderator, Array messageSplited, int clientFileDescriptor);
 void handleConnectionRequest(Moderator *moderator, Array messageSplited, char *clientNamedPipe, int clientFileDesciptor);
 
 /*
