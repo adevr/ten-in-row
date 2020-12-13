@@ -49,6 +49,11 @@ char *getNumberInString(int number) {
     return strdup(pidString);
 }
 
+long stringToNumber(char *string) {
+    char *pChar;
+    return strtol(string, &pChar,10);
+}
+
 void freeTheArrayAllocatedMemory(Array *array) {
     //for (int i = 0; i < array->length; i++) {
     //    free(*(array->array + i));

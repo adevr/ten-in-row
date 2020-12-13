@@ -25,8 +25,14 @@ Moderator initModerator(){
     Moderator.pid = getpid();
     Moderator.pipePath = strdup(TEMP_MODERATOR_NAMED_PIPE);
     Moderator.pipeDescriptor = -1;
-    Moderator.Connections = Connections;
 
+    Moderator.connectedClients = NULL;
+    Moderator.connectedClientsLength = 0;
+
+    Moderator.createdGames = NULL;
+    Moderator.createdGamesLength = 0;
+
+    Moderator.Connections = Connections;
     Moderator.Connections.length = 0;
 
     mkfifo(Moderator.pipePath,0777);
@@ -34,7 +40,83 @@ Moderator initModerator(){
     return Moderator;
 }
 
-void makeConnection(Connections *Connections, Client Client, Game Game){
+Client *addClient(Moderator *Moderator, int clientPid, char *user, char *pipeLocation) {
+    ConnectedClients *auxConnectedClientsPointer, *newConnectedClients;
+
+    auxConnectedClientsPointer = Moderator->connectedClients;
+    newConnectedClients = malloc(sizeof(ConnectedClients));
+
+    if (newConnectedClients == NULL) {
+        perror("On add client: Exception during memory allocation");
+        exit(1);
+    }
+
+    newConnectedClients->client = initClient(clientPid, user, pipeLocation);
+    newConnectedClients->prox = NULL;
+
+    while (1) {
+        if (Moderator->connectedClientsLength == 0) {
+            Moderator->connectedClients = newConnectedClients;
+            break;
+        }
+
+        if (Moderator->connectedClients->prox == NULL) {
+            newConnectedClients->prev = Moderator->connectedClientsLength != 0 ? Moderator->connectedClients : NULL;
+
+            Moderator->connectedClients->prox = newConnectedClients;
+
+            // Back to the first node
+            Moderator->connectedClients = auxConnectedClientsPointer;
+            break;
+        }
+
+        // Iterate over the nodes
+        Moderator->connectedClients = Moderator->connectedClients ->prox;
+    }
+
+    Moderator->connectedClientsLength ++;
+    return &newConnectedClients->client;
+}
+
+Game *addGame(Moderator *Moderator, char *name, int gamePid, int readDescriptor, int writeDescriptor) {
+    CreatedGames *auxCreatedGamesPointer, *newCreatedGame;
+
+    auxCreatedGamesPointer = Moderator->createdGames;
+    newCreatedGame = malloc(sizeof(CreatedGames));
+
+    if (newCreatedGame == NULL) {
+        perror("On new game creation: Exception during memory allocation");
+        exit(1);
+    }
+
+    newCreatedGame->game = initGame(gamePid, name, readDescriptor, writeDescriptor);
+    newCreatedGame->prox = NULL;
+
+    while (1) {
+        if (Moderator->createdGamesLength == 0) {
+            Moderator->createdGames = newCreatedGame;
+            break;
+        }
+
+        if (Moderator->createdGames->prox == NULL) {
+            newCreatedGame->prev = Moderator->createdGamesLength != 0 ? Moderator->createdGames : NULL;
+
+            Moderator->createdGames->prox = newCreatedGame;
+
+            // Back to the first node
+            Moderator->createdGames = auxCreatedGamesPointer;
+            break;
+        }
+
+        // Iterate over the nodes
+        Moderator->createdGames = Moderator->createdGames ->prox;
+    }
+
+    Moderator->createdGamesLength ++;
+    return &newCreatedGame->game;
+}
+
+void makeConnection(Connections *Connections, Client *Client, Game *Game){
     RunningGame *auxRunningGamePointer, *newRunningGame;
 
     auxRunningGamePointer = Connections->RunningGames;
@@ -42,7 +124,7 @@ void makeConnection(Connections *Connections, Client Client, Game Game){
 
     if (newRunningGame == NULL) {
         perror("On Make Connection: Exception during memory allocation");
-        return;
+        exit(1);
     }
 
     newRunningGame->Client = Client;
@@ -72,24 +154,62 @@ void makeConnection(Connections *Connections, Client Client, Game Game){
     Connections->length++;
 }
 
-void handleMessageByCode(Array messageSplited, char *clientNamedPipe) {
+// TODO if accepted, create a new running game
+void handleConnectionRequest(Moderator *moderator, Array messageSplited, char *clientNamedPipe, int clientFileDesciptor) {
+    // TODO change 25 to the global var maxPlayers (getted from env)
+    if (moderator->Connections.length >= 25) {
+        sendMessage(
+            clientFileDesciptor,
+            initMessageModel(moderator->pid, CONNECTION_REFUSED, "Capacidade maxima de jogadores atingida")
+        );
+        return;
+    }
+
+    if (userNameExists(moderator->connectedClients, messageSplited.array[MESSAGE])) {
+        sendMessage(
+                clientFileDesciptor,
+                initMessageModel(moderator->pid, INVALID_USERNAME, "Utilizador já existe, tente um novo")
+        );
+        return;
+    }
+
+    Client *client = addClient(
+        moderator,
+        stringToNumber(messageSplited.array[PROCESS_ID]),
+        messageSplited.array[MESSAGE],
+        clientNamedPipe
+    );
+
+    makeConnection(&moderator->Connections, client, NULL);
+
+    sendMessage(
+        clientFileDesciptor,
+        initMessageModel(moderator->pid, CONNECTION_ACCEPTED, "ARBITRO: Conectado com sucesso!")
+    );
+}
+
+void handleMessageByCode(Moderator *moderator, Array messageSplited, char *clientNamedPipe) {
     // TODO adapt. Follow the TODO above ^
-    char *pChar;
     int fd = open(clientNamedPipe, O_WRONLY);
-    long messageCode = strtol(messageSplited.array[MESSAGE_CODE], &pChar,10);
+
+    long messageCode = stringToNumber(messageSplited.array[MESSAGE_CODE]);
 
     switch (messageCode) {
         case COMMAND:
-            sendMessage(fd, "ARBITRO: É um comando");
+            sendMessage(fd, initMessageModel(moderator->pid, INFO, "ARBITRO: Comando recebido"));
             break;
         case CONNECTION_REQUEST:
-            sendMessage(fd, "ARBITRO: É um pedido de conexao");
+            handleConnectionRequest(moderator, messageSplited, clientNamedPipe, fd);
             break;
         case GAME_MOVE:
-            sendMessage(fd, "ARBITRO: É um movimento");
+            sendMessage(fd, initMessageModel(moderator->pid, INFO, "ARBITRO: É um movimento"));
+            break;
+        case REQUEST_QUIT:
+            //TODO remove unlink the player from the running games
+            sendMessage(fd, initMessageModel(moderator->pid, INFO, "ARBITRO: É um pedido de saida"));
             break;
         default:
-            sendMessage(fd, "ARBITRO: Comando não reconhecido");
+            sendMessage(fd, initMessageModel(moderator->pid, INFO, "ARBITRO: Código não reconhecido"));
             break;
     }
 
@@ -112,7 +232,7 @@ void handleClientRequest(Moderator *Moderator, char *message) {
     strcpy(clientNamedPipe, clientsTempPath);
     strcat(clientNamedPipe, clientPid);
 
-    handleMessageByCode(messageSplited, clientNamedPipe);
+    handleMessageByCode(Moderator, messageSplited, clientNamedPipe);
 
     freeTheArrayAllocatedMemory(&messageSplited);
 }
