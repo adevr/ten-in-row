@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
     welcomeMenu();
 
     scanf("%c", &selection);
-    if(selection != 'A'){
+    if(selection != 'A' && selection != 'a'){
         exit(1);
     }
 
@@ -88,7 +88,9 @@ int main(int argc, char *argv[]) {
 
         
         scanf("%i", &column);
-
+        if(column == 0){
+            exit(1);
+        }
         doPlay(game, pieceToPlay,column - 1);
 
         playsCounter ++;
