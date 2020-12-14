@@ -46,6 +46,5 @@ int main(int argc, char *argv[])
         }
         printf("Escolha outra opcao\n");
     }
-
 }
 

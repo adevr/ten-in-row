@@ -57,12 +57,6 @@ void handleMessageByCode(Moderator *moderator, Array messageSplited, char *clien
 void handleCommand(Moderator *moderator, Array messageSplited, int clientFileDescriptor);
 void handleConnectionRequest(Moderator *moderator, Array messageSplited, char *clientNamedPipe, int clientFileDesciptor);
 
-/*
- * TODO
- * Check the num max of connected clients
- * Validate the username (if the request username is already exist, send the proper feedback message)
- * If the none of the above validations is triggered, make a connection (new game must be linked to the client)
- */
 void onClientConnectionAttempt(Connections *Connections);
 
 void disconnectClients(Connections *Connections);
