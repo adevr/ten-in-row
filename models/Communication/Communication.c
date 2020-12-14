@@ -1,9 +1,10 @@
-//
-// Created by ubuntu on 08/12/20.
-//
+/**
+ * Alexandre Reis - 2018019414
+ * Diogo Barbosa - 2018012425
+ */
+
 #include <string.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
 #include "../../helpers/helpers.h"
 #include "../../constants/constants.h"

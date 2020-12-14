@@ -46,7 +46,9 @@ void readEnvVariables();
 void printInitialInformation(int waiting_time, int duration);
 
 Client *addClient(Moderator *Moderator, int clientPid, char *user, char *pipeLocation);
+void removeClient(Moderator *Moderator, int clientPid);
 Game *addGame(Moderator *Moderator, char *name, int gamePid, int readDescriptor, int writeDescriptor);
+void removeGame(Moderator *Moderator, int gamePid);
 
 void makeConnection(Connections *Connections, Client *Client, Game *Game);
 
@@ -68,6 +70,4 @@ void interruptGames(Connections *Connections);
 
 void sendSignal(int targetPID);
 
-// TODO pesquisar sobre os handlers de sinais
-void signalHandler();
 #endif

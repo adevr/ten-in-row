@@ -12,7 +12,7 @@
 
 int main(int argc, char *argv[])
 {
-    char opcao[2];
+    char option;
 
     setenv("GAMEDIR", "application/", 0);
     setenv("MAXPLAYERS", "30", 0);
@@ -24,9 +24,9 @@ int main(int argc, char *argv[])
 
     while (1) {
         printf("\nOPCAO $: ");
-        scanf("%1s", opcao);
+        scanf(" %c", &option);
 
-        if (!strcmp(opcao, "1")) {
+        if (option == '1') {
             char duration[INPUT_BUFFER];
             char waitTime[INPUT_BUFFER];
 
@@ -40,9 +40,9 @@ int main(int argc, char *argv[])
             exit(0);
         }
 
-        if (!strcmp(opcao, "0")) {
+        if (option == '0') {
             printf("sair\n");
-            exit(0);
+            exit(1);
         }
         printf("Escolha outra opcao\n");
     }

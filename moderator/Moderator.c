@@ -13,7 +13,6 @@
 #include "Moderator.h"
 
 #include "../constants/constants.h"
-#include "../helpers/helpers.h"
 #include "../models/Communication/Communication.h"
 
 extern char **environ;
@@ -76,6 +75,35 @@ Client *addClient(Moderator *Moderator, int clientPid, char *user, char *pipeLoc
 
     Moderator->connectedClientsLength ++;
     return &newConnectedClients->client;
+}
+void removeClient(Moderator *Moderator, int clientPid) {
+    ConnectedClients *auxConnectedClients = Moderator->connectedClients;
+
+    for (int i = 0; Moderator->connectedClients != NULL; i++) {
+        if (Moderator->connectedClients->client.pid != clientPid) {
+            Moderator->connectedClients = Moderator->connectedClients->prox;
+            continue;
+        }
+
+        if (i == 0) {
+            auxConnectedClients = Moderator->connectedClients->prox;
+        }
+
+        if (Moderator->connectedClients->prox != NULL) {
+            Moderator->connectedClients->prox->prev = Moderator->connectedClients->prev;
+        }
+
+        if (Moderator->connectedClients->prev != NULL) {
+            Moderator->connectedClients->prev->prox = Moderator->connectedClients->prox;
+        }
+
+        free(Moderator->connectedClients);
+
+        break;
+    }
+
+    Moderator->connectedClients = auxConnectedClients;
+    Moderator->connectedClientsLength--;
 }
 
 Game *addGame(Moderator *Moderator, char *name, int gamePid, int readDescriptor, int writeDescriptor) {
@@ -189,23 +217,25 @@ void handleConnectionRequest(Moderator *moderator, Array messageSplited, char *c
         moderator,
         stringToNumber(messageSplited.array[PROCESS_ID]),
         messageSplited.array[MESSAGE],
-        clientNamedPipe
+        strdup(clientNamedPipe)
     );
 
     // TODO HERE
-    makeConnection(&moderator->Connections, client, NULL);
+    //makeConnection(&moderator->Connections, client, NULL);
 
+    printf("O cliente [%s:%s] conectou-se com sucesso.\n", messageSplited.array[MESSAGE], messageSplited.array[PROCESS_ID]);
     sendMessage(
         clientFileDesciptor,
         initMessageModel(moderator->pid, CONNECTION_ACCEPTED, "ARBITRO: Conectado com sucesso!")
     );
 }
 
+// TODO
 void handleMessageByCode(Moderator *moderator, Array messageSplited, char *clientNamedPipe) {
-    // TODO adapt. Follow the TODO above ^
     int fd = open(clientNamedPipe, O_WRONLY);
 
     long messageCode = stringToNumber(messageSplited.array[MESSAGE_CODE]);
+    int clientPid = stringToNumber(messageSplited.array[PROCESS_ID]);
 
     switch (messageCode) {
         case COMMAND:
@@ -218,8 +248,9 @@ void handleMessageByCode(Moderator *moderator, Array messageSplited, char *clien
             sendMessage(fd, initMessageModel(moderator->pid, INFO, "ARBITRO: É um movimento"));
             break;
         case REQUEST_QUIT:
-            //TODO remove unlink the player from the running games
-            sendMessage(fd, initMessageModel(moderator->pid, INFO, "ARBITRO: É um pedido de saida"));
+            removeClient(moderator, clientPid);
+            printf("\nO cliente [%s] abandonou.\n", messageSplited.array[PROCESS_ID]);
+            sendMessage(fd, initMessageModel(moderator->pid, INFO, "ARBITRO: Saiu com sucesso"));
             break;
         default:
             sendMessage(fd, initMessageModel(moderator->pid, INFO, "ARBITRO: Código não reconhecido"));
@@ -229,8 +260,6 @@ void handleMessageByCode(Moderator *moderator, Array messageSplited, char *clien
     close(fd);
 }
 
-// TODO
-//  Delete the node when the client request to exit
 void handleClientRequest(Moderator *Moderator, char *message) {
     Array messageSplited = splitString(strdup(message));
 
@@ -249,6 +278,7 @@ void handleClientRequest(Moderator *Moderator, char *message) {
     freeTheArrayAllocatedMemory(&messageSplited);
 }
 
+// TODO verify if the gameDirExists
 void readEnvVariables() {
     char *tempMaxPlayer = getenv("MAXPLAYERS"), *tempGameDir = getenv("GAMEDIR");
 
@@ -257,7 +287,14 @@ void readEnvVariables() {
         exit(0);
     }
 
-    maxPlayers = atoi(tempMaxPlayer);
+    maxPlayers = stringToNumber(tempMaxPlayer);
+
+    if (maxPlayers <= 0 || maxPlayers > MAX_PLAYERS) {
+        system("clear");
+        printf("\nErro: A variavel de ambiente MAXPLAYERS apresenta valores inválidos. O seu valor deve ser estar contido entre 1 e 30.\n");
+        exit(1);
+    }
+
     gameDir = tempGameDir;
 }
 

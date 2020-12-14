@@ -10,11 +10,13 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <signal.h>
 
 #include "Moderator.h"
-#include "../helpers/helpers.h"
 #include "../constants/constants.h"
 #include "../models/Communication/Communication.h"
+
+Moderator moderator;
 
 void setTempPaths() {
     mkdir(TEMP_ROOT_PATH, 0777);
@@ -49,14 +51,14 @@ void getArgsValues(int argc, char *argv[]) {
 }
 
 void displayClients(Moderator *Moderator) {
-    ConnectedClients *auxConnectedClients;
-    auxConnectedClients = Moderator->connectedClients;
+    ConnectedClients *auxConnectedClients = Moderator->connectedClients;
 
     printf("\n##### Clientes Conectados #####\n");
+    printf("Total: %i\n", Moderator->connectedClientsLength);
 
     while (Moderator->connectedClients != NULL) {
 
-        printf("PID: %i \t|\t Username: %s \t|\t Named Pipe: %s\n",
+        printf("PID: %i | Username: %s | Named Pipe: %s\n",
            Moderator->connectedClients->client.pid,
            Moderator->connectedClients->client.userName,
            Moderator->connectedClients->client.pipeLocation
@@ -68,47 +70,24 @@ void displayClients(Moderator *Moderator) {
     Moderator->connectedClients = auxConnectedClients;
 }
 
-// TODO DELETE
-// ONLY FOR TEST PROPOSE
-void connectionsTester(Moderator *Moderator) {
-    makeConnection(
-        &Moderator->Connections,
-        addClient(Moderator, 123, "Diogo", "/Diogo"),
-        addGame(Moderator, "g_1", 321, 1, 2)
-    );
-    makeConnection(
-        &Moderator->Connections,
-        addClient(Moderator, 345, "Diogo1", "/Diogo1"),
-        addGame(Moderator, "g_2", 333, 1, 2)
-    );
-    makeConnection(
-        &Moderator->Connections,
-        addClient(Moderator, 678, "Diogo2", "/Diogo2"),
-        addGame(Moderator, "g_3", 444, 1, 2)
-    );
+// TODO clean the runningGames and createdGames nodes
+void signalHandler(int signal) {
+    close(moderator.pipeDescriptor);
+    unlink(TEMP_MODERATOR_NAMED_PIPE);
 
-    for (int i = 0; i < Moderator->createdGamesLength; ++i) {
-        printf("Node\n");
-        printf("PID: %i | ID: %s\n", Moderator->createdGames->game.pid, Moderator->createdGames->game.name);
-        printf("------------\n");
-        Moderator->createdGames = Moderator->createdGames->prox;
+    while (moderator.connectedClients != NULL) {
+        ConnectedClients *auxConnectedClients = moderator.connectedClients->prox;
+
+        kill(moderator.connectedClients->client.pid, SIGUSR1);
+        free(moderator.connectedClients);
+
+        moderator.connectedClients = auxConnectedClients;
     }
 
-    printf("\n-----------\n");
-    for (int i = 0; i < Moderator->connectedClientsLength; ++i) {
-        printf("Node\n");
-        printf("PID: %i | USerName: %s\n", Moderator->connectedClients->client.pid, Moderator->connectedClients->client.userName);
-        printf("------------\n");
-        Moderator->connectedClients = Moderator->connectedClients->prox;
-    }
+    system(RM_TEMP_ROOT_PATH);
 
-    printf("\n-----------\n");
-    for (int i = 0; i < Moderator->Connections.length; ++i) {
-        printf("Node\n");
-        printf("GAME ID: %s | USERNAME: %s\n", Moderator->Connections.RunningGames->Game->name, Moderator->Connections.RunningGames->Client->userName);
-        printf("------------\n");
-        Moderator->Connections.RunningGames = Moderator->Connections.RunningGames->prox;
-    }
+    moderator.connectedClients = NULL;
+    exit(0);
 }
 
 void *commandReaderListener(void *pointerToData) {
@@ -116,7 +95,6 @@ void *commandReaderListener(void *pointerToData) {
     char command[INPUT_BUFFER];
 
     while (1) {
-        printf("\n$ ->: ");
         scanf("%29s", command);
 
         if (!strcmp(command, "players")) {
@@ -126,7 +104,7 @@ void *commandReaderListener(void *pointerToData) {
             printf("Jogos\n");
         }
         else if (!strcmp(command, "quit")) {
-            printf("Sair\n");
+            kill(moderator.pid, SIGTERM);
         }
         else if (command[0] == 'k') {
             printf("Kickar jogador\n");
@@ -139,11 +117,7 @@ void *commandReaderListener(void *pointerToData) {
 
 /* TODO
  * Create the threads to:
- *      -> handle the communications between the clients and games
  *      -> handle the CHAMPION duration and interrupt the games when the counter fisnishes.
- *      -> handle the administrator commands
- *
- * On exit status(SIGTERM or SIGKILL), close the opened pipes and unlink(remove) them
  */
 int main(int argc, char *argv[]) {
     char responseBuffer[STRING_BUFFER] = "\0";
@@ -152,19 +126,25 @@ int main(int argc, char *argv[]) {
     getArgsValues(argc, argv);
     setTempPaths();
 
-    Moderator Moderator = initModerator();
-    Moderator.pipeDescriptor = open(Moderator.pipePath, O_RDWR);
+    moderator = initModerator();
+    moderator.pipeDescriptor = open(moderator.pipePath, O_RDWR);
 
-    pthread_create(&administratorCommandsReaderThread, NULL, commandReaderListener, &Moderator);
+    signal(SIGTERM, signalHandler);
+    signal(SIGINT, signalHandler);
+
+    pthread_create(&administratorCommandsReaderThread, NULL, commandReaderListener, &moderator);
+
+    printf("-----------------------------------------------\n");
+    printf("\t ### A aguardar por clientes... ###\n");
 
     while (1) {
-        listeningResponse(Moderator.pipeDescriptor, responseBuffer);
-        handleClientRequest(&Moderator, responseBuffer);
+        listeningResponse(moderator.pipeDescriptor, responseBuffer);
+        handleClientRequest(&moderator, responseBuffer);
 
         memset(responseBuffer, 0, sizeof(responseBuffer));
     }
 
-    close(Moderator.pipeDescriptor);
+    close(moderator.pipeDescriptor);
     return 0;
 }
 

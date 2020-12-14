@@ -8,19 +8,35 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
+#include <signal.h>
 #include "Client.h"
 #include "../constants/constants.h"
 #include "../models/Communication/Communication.h"
 
-// TODO
-//  if moderator accept the client, change status to 1 (fetched or connected)
-//  ON SIGTERM OR KILL unlink pipes and close connections
+Client client;
+
+void signalHandler(int signal) {
+    if (signal == SIGUSR1) {
+        printf("O campeonato foi encerrado.\n");
+    }
+
+    if (client.status) {
+        sendMessage(client.pipeModeratorDescriptor, initMessageModel(client.pid, REQUEST_QUIT, "\0"));
+    }
+
+    onExit(&client);
+}
+
 int main(int argc, char *argv[]) {
     char moderatorResponseMessage[STRING_BUFFER], userInput[INPUT_BUFFER];
 
     system("clear");
 
-    Client client = initClient();
+    client = initClient();
+
+    signal(SIGTERM, signalHandler);
+    signal(SIGINT, signalHandler);
+    signal(SIGUSR1, signalHandler);
 
     createClientPipe(&client);
 
