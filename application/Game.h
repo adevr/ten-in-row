@@ -35,7 +35,7 @@ void doPlay(Game *game, char *pieceToVerify, int column);
 void verifyLines(Game *game, int line);
 void addPoints(Game *game);
 void showGameTable(Game *game);
-void cleanColumn(Game *game, int col);
+void cleanBoard(Game *game);
 
 
 #endif //TENINROW_GAME_H
