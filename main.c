@@ -31,10 +31,10 @@ int main(int argc, char *argv[])
             char waitTime[BUFFER_SIZE];
 
             printf("\nIntroduzir duracao do campeonato: ");
-            scanf("%s", duration);
+            scanf("%29s", duration);
 
             printf("\nIntroduzir tempo de espera do campeonato: ");
-            scanf("%s", waitTime);
+            scanf("%29s", waitTime);
 
             execl("./moderator/moderator", "moderator", "-d", duration, "-w", waitTime, NULL);
             exit(0);

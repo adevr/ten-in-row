@@ -8,12 +8,19 @@
 
 typedef struct Game {
     int pid;
-
+    char *name;
     int readDescriptor;
     int writeDescriptor;
 } Game;
 
-Game initGame(int gamePid, int readDescriptor, int writeDescriptor);
+typedef struct CreatedGames {
+    struct CreatedGames *prev;
+    Game game;
+    struct CreatedGames *prox;
+} CreatedGames;
+
+
+Game initGame(int gamePid, char* name, int readDescriptor, int writeDescriptor);
 void removeGame(Game *game);
 
 #endif //TEN_IN_ROW_GAME_H

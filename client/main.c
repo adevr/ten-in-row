@@ -15,7 +15,7 @@
 //  if moderator accept the client, change status to 1 (fetched or connected)
 //  ON SIGTERM OR KILL unlink pipes and close connections
 int main(int argc, char *argv[]) {
-    char moderatorResponseMessage[STRING_BUFFER], userInput[STRING_BUFFER];
+    char moderatorResponseMessage[STRING_BUFFER], userInput[INPUT_BUFFER];
     printf("%i\n", getpid());
 
     Client client = initClient();
@@ -27,15 +27,18 @@ int main(int argc, char *argv[]) {
         memset(userInput, 0, sizeof(userInput));
         memset(moderatorResponseMessage, 0, sizeof(moderatorResponseMessage));
 
-        printf("\n$ ->: ");
-        scanf("%25s", userInput);
+        if (client.status) {
+            printf("\n$ ->: ");
+            scanf("%29s", userInput);
+        } else {
+            userNameInput(&client);
+        }
 
         handleUserInput(client, userInput);
         close(client.pipeModeratorDescriptor);
 
         client.pipeDescriptor = open(client.pipePath, O_RDONLY);
-        listeningResponse(client.pipeDescriptor, moderatorResponseMessage);
-
+        handleModeratorResponse(&client, moderatorResponseMessage);
         close(client.pipeDescriptor);
     }
 }

@@ -9,9 +9,9 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <pthread.h>
 
 #include "Moderator.h"
-#include "../helpers/helpers.h"
 #include "../constants/constants.h"
 #include "../models/Communication/Communication.h"
 
@@ -50,23 +50,53 @@ void getArgsValues(int argc, char *argv[]) {
 // TODO DELETE
 // ONLY FOR TEST PROPOSE
 void connectionsTester(Moderator *Moderator) {
-    Client client1, client2;
-    Game game1, game2;
+    makeConnection(
+        &Moderator->Connections,
+        addClient(Moderator, 123, "Diogo", "/Diogo"),
+        addGame(Moderator, "g_1", 321, 1, 2)
+    );
+    makeConnection(
+        &Moderator->Connections,
+        addClient(Moderator, 345, "Diogo1", "/Diogo1"),
+        addGame(Moderator, "g_2", 333, 1, 2)
+    );
+    makeConnection(
+        &Moderator->Connections,
+        addClient(Moderator, 678, "Diogo2", "/Diogo2"),
+        addGame(Moderator, "g_3", 444, 1, 2)
+    );
 
-    client1 = initClient(123, "Diogo", "pipeClient1");
-    client2 = initClient(1234, "Diogo2", "pipeClient2");
+    for (int i = 0; i < Moderator->createdGamesLength; ++i) {
+        printf("Node\n");
+        printf("PID: %i | ID: %s\n", Moderator->createdGames->game.pid, Moderator->createdGames->game.name);
+        printf("------------\n");
+        Moderator->createdGames = Moderator->createdGames->prox;
+    }
 
-    game1 = initGame(321, 1, 2);
-    game2 = initGame(4321, 3, 4);
+    printf("\n-----------\n");
+    for (int i = 0; i < Moderator->connectedClientsLength; ++i) {
+        printf("Node\n");
+        printf("PID: %i | USerName: %s\n", Moderator->connectedClients->client.pid, Moderator->connectedClients->client.userName);
+        printf("------------\n");
+        Moderator->connectedClients = Moderator->connectedClients->prox;
+    }
 
-    makeConnection(&Moderator->Connections, client1, game1);
-    makeConnection(&Moderator->Connections, client2, game2);
-
+    printf("\n-----------\n");
     for (int i = 0; i < Moderator->Connections.length; ++i) {
         printf("Node\n");
-        printf("PID: %i | User: %s\n", Moderator->Connections.RunningGames->Client.pid, Moderator->Connections.RunningGames->Client.userName);
+        printf("GAME ID: %s | USERNAME: %s\n", Moderator->Connections.RunningGames->Game->name, Moderator->Connections.RunningGames->Client->userName);
         printf("------------\n");
         Moderator->Connections.RunningGames = Moderator->Connections.RunningGames->prox;
+    }
+}
+
+void *commandReaderListener(void *pointerToData) {
+    char command[INPUT_BUFFER];
+
+    while (1) {
+        printf("\n$ ->: ");
+        scanf("%29s", command);
+        printf("\n$$$: %s", command);
     }
 }
 
@@ -80,7 +110,8 @@ void connectionsTester(Moderator *Moderator) {
  */
 int main(int argc, char *argv[]) {
     char responseBuffer[STRING_BUFFER] = "\0";
-    int requestMessageSize = 0;
+
+    pthread_t administratorCommandsReaderThread;
 
     //getArgsValues(argc, argv);
     setTempPaths();
@@ -88,22 +119,16 @@ int main(int argc, char *argv[]) {
     Moderator Moderator = initModerator();
     Moderator.pipeDescriptor = open(Moderator.pipePath, O_RDWR);
 
+    pthread_create(&administratorCommandsReaderThread, NULL, commandReaderListener, NULL);
+
     while (1) {
-        if (read(Moderator.pipeDescriptor, &requestMessageSize, sizeof(int)) == 0) {
-            puts("INFO: Client closed a connection.");
-            continue;
-        }
-
-        if (read(Moderator.pipeDescriptor, responseBuffer, requestMessageSize) == 0) {
-            puts("INFO: Client closed a connection.");
-            continue;
-        }
-        printf("Reponse: %s %i\n", responseBuffer, requestMessageSize);
-
+        listeningResponse(Moderator.pipeDescriptor, responseBuffer);
         handleClientRequest(&Moderator, responseBuffer);
+
         memset(responseBuffer, 0, sizeof(responseBuffer));
     }
 
+    close(Moderator.pipeDescriptor);
     return 0;
 }
 

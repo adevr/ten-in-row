@@ -14,6 +14,7 @@ typedef struct Array {
 Array splitString(char *string);
 int getNumberDigits(int number);
 char *getNumberInString(int number);
+long stringToNumber(char *string);
 void freeTheArrayAllocatedMemory(Array *array);
 
 #endif

@@ -22,9 +22,15 @@ typedef struct Client {
 
 Client initClient();
 
+void userNameInput(Client *client);
+
 void createClientPipe(Client *client);
 
 void handleUserInput(Client client, char *userInput);
+
+void handleModeratorResponse(Client *client, char *moderatorResponseMessage);
+
+void onExit(Client *client);
 
 
 #endif

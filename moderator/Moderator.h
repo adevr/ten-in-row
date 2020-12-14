@@ -8,14 +8,15 @@
 
 #include "models/Client/Client.h"
 #include "models/Application/Game.h"
+#include "../helpers/helpers.h"
 
 int maxPlayers;
 char *gameDir;
 
 typedef struct RunningGame {
     struct RunningGame *prev;
-    Client Client;
-    Game Game;
+    Client *Client;
+    Game *Game;
     struct RunningGame *prox;
 } RunningGame;
 
@@ -29,7 +30,14 @@ typedef struct Moderator {
     int pid;
     char *pipePath;
     int pipeDescriptor;
+
+    ConnectedClients *connectedClients;
+    int connectedClientsLength;
+    CreatedGames *createdGames;
+    int createdGamesLength;
+
     Connections Connections;
+
 } Moderator;
 
 Moderator initModerator();
@@ -37,8 +45,15 @@ Moderator initModerator();
 void readEnvVariables();
 void printInitialInformation(int waiting_time, int duration);
 
-void makeConnection(Connections *Connections, Client Client, Game Game);
+Client *addClient(Moderator *Moderator, int clientPid, char *user, char *pipeLocation);
+Game *addGame(Moderator *Moderator, char *name, int gamePid, int readDescriptor, int writeDescriptor);
+
+void makeConnection(Connections *Connections, Client *Client, Game *Game);
+
 void handleClientRequest(Moderator *Moderator, char *message);
+void handleMessageByCode(Moderator *moderator, Array messageSplited, char *clientNamedPipe);
+void handleConnectionRequest(Moderator *moderator, Array messageSplited, char *clientNamedPipe, int clientFileDesciptor);
+
 /*
  * TODO
  * Check the num max of connected clients
