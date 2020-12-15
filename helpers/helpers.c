@@ -1,6 +1,8 @@
-//
-// Created by ubuntu on 07/12/20.
-//
+/**
+ * Alexandre Reis - 2018019414
+ * Diogo Barbosa - 2018012425
+ */
+
 
 #include <stdio.h>
 #include <string.h>
@@ -9,8 +11,6 @@
 #include "helpers.h"
 #include "../constants/constants.h"
 
-// TODO
-// * Libertar todos os nós no final(elementos da lista e depois a lista em si)
 Array splitString(char *string){
     Array splitedString;
 

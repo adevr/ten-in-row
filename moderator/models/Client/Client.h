@@ -1,6 +1,7 @@
-//
-// Created by ubuntu on 01/12/20.
-//
+/**
+ * Alexandre Reis - 2018019414
+ * Diogo Barbosa - 2018012425
+ */
 
 #ifndef TEN_IN_ROW_CLIENT_H
 #define TEN_IN_ROW_CLIENT_H
@@ -21,9 +22,6 @@ typedef struct ConnectedClients {
 Client initClient(int clientPid, char *user, char *pipeLocation);
 
 int userNameExists(ConnectedClients *connectedClients, char *userName);
-
-void removeClient(Client *client);
-
 
 
 #endif //TEN_IN_ROW_CLIENT_H

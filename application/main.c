@@ -39,7 +39,11 @@ void gameSig_handler(int signo){
         printf("\n POINTS: %i \n", game->points);
         exit(game->points);
     }
-    printf("received SIGINT\n");
+
+    if (signo == SIGTERM || signo == SIGINT){
+        exit(0);
+    }
+
 }
 
 int main(int argc, char *argv[]) {

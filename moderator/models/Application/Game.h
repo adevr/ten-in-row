@@ -21,6 +21,5 @@ typedef struct CreatedGames {
 
 
 Game initGame(int gamePid, char* name, int readDescriptor, int writeDescriptor);
-void removeGame(Game *game);
 
 #endif //TEN_IN_ROW_GAME_H

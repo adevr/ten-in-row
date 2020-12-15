@@ -46,20 +46,17 @@ void readEnvVariables();
 void printInitialInformation(int waiting_time, int duration);
 
 Client *addClient(Moderator *Moderator, int clientPid, char *user, char *pipeLocation);
+void removeClient(Moderator *Moderator, int clientPid);
 Game *addGame(Moderator *Moderator, char *name, int gamePid, int readDescriptor, int writeDescriptor);
+void removeGame(Moderator *Moderator, int gamePid);
 
 void makeConnection(Connections *Connections, Client *Client, Game *Game);
 
 void handleClientRequest(Moderator *Moderator, char *message);
 void handleMessageByCode(Moderator *moderator, Array messageSplited, char *clientNamedPipe);
+void handleCommand(Moderator *moderator, Array messageSplited, int clientFileDescriptor);
 void handleConnectionRequest(Moderator *moderator, Array messageSplited, char *clientNamedPipe, int clientFileDesciptor);
 
-/*
- * TODO
- * Check the num max of connected clients
- * Validate the username (if the request username is already exist, send the proper feedback message)
- * If the none of the above validations is triggered, make a connection (new game must be linked to the client)
- */
 void onClientConnectionAttempt(Connections *Connections);
 
 void disconnectClients(Connections *Connections);
@@ -67,6 +64,4 @@ void interruptGames(Connections *Connections);
 
 void sendSignal(int targetPID);
 
-// TODO pesquisar sobre os handlers de sinais
-void signalHandler();
 #endif

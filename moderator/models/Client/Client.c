@@ -1,9 +1,9 @@
-//
-// Created by ubuntu on 01/12/20.
-//
+/**
+ * Alexandre Reis - 2018019414
+ * Diogo Barbosa - 2018012425
+ */
 
 #include <string.h>
-#include <stdio.h>
 #include "Client.h"
 
 Client initClient(int clientPid, char *user, char *pipeLocation) {
