@@ -306,3 +306,12 @@ void printInitialInformation(int waiting_time, int duration) {
     printf("*  Waiting time          = %d\n",waiting_time);
 }
 
+void sendSignal(int sig, int targetId){
+    if(targetId == 0){
+        if(sig == SIGTERM){
+            kill(targetId, SIGTERM);
+        }else if (sig == SIGUSR1){
+            kill(targetId, SIGUSR1);
+        }
+    }
+}

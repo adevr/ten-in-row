@@ -6,6 +6,7 @@
 #ifndef TENINROW_MODERATOR_H
 #define TENINROW_MODERATOR_H
 
+#include <signal.h>
 #include "models/Client/Client.h"
 #include "models/Application/Game.h"
 #include "../helpers/helpers.h"
@@ -60,8 +61,7 @@ void handleConnectionRequest(Moderator *moderator, Array messageSplited, char *c
 void onClientConnectionAttempt(Connections *Connections);
 
 void disconnectClients(Connections *Connections);
-void interruptGames(Connections *Connections);
 
-void sendSignal(int targetPID);
+void sendSignal(int sig, int targetId);
 
 #endif
