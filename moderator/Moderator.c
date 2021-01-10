@@ -221,9 +221,9 @@ void handleConnectionRequest(Moderator *moderator, Array messageSplited, char *c
     );
 
     // TODO HERE
-    //makeConnection(&moderator->Connections, client, NULL);
-
+    makeConnection(&moderator->Connections, client, NULL);
     printf("O cliente [%s:%s] conectou-se com sucesso.\n", messageSplited.array[MESSAGE], messageSplited.array[PROCESS_ID]);
+
     sendMessage(
         clientFileDesciptor,
         initMessageModel(moderator->pid, CONNECTION_ACCEPTED, "ARBITRO: Conectado com sucesso!")
@@ -276,6 +276,26 @@ void handleClientRequest(Moderator *Moderator, char *message) {
     handleMessageByCode(Moderator, messageSplited, clientNamedPipe);
 
     freeTheArrayAllocatedMemory(&messageSplited);
+}
+
+void displayClients(Moderator *Moderator) {
+    ConnectedClients *auxConnectedClients = Moderator->connectedClients;
+
+    printf("\n##### Clientes Conectados #####\n");
+    printf("Total: %i\n", Moderator->connectedClientsLength);
+
+    while (Moderator->connectedClients != NULL) {
+
+        printf("PID: %i | Username: %s | Named Pipe: %s\n",
+               Moderator->connectedClients->client.pid,
+               Moderator->connectedClients->client.userName,
+               Moderator->connectedClients->client.pipeLocation
+        );
+
+        Moderator->connectedClients = Moderator->connectedClients->prox;
+    }
+
+    Moderator->connectedClients = auxConnectedClients;
 }
 
 // TODO verify if the gameDirExists
