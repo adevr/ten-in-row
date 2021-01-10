@@ -58,9 +58,7 @@ void handleMessageByCode(Moderator *moderator, Array messageSplited, char *clien
 void handleCommand(Moderator *moderator, Array messageSplited, int clientFileDescriptor);
 void handleConnectionRequest(Moderator *moderator, Array messageSplited, char *clientNamedPipe, int clientFileDesciptor);
 
-void onClientConnectionAttempt(Connections *Connections);
-
-void disconnectClients(Connections *Connections);
+void displayClients(Moderator *Moderator);
 
 void sendSignal(int sig, int targetId);
 

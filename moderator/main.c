@@ -17,6 +17,7 @@
 #include "../models/Communication/Communication.h"
 
 Moderator moderator;
+int championship_duration = 0, waiting_time = 0;
 
 void setTempPaths() {
     mkdir(TEMP_ROOT_PATH, 0777);
@@ -25,8 +26,6 @@ void setTempPaths() {
 }
 
 void getArgsValues(int argc, char *argv[]) {
-    int championship_duration, waiting_time;
-
     if (argc < 5) {
         printf("Incorrect set of arguments passed to the program. Must use: \n");
         printf("./moderator -d {championship duration} -w {waiting time}\n");
@@ -48,26 +47,6 @@ void getArgsValues(int argc, char *argv[]) {
     system("clear");
     readEnvVariables();
     printInitialInformation(waiting_time, championship_duration);
-}
-
-void displayClients(Moderator *Moderator) {
-    ConnectedClients *auxConnectedClients = Moderator->connectedClients;
-
-    printf("\n##### Clientes Conectados #####\n");
-    printf("Total: %i\n", Moderator->connectedClientsLength);
-
-    while (Moderator->connectedClients != NULL) {
-
-        printf("PID: %i | Username: %s | Named Pipe: %s\n",
-           Moderator->connectedClients->client.pid,
-           Moderator->connectedClients->client.userName,
-           Moderator->connectedClients->client.pipeLocation
-        );
-
-        Moderator->connectedClients = Moderator->connectedClients->prox;
-    }
-
-    Moderator->connectedClients = auxConnectedClients;
 }
 
 // TODO clean the runningGames and createdGames nodes
@@ -115,13 +94,27 @@ void *commandReaderListener(void *pointerToData) {
     }
 }
 
+void *championshipTimerThread(void *pointerToData) {
+    Moderator *Moderator = pointerToData;
+
+    sleep(championship_duration);
+    // TODO
+    //  Finish the games
+    //  Return the pontuation to the Clients
+    //  Disconnect the clients
+    //  Close the program
+    kill(Moderator->pid, SIGTERM);
+}
+
 /* TODO
  * Create the threads to:
- *      -> handle the CHAMPION duration and interrupt the games when the counter fisnishes.
+ *      -> handle the clients connections
+ *      -> control the waiting time
+ *      -> handle the CHAMPION duration and interrupt the games and clients when the counter fisnishes,sending the pontuation
  */
 int main(int argc, char *argv[]) {
     char responseBuffer[STRING_BUFFER] = "\0";
-    pthread_t administratorCommandsReaderThread;
+    pthread_t administratorCommandsReaderThreadID, timerControllerThreadID;
 
     getArgsValues(argc, argv);
     setTempPaths();
@@ -132,7 +125,10 @@ int main(int argc, char *argv[]) {
     signal(SIGTERM, signalHandler);
     signal(SIGINT, signalHandler);
 
-    pthread_create(&administratorCommandsReaderThread, NULL, commandReaderListener, &moderator);
+    pthread_create(&administratorCommandsReaderThreadID, NULL, commandReaderListener, &moderator);
+    pthread_create(&timerControllerThreadID, NULL, championshipTimerThread, &moderator);
+
+    //pthread_join(timerControllerThread, NULL);
 
     printf("-----------------------------------------------\n");
     printf("\t ### A aguardar por clientes... ###\n");
