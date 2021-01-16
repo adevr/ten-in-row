@@ -16,6 +16,8 @@ Game *createGame()
     Game *game = malloc(sizeof(Game));
 
     game->PID = getpid();
+    game->readFd = -1;
+    game->writeFd = -1;
     game->points = 0;
     game->state = 0;
     game->pointsPerRow = 10;

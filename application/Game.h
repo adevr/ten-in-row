@@ -15,6 +15,10 @@
 
 typedef struct Game {
     int PID;
+    
+    int readFd;
+    int writeFd;
+
     int points;
     int pointsPerRow;
     /*

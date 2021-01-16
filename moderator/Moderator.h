@@ -27,10 +27,21 @@ typedef struct Connections {
     int length;
 } Connections;
 
+typedef struct Threads {
+    pthread_t administratorCommandsReaderThreadID;
+    pthread_t championshipWaitingTimeThreadID;
+    pthread_t championshipTimerThreadID;
+} Threads;
+
 typedef struct Moderator {
     int pid;
     char *pipePath;
     int pipeDescriptor;
+    /*
+        * 0 -> not started and waiting for players
+        * 1 -> started
+    */
+    int championStatus;
 
     ConnectedClients *connectedClients;
     int connectedClientsLength;
@@ -39,6 +50,7 @@ typedef struct Moderator {
 
     Connections Connections;
 
+    Threads threads;
 } Moderator;
 
 Moderator initModerator();
@@ -59,6 +71,7 @@ void handleCommand(Moderator *moderator, Array messageSplited, int clientFileDes
 void handleConnectionRequest(Moderator *moderator, Array messageSplited, char *clientNamedPipe, int clientFileDesciptor);
 
 void displayClients(Moderator *Moderator);
+void displayGames(Moderator *Moderator);
 
 void sendSignal(int sig, int targetId);
 

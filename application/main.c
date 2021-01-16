@@ -9,27 +9,53 @@
 #include <string.h>
 #include <signal.h>
 #include "Game.h"
+#include "../helpers/helpers.h"
 
 Game *game;
 
-void welcomeMenu() {
-    printf("\n\t ############################################ \n");
-    printf("\t ###### Bem vindo ao jogo 10-em-linha! ###### \n");
-    printf("\t ##### O jogo favorito da tua infancia ###### \n");
-    printf("\t ############################################ \n");
-    printf("\t ################## Regras ################## \n");
-    printf("\t #      -> 1 Linha completa = 1 ponto       # \n");
-    printf("\t #      -> Maximo de 2 utilizadores         # \n");
-    printf("\t #      -> 2 tipos de caracteres: `*` `º`   # \n");
-    printf("\t #      -> Uma jogada de cada vez           # \n");
-    printf("\t ############################################ \n");
-    printf("\t # O jogo termina, assim que acabar o tempo # \n");
-    printf("\t ############################################ \n");
-    printf("\t ##### (A) Avançar ########## (S) Sair ###### \n");
-    printf("\t ############################################ \n");
-    printf("\t ##### Selecione opção: ");
+void getArgsValues(int argc, char *argv[]) {
+    if (argc == 1) {
+        return;
+    }
+
+    if (argc == 2) {
+        printf("Incorrect set of arguments passed to the program.\n");
+        printf("Must use: ./{games program} {file descriptor to read} {file descriptor to write}\n");
+        exit(0);
+    }
+
+    game->readFd = stringToNumber(argv[1]);
+    game->writeFd = stringToNumber(argv[2]);
 }
 
+void setFileDescriptors() {
+    dup2(game->readFd, 0);
+    dup2(game->writeFd, 1);
+
+    close(game->readFd);
+    close(game->writeFd);
+}
+
+void welcomeMenu() {
+    printf(
+        "\n\t ############################################ \n\t"
+        "###### Bem vindo ao jogo 10-em-linha! ###### \n"
+        "\t ##### O jogo favorito da tua infancia ###### \n"
+        "\t ############################################ \n"
+        "\t ################## Regras ################## \n"
+        "\t #      -> 1 Linha completa = 1 ponto       # \n"
+        "\t #      -> Maximo de 2 utilizadores         # \n"
+        "\t #      -> 2 tipos de caracteres: `*` `º`   # \n"
+        "\t #      -> Uma jogada de cada vez           # \n"
+        "\t ############################################ \n"
+        "\t # O jogo termina, assim que acabar o tempo # \n"
+        "\t ############################################ \n"
+        "\t ##### (A) Avançar ########## (S) Sair ###### \n"
+        "\t ############################################ \n"
+        "\t ##### Selecione opção: "
+    );
+    fflush(stdout);
+}
 
 void gameSig_handler(int signo){
     if (signo == SIGUSR1){
@@ -46,10 +72,25 @@ void gameSig_handler(int signo){
 
 }
 
+/*
+    TODO 
+        if there are 0 arguments, run the game normaly
+        if not, the game should work by instructions:
+            -> getWelcomeMessage;
+            -> startGame;
+
+*/
 int main(int argc, char *argv[]) {
     int column = 0;
     int playsCounter = 1;
     char selection;
+
+    game = createGame();
+    getArgsValues(argc, argv);
+
+    if (argc > 2) {
+        setFileDescriptors();
+    }
 
     welcomeMenu();
 
@@ -57,9 +98,9 @@ int main(int argc, char *argv[]) {
     if(selection != 'A' && selection != 'a'){
         exit(1);
     }
-
-    game = createGame();
+    
     initGame(game);
+
     
     if (signal(SIGUSR1, gameSig_handler) == (sig_t)SIG_ERR)
         printf("\ncan't catch SIGINT\n");
@@ -92,9 +133,9 @@ int main(int argc, char *argv[]) {
 
         
         scanf("%i", &column);
-        if(column == 0){
+        /*if(column == 0){
             exit(1);
-        }
+        }*/
         doPlay(game, pieceToPlay,column - 1);
 
         playsCounter ++;

@@ -13,6 +13,7 @@
 #include <signal.h>
 
 #include "Moderator.h"
+#include "../helpers/helpers.h"
 #include "../constants/constants.h"
 #include "../models/Communication/Communication.h"
 
@@ -97,7 +98,9 @@ void *commandReaderListener(void *pointerToData) {
 void *championshipTimerThread(void *pointerToData) {
     Moderator *Moderator = pointerToData;
 
+    printf("\n## Campeonato iniciado!");fflush(stdout);
     sleep(championship_duration);
+    printf("\n## O campeonato terminou!\n");fflush(stdout);
     // TODO
     //  Finish the games
     //  Return the pontuation to the Clients
@@ -106,36 +109,78 @@ void *championshipTimerThread(void *pointerToData) {
     kill(Moderator->pid, SIGTERM);
 }
 
+void *championshipWaitingTimeThread(void *pointerToData) {
+    Moderator *Moderator = pointerToData;
+
+    sleep(waiting_time);
+    moderator.championStatus = 1;
+
+    pthread_create(&moderator.threads.championshipTimerThreadID, NULL, championshipTimerThread, &moderator);
+    pthread_exit(NULL);
+}
+
+void setChildProcessGames(Moderator *moderator) {
+    int currentForkPID = -2;
+    int childProcessFd[2];
+    int moderatorProcessFd[2];
+
+    pipe(moderatorProcessFd);
+
+    for (int i = 0; i < maxPlayers && currentForkPID != 0; i++) {
+        pipe(childProcessFd);
+
+        currentForkPID = fork();
+        
+        if (currentForkPID) {
+            addGame(moderator, "g_1", currentForkPID, moderatorProcessFd[0], childProcessFd[1]);
+        }
+    }
+
+    if (!currentForkPID) {
+        execl("./application/g_1", "g_1", getNumberInString(childProcessFd[0]), getNumberInString(moderatorProcessFd[1]), NULL);
+    }
+
+    /*char test[2000];
+    read(moderatorProcessFd[0], test, 2000);
+    printf("%s\n->>>>>\n", test);*/
+
+    //displayGames(moderator);
+}
+
 /* TODO
  * Create the threads to:
- *      -> handle the clients connections
  *      -> control the waiting time
  *      -> handle the CHAMPION duration and interrupt the games and clients when the counter fisnishes,sending the pontuation
  */
 int main(int argc, char *argv[]) {
     char responseBuffer[STRING_BUFFER] = "\0";
-    pthread_t administratorCommandsReaderThreadID, timerControllerThreadID;
-
+    
     getArgsValues(argc, argv);
     setTempPaths();
 
     moderator = initModerator();
     moderator.pipeDescriptor = open(moderator.pipePath, O_RDWR);
 
+    setChildProcessGames(&moderator);
+
     signal(SIGTERM, signalHandler);
     signal(SIGINT, signalHandler);
+    signal(SIGKILL, signalHandler);
 
-    pthread_create(&administratorCommandsReaderThreadID, NULL, commandReaderListener, &moderator);
-    pthread_create(&timerControllerThreadID, NULL, championshipTimerThread, &moderator);
-
-    //pthread_join(timerControllerThread, NULL);
+    //pthread_create(&moderator.threads.administratorCommandsReaderThreadID, NULL, commandReaderListener, &moderator);
 
     printf("-----------------------------------------------\n");
-    printf("\t ### A aguardar por clientes... ###\n");
+    printf("\t### A aguardar por clientes... ###\n");
+    printf("-----------------------------------------------\n");
+
 
     while (1) {
         listeningResponse(moderator.pipeDescriptor, responseBuffer);
         handleClientRequest(&moderator, responseBuffer);
+
+        if (!moderator.championStatus && moderator.connectedClientsLength == 2) {
+            //pthread_create(&moderator.threads.championshipWaitingTimeThreadID, NULL, championshipWaitingTimeThread, &moderator);
+        }
 
         memset(responseBuffer, 0, sizeof(responseBuffer));
     }

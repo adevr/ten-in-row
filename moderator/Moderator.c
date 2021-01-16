@@ -28,13 +28,15 @@ Moderator initModerator(){
     Moderator.connectedClients = NULL;
     Moderator.connectedClientsLength = 0;
 
+    Moderator.championStatus = 0;
+
     Moderator.createdGames = NULL;
     Moderator.createdGamesLength = 0;
 
     Moderator.Connections = Connections;
     Moderator.Connections.length = 0;
 
-    mkfifo(Moderator.pipePath,0777);
+    mkfifo(Moderator.pipePath, 0777);
 
     return Moderator;
 }
@@ -296,6 +298,27 @@ void displayClients(Moderator *Moderator) {
     }
 
     Moderator->connectedClients = auxConnectedClients;
+    printf("#########################\n");
+}
+
+void displayGames(Moderator *Moderator) {
+    CreatedGames *auxCreatedGames = Moderator->createdGames;
+
+    printf("\n##### Jogos Criados #####\n");
+    printf("Total: %i\n", Moderator->createdGamesLength);
+
+    while (Moderator->createdGames != NULL) {
+
+        printf("PID: %i | Name: %s\n",
+               Moderator->createdGames->game.pid,
+               Moderator->createdGames->game.name
+        );
+
+        Moderator->createdGames = Moderator->createdGames->prox;
+    }
+
+    Moderator->createdGames = auxCreatedGames;
+    printf("#########################\n");
 }
 
 // TODO verify if the gameDirExists
@@ -327,7 +350,7 @@ void printInitialInformation(int waiting_time, int duration) {
 }
 
 void sendSignal(int sig, int targetId){
-    if(targetId == 0){
+    if(targetId != 0){
         if(sig == SIGTERM){
             kill(targetId, SIGTERM);
         }else if (sig == SIGUSR1){
