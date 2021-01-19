@@ -28,8 +28,8 @@ void setTempPaths() {
 
 void getArgsValues(int argc, char *argv[]) {
     if (argc < 5) {
-        printf("Incorrect set of arguments passed to the program. Must use: \n");
-        printf("./moderator -d {championship duration} -w {waiting time}\n");
+        perror("Incorrect set of arguments passed to the program. Must use: \n");
+        perror("./moderator -d {championship duration} -w {waiting time}\n");
         exit(0);
     }
 
@@ -81,7 +81,7 @@ void *commandReaderListener(void *pointerToData) {
             displayClients(Moderator);
         }
         else if (!strcmp(command, "games")) {
-            printf("Jogos\n");
+            displayGames(Moderator);
         }
         else if (!strcmp(command, "quit")) {
             kill(moderator.pid, SIGTERM);
@@ -119,6 +119,22 @@ void *championshipWaitingTimeThread(void *pointerToData) {
     pthread_exit(NULL);
 }
 
+void buildGamesApps(int numberOfGamesToBuild) {
+
+    char command[STRING_BUFFER] = "\0";
+
+    for (int i = 0; i < numberOfGamesToBuild && i < 1000; i++)
+    {
+        strcat(command, "make jogo GAME_NUMBER=");
+        strcat(command, getNumberInString(i+1));
+
+        system(command);
+
+        memset(command, 0, sizeof(command));
+    }
+}
+
+// TODO refactor the function in order to create only one childprocess (return)
 void setChildProcessGames(Moderator *moderator) {
     int currentForkPID = -2;
     int childProcessFd[2];
@@ -140,39 +156,47 @@ void setChildProcessGames(Moderator *moderator) {
         execl("./application/g_1", "g_1", getNumberInString(childProcessFd[0]), getNumberInString(moderatorProcessFd[1]), NULL);
     }
 
-    /*char test[2000];
-    read(moderatorProcessFd[0], test, 2000);
-    printf("%s\n->>>>>\n", test);*/
+    //char test[150000] = "\0";
 
-    //displayGames(moderator);
+    //write(moderator->createdGames->game.writeDescriptor, "A", sizeof(char));
+    //read(moderator->createdGames->game.readDescriptor, test, sizeof(test));
+
+    //printf("%s\n", test);
 }
 
 /* TODO
+ * Create The anonymous pipe for Moderator
+ * Add the numberOfGames to the structure
+ * Create the game child process on client connection request
+ * Make the connections (Client <-> Game)
+ * During the champion, on client request, get the client info by PID and redirect the info to the related game process.
+ * 
  * Create the threads to:
  *      -> control the waiting time
  *      -> handle the CHAMPION duration and interrupt the games and clients when the counter fisnishes,sending the pontuation
  */
 int main(int argc, char *argv[]) {
     char responseBuffer[STRING_BUFFER] = "\0";
+    int numberOfGames = 4;
     
+    initRandom();
+    buildGamesApps(numberOfGames);
     getArgsValues(argc, argv);
     setTempPaths();
 
     moderator = initModerator();
     moderator.pipeDescriptor = open(moderator.pipePath, O_RDWR);
 
-    setChildProcessGames(&moderator);
-
+    //setChildProcessGames(&moderator);
+    
     signal(SIGTERM, signalHandler);
     signal(SIGINT, signalHandler);
-    signal(SIGKILL, signalHandler);
 
-    //pthread_create(&moderator.threads.administratorCommandsReaderThreadID, NULL, commandReaderListener, &moderator);
+    pthread_create(&moderator.threads.administratorCommandsReaderThreadID, NULL, commandReaderListener, &moderator);
 
     printf("-----------------------------------------------\n");
     printf("\t### A aguardar por clientes... ###\n");
     printf("-----------------------------------------------\n");
-
 
     while (1) {
         listeningResponse(moderator.pipeDescriptor, responseBuffer);

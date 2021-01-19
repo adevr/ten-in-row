@@ -10,8 +10,9 @@
 #include <unistd.h>
 #include <ftw.h>
 #include <fcntl.h>
-#include "Moderator.h"
 
+#include "Moderator.h"
+#include "../helpers/helpers.h"
 #include "../constants/constants.h"
 #include "../models/Communication/Communication.h"
 
@@ -202,7 +203,15 @@ void handleConnectionRequest(Moderator *moderator, Array messageSplited, char *c
     if (moderator->Connections.length >= maxPlayers) {
         sendMessage(
             clientFileDesciptor,
-            initMessageModel(moderator->pid, CONNECTION_REFUSED, "Capacidade maxima de jogadores atingida")
+            initMessageModel(moderator->pid, CONNECTION_REFUSED, "Capacidade maxima de jogadores atingida.")
+        );
+        return;
+    }
+
+    if (moderator->championStatus) {
+        sendMessage(
+                clientFileDesciptor,
+                initMessageModel(moderator->pid, CONNECTION_REFUSED, "O campeonato já foi iniciado.")
         );
         return;
     }
@@ -210,7 +219,7 @@ void handleConnectionRequest(Moderator *moderator, Array messageSplited, char *c
     if (userNameExists(moderator->connectedClients, messageSplited.array[MESSAGE])) {
         sendMessage(
                 clientFileDesciptor,
-                initMessageModel(moderator->pid, INVALID_USERNAME, "Utilizador já existe, tente um novo")
+                initMessageModel(moderator->pid, INVALID_USERNAME, "Utilizador já existe, tente um novo.")
         );
         return;
     }
@@ -223,12 +232,29 @@ void handleConnectionRequest(Moderator *moderator, Array messageSplited, char *c
     );
 
     // TODO HERE
+    // GET random game app, fork the process, execl the random app (adapt this funct in main.c -> setChildProcessGames)
     makeConnection(&moderator->Connections, client, NULL);
     printf("O cliente [%s:%s] conectou-se com sucesso.\n", messageSplited.array[MESSAGE], messageSplited.array[PROCESS_ID]);
 
+    /*sendMessage(
+        moderator->createdGames->game.writeDescriptor,
+        REQUEST_CODE_GET_GAME_ROULES
+    );
+
+    char gameRoules[STRING_BUFFER] = "\0";
+    listeningResponse(
+        moderator->createdGames->game.readDescriptor,
+        gameRoules
+    );
     sendMessage(
         clientFileDesciptor,
-        initMessageModel(moderator->pid, CONNECTION_ACCEPTED, "ARBITRO: Conectado com sucesso!")
+        initMessageModel(moderator->pid, CONNECTION_ACCEPTED, gameRoules)
+    );
+    */
+
+    sendMessage(
+        clientFileDesciptor,
+        initMessageModel(moderator->pid, CONNECTION_ACCEPTED, "Arbitro: Conectado com sucesso")
     );
 }
 

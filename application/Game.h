@@ -29,17 +29,21 @@ typedef struct Game {
     int state;
     int lines;
     int columns;
+    int playsCounter;
 
     char *gameTable[NR_OF_LINES][NR_OF_COLUMNS];
 } Game;
 
 Game *createGame();
-void initGame(Game *game);
+void gameRoulesInfo(Game *game);
+void gameRoulesInfoMenu(Game *game);
 void doPlay(Game *game, char *pieceToVerify, int column);
 void verifyLines(Game *game, int line);
 void addPoints(Game *game);
 void showGameTable(Game *game);
 void cleanBoard(Game *game);
+void initGame(Game *game);
+void initGameChildProcess(Game *game);
 
 
 #endif //TENINROW_GAME_H
