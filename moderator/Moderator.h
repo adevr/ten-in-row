@@ -14,18 +14,12 @@
 int maxPlayers;
 char *gameDir;
 
-typedef struct RunningGame {
-    struct RunningGame *prev;
-    Client *Client;
-    Game *Game;
-    struct RunningGame *prox;
-} RunningGame;
-
-typedef struct Connections {
-    // Pointer to the first connection node
-    RunningGame *RunningGames;
-    int length;
-} Connections;
+typedef struct GameApps {
+    struct GameApps *prev;
+    char *name;
+    char *path;
+    struct GameApps *prox;
+} GameApps;
 
 typedef struct Threads {
     pthread_t administratorCommandsReaderThreadID;
@@ -37,6 +31,8 @@ typedef struct Moderator {
     int pid;
     char *pipePath;
     int pipeDescriptor;
+    int anonymousPipeFd[2];
+    
     /*
         * 0 -> not started and waiting for players
         * 1 -> started
@@ -45,10 +41,8 @@ typedef struct Moderator {
 
     ConnectedClients *connectedClients;
     int connectedClientsLength;
-    CreatedGames *createdGames;
-    int createdGamesLength;
-
-    Connections Connections;
+    GameApps *gameApps;
+    int gameAppsLength;
 
     Threads threads;
 } Moderator;
@@ -58,12 +52,11 @@ Moderator initModerator();
 void readEnvVariables();
 void printInitialInformation(int waiting_time, int duration);
 
+void *addGameApp(Moderator *Moderator, char *name, char *path);
+GameApps *getRandomGameApp(Moderator *Moderator);
+
 Client *addClient(Moderator *Moderator, int clientPid, char *user, char *pipeLocation);
 void removeClient(Moderator *Moderator, int clientPid);
-Game *addGame(Moderator *Moderator, char *name, int gamePid, int readDescriptor, int writeDescriptor);
-void removeGame(Moderator *Moderator, int gamePid);
-
-void makeConnection(Connections *Connections, Client *Client, Game *Game);
 
 void handleClientRequest(Moderator *Moderator, char *message);
 void handleMessageByCode(Moderator *moderator, Array messageSplited, char *clientNamedPipe);

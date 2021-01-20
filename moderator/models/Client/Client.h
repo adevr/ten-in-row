@@ -6,11 +6,15 @@
 #ifndef TEN_IN_ROW_CLIENT_H
 #define TEN_IN_ROW_CLIENT_H
 
+#include "../Application/Game.h" 
+
 typedef struct Client {
     int pid;
     char *userName;
     char *pipeLocation;
     int pipeDescriptor;
+
+    Game *gameChildProcess;
 } Client;
 
 typedef struct ConnectedClients {
@@ -19,7 +23,7 @@ typedef struct ConnectedClients {
     struct ConnectedClients *prox;
 } ConnectedClients;
 
-Client initClient(int clientPid, char *user, char *pipeLocation);
+Client initClient(int clientPid, Game *game, char *user, char *pipeLocation);
 
 int userNameExists(ConnectedClients *connectedClients, char *userName);
 

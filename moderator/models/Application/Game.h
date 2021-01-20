@@ -9,17 +9,11 @@
 typedef struct Game {
     int pid;
     char *name;
+    char *path;
     int readDescriptor;
     int writeDescriptor;
 } Game;
 
-typedef struct CreatedGames {
-    struct CreatedGames *prev;
-    Game game;
-    struct CreatedGames *prox;
-} CreatedGames;
+Game *initGame(char *name, char *path, int moderatorPipeFd[2]);
 
-
-Game initGame(int gamePid, char* name, int readDescriptor, int writeDescriptor);
-
-#endif //TEN_IN_ROW_GAME_H
+#endif

@@ -50,7 +50,7 @@ void getArgsValues(int argc, char *argv[]) {
     printInitialInformation(waiting_time, championship_duration);
 }
 
-// TODO clean the runningGames and createdGames nodes
+// TODO close the games (SIGUSR1), wait the points, send to the client and close the connections
 void signalHandler(int signal) {
     close(moderator.pipeDescriptor);
     unlink(TEMP_MODERATOR_NAMED_PIPE);
@@ -63,7 +63,6 @@ void signalHandler(int signal) {
 
         moderator.connectedClients = auxConnectedClients;
     }
-
     system(RM_TEMP_ROOT_PATH);
 
     moderator.connectedClients = NULL;
@@ -119,56 +118,34 @@ void *championshipWaitingTimeThread(void *pointerToData) {
     pthread_exit(NULL);
 }
 
-void buildGamesApps(int numberOfGamesToBuild) {
+void buildGamesApps(Moderator *moderator, int numberOfGamesToBuild) {
 
-    char command[STRING_BUFFER] = "\0";
+    char command[100] = "\0";
+    char gameName[20] = "\0";
+    char gamePath[100] = "\0";
 
     for (int i = 0; i < numberOfGamesToBuild && i < 1000; i++)
     {
         strcat(command, "make jogo GAME_NUMBER=");
         strcat(command, getNumberInString(i+1));
 
+        strcat(gameName, "g_");
+        strcat(gameName, getNumberInString(i+1));
+        strcat(gamePath, "./");
+        strcat(gamePath, gameDir);
+        strcat(gamePath, gameName);
+
+        addGameApp(moderator, gameName, gamePath);
+
         system(command);
 
         memset(command, 0, sizeof(command));
+        memset(gameName, 0, sizeof(gameName));
+        memset(gamePath, 0, sizeof(gamePath));
     }
-}
-
-// TODO refactor the function in order to create only one childprocess (return)
-void setChildProcessGames(Moderator *moderator) {
-    int currentForkPID = -2;
-    int childProcessFd[2];
-    int moderatorProcessFd[2];
-
-    pipe(moderatorProcessFd);
-
-    for (int i = 0; i < maxPlayers && currentForkPID != 0; i++) {
-        pipe(childProcessFd);
-
-        currentForkPID = fork();
-        
-        if (currentForkPID) {
-            addGame(moderator, "g_1", currentForkPID, moderatorProcessFd[0], childProcessFd[1]);
-        }
-    }
-
-    if (!currentForkPID) {
-        execl("./application/g_1", "g_1", getNumberInString(childProcessFd[0]), getNumberInString(moderatorProcessFd[1]), NULL);
-    }
-
-    //char test[150000] = "\0";
-
-    //write(moderator->createdGames->game.writeDescriptor, "A", sizeof(char));
-    //read(moderator->createdGames->game.readDescriptor, test, sizeof(test));
-
-    //printf("%s\n", test);
 }
 
 /* TODO
- * Create The anonymous pipe for Moderator
- * Add the numberOfGames to the structure
- * Create the game child process on client connection request
- * Make the connections (Client <-> Game)
  * During the champion, on client request, get the client info by PID and redirect the info to the related game process.
  * 
  * Create the threads to:
@@ -180,14 +157,13 @@ int main(int argc, char *argv[]) {
     int numberOfGames = 4;
     
     initRandom();
-    buildGamesApps(numberOfGames);
     getArgsValues(argc, argv);
     setTempPaths();
 
     moderator = initModerator();
     moderator.pipeDescriptor = open(moderator.pipePath, O_RDWR);
 
-    //setChildProcessGames(&moderator);
+    buildGamesApps(&moderator, numberOfGames);
     
     signal(SIGTERM, signalHandler);
     signal(SIGINT, signalHandler);
