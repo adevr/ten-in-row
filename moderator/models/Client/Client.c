@@ -6,13 +6,15 @@
 #include <string.h>
 #include "Client.h"
 
-Client initClient(int clientPid, char *user, char *pipeLocation) {
+Client initClient(int clientPid, Game *game, char *user, char *pipeLocation) {
     Client client;
 
     client.pid = clientPid;
     client.userName = user;
     client.pipeLocation = pipeLocation;
     client.pipeDescriptor = -1;
+
+    client.gameChildProcess = game;
 
     return client;
 }

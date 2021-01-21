@@ -10,8 +10,9 @@
 #include <unistd.h>
 #include <ftw.h>
 #include <fcntl.h>
-#include "Moderator.h"
 
+#include "Moderator.h"
+#include "../helpers/helpers.h"
 #include "../constants/constants.h"
 #include "../models/Communication/Communication.h"
 
@@ -19,24 +20,87 @@ extern char **environ;
 
 Moderator initModerator(){
     Moderator Moderator;
-    Connections Connections;
 
     Moderator.pid = getpid();
     Moderator.pipePath = strdup(TEMP_MODERATOR_NAMED_PIPE);
     Moderator.pipeDescriptor = -1;
+    Moderator.anonymousPipeFd[0] = -1;
+    Moderator.anonymousPipeFd[1] = -1;
 
     Moderator.connectedClients = NULL;
     Moderator.connectedClientsLength = 0;
 
-    Moderator.createdGames = NULL;
-    Moderator.createdGamesLength = 0;
+    Moderator.championStatus = 0;
 
-    Moderator.Connections = Connections;
-    Moderator.Connections.length = 0;
+    Moderator.gameApps = NULL;
+    Moderator.gameAppsLength = 0;
 
-    mkfifo(Moderator.pipePath,0777);
+    mkfifo(Moderator.pipePath, 0777);
+    pipe(Moderator.anonymousPipeFd);
 
     return Moderator;
+}
+
+void *addGameApp(Moderator *Moderator, char *name, char *path) {
+    GameApps *auxCreatedGamesPointer, *newCreatedGame;
+
+    auxCreatedGamesPointer = Moderator->gameApps;
+    newCreatedGame = malloc(sizeof(GameApps));
+
+    if (newCreatedGame == NULL) {
+        perror("On new game creation: Exception during memory allocation");
+        exit(1);
+    }
+
+    newCreatedGame->path = strdup(path);
+    newCreatedGame->name = strdup(name);
+
+    newCreatedGame->prox = NULL;
+
+    while (1) {
+        if (Moderator->gameAppsLength == 0) {
+            Moderator->gameApps = newCreatedGame;
+            break;
+        }
+
+        if (Moderator->gameApps->prox == NULL) {
+            newCreatedGame->prev = Moderator->gameAppsLength != 0 ? Moderator->gameApps : NULL;
+
+            Moderator->gameApps->prox = newCreatedGame;
+
+            // Back to the first node
+            Moderator->gameApps = auxCreatedGamesPointer;
+            break;
+        }
+
+        // Iterate over the nodes
+        Moderator->gameApps = Moderator->gameApps->prox;
+    }
+
+    Moderator->gameAppsLength ++;
+}
+
+GameApps *getRandomGameApp(Moderator *Moderator) {
+    if (Moderator->gameAppsLength <= 0) {
+        perror("Error: getRandomGameApp getting a random GameApp. There is no game created");
+    }
+
+    int randomGameIndex = intUniformRnd(1, Moderator->gameAppsLength);
+
+    GameApps *auxGameApp = Moderator->gameApps;
+    GameApps *randomGameApp;
+
+    for (int i = 1; i <= Moderator->gameAppsLength && Moderator->gameApps != NULL; i++)
+    {
+        if (i == randomGameIndex) {
+            randomGameApp = Moderator->gameApps;
+            break;
+        }
+        Moderator->gameApps = Moderator->gameApps->prox;
+    }
+
+    Moderator->gameApps = auxGameApp;
+    return randomGameApp;
 }
 
 Client *addClient(Moderator *Moderator, int clientPid, char *user, char *pipeLocation) {
@@ -49,8 +113,11 @@ Client *addClient(Moderator *Moderator, int clientPid, char *user, char *pipeLoc
         perror("On add client: Exception during memory allocation");
         exit(1);
     }
+    
+    GameApps *randomGameApp = getRandomGameApp(Moderator);
+    Game *game = initGame(randomGameApp->name, randomGameApp->path, Moderator->anonymousPipeFd);
 
-    newConnectedClients->client = initClient(clientPid, user, pipeLocation);
+    newConnectedClients->client = initClient(clientPid, game, user, pipeLocation);
     newConnectedClients->prox = NULL;
 
     while (1) {
@@ -106,82 +173,6 @@ void removeClient(Moderator *Moderator, int clientPid) {
     Moderator->connectedClientsLength--;
 }
 
-Game *addGame(Moderator *Moderator, char *name, int gamePid, int readDescriptor, int writeDescriptor) {
-    CreatedGames *auxCreatedGamesPointer, *newCreatedGame;
-
-    auxCreatedGamesPointer = Moderator->createdGames;
-    newCreatedGame = malloc(sizeof(CreatedGames));
-
-    if (newCreatedGame == NULL) {
-        perror("On new game creation: Exception during memory allocation");
-        exit(1);
-    }
-
-    newCreatedGame->game = initGame(gamePid, name, readDescriptor, writeDescriptor);
-    newCreatedGame->prox = NULL;
-
-    while (1) {
-        if (Moderator->createdGamesLength == 0) {
-            Moderator->createdGames = newCreatedGame;
-            break;
-        }
-
-        if (Moderator->createdGames->prox == NULL) {
-            newCreatedGame->prev = Moderator->createdGamesLength != 0 ? Moderator->createdGames : NULL;
-
-            Moderator->createdGames->prox = newCreatedGame;
-
-            // Back to the first node
-            Moderator->createdGames = auxCreatedGamesPointer;
-            break;
-        }
-
-        // Iterate over the nodes
-        Moderator->createdGames = Moderator->createdGames ->prox;
-    }
-
-    Moderator->createdGamesLength ++;
-    return &newCreatedGame->game;
-}
-
-void makeConnection(Connections *Connections, Client *Client, Game *Game){
-    RunningGame *auxRunningGamePointer, *newRunningGame;
-
-    auxRunningGamePointer = Connections->RunningGames;
-    newRunningGame = malloc(sizeof(RunningGame));
-
-    if (newRunningGame == NULL) {
-        perror("On Make Connection: Exception during memory allocation");
-        exit(1);
-    }
-
-    newRunningGame->Client = Client;
-    newRunningGame->Game = Game;
-    newRunningGame->prox = NULL;
-
-    while (1) {
-        if (Connections->length == 0) {
-            Connections->RunningGames = newRunningGame;
-            break;
-        }
-
-        if (Connections->RunningGames->prox == NULL) {
-            newRunningGame->prev = Connections->length != 0 ? Connections->RunningGames : NULL;
-
-            Connections->RunningGames->prox = newRunningGame;
-
-            // Back to the first node
-            Connections->RunningGames = auxRunningGamePointer;
-            break;
-        }
-
-        // Iterate over the nodes
-        Connections->RunningGames = Connections->RunningGames->prox;
-    }
-
-    Connections->length++;
-}
-
 void handleCommand(Moderator *moderator, Array messageSplited, int clientFileDescriptor) {
     char *command = messageSplited.array[MESSAGE];
     char *response;
@@ -197,10 +188,18 @@ void handleCommand(Moderator *moderator, Array messageSplited, int clientFileDes
 
 // TODO get a random game and connect to a client with "makeConnection"
 void handleConnectionRequest(Moderator *moderator, Array messageSplited, char *clientNamedPipe, int clientFileDesciptor) {
-    if (moderator->Connections.length >= maxPlayers) {
+    if (moderator->connectedClientsLength >= maxPlayers) {
         sendMessage(
             clientFileDesciptor,
-            initMessageModel(moderator->pid, CONNECTION_REFUSED, "Capacidade maxima de jogadores atingida")
+            initMessageModel(moderator->pid, CONNECTION_REFUSED, "Capacidade maxima de jogadores atingida.")
+        );
+        return;
+    }
+
+    if (moderator->championStatus) {
+        sendMessage(
+                clientFileDesciptor,
+                initMessageModel(moderator->pid, CONNECTION_REFUSED, "O campeonato já foi iniciado.")
         );
         return;
     }
@@ -208,7 +207,7 @@ void handleConnectionRequest(Moderator *moderator, Array messageSplited, char *c
     if (userNameExists(moderator->connectedClients, messageSplited.array[MESSAGE])) {
         sendMessage(
                 clientFileDesciptor,
-                initMessageModel(moderator->pid, INVALID_USERNAME, "Utilizador já existe, tente um novo")
+                initMessageModel(moderator->pid, INVALID_USERNAME, "Utilizador já existe, tente um novo.")
         );
         return;
     }
@@ -220,14 +219,26 @@ void handleConnectionRequest(Moderator *moderator, Array messageSplited, char *c
         strdup(clientNamedPipe)
     );
 
-    // TODO HERE
-    makeConnection(&moderator->Connections, client, NULL);
     printf("O cliente [%s:%s] conectou-se com sucesso.\n", messageSplited.array[MESSAGE], messageSplited.array[PROCESS_ID]);
 
+    char gameRoules[STRING_BUFFER] = "\0";
+    sendMessage(
+        client->gameChildProcess->writeDescriptor,
+        REQUEST_CODE_GET_GAME_ROULES
+    );
+    listeningResponse(
+        client->gameChildProcess->readDescriptor,
+        gameRoules
+    );
     sendMessage(
         clientFileDesciptor,
-        initMessageModel(moderator->pid, CONNECTION_ACCEPTED, "ARBITRO: Conectado com sucesso!")
+        initMessageModel(moderator->pid, CONNECTION_ACCEPTED, gameRoules)
     );
+
+    /*sendMessage(
+        clientFileDesciptor,
+        initMessageModel(moderator->pid, CONNECTION_ACCEPTED, "Arbitro: Conectado com sucesso")
+    );*/
 }
 
 // TODO
@@ -296,6 +307,27 @@ void displayClients(Moderator *Moderator) {
     }
 
     Moderator->connectedClients = auxConnectedClients;
+    printf("#########################\n");
+}
+
+void displayGames(Moderator *Moderator) {
+    GameApps *auxCreatedGames = Moderator->gameApps;
+
+    printf("\n##### Jogos Criados #####\n");
+    printf("Total: %i\n", Moderator->gameAppsLength);
+
+    while (Moderator->gameApps != NULL) {
+
+        printf("Nome: %s | Path: %s\n",
+               Moderator->gameApps->name,
+               Moderator->gameApps->path
+        );
+
+        Moderator->gameApps = Moderator->gameApps->prox;
+    }
+
+    Moderator->gameApps = auxCreatedGames;
+    printf("#########################\n");
 }
 
 // TODO verify if the gameDirExists
@@ -327,7 +359,7 @@ void printInitialInformation(int waiting_time, int duration) {
 }
 
 void sendSignal(int sig, int targetId){
-    if(targetId == 0){
+    if(targetId != 0){
         if(sig == SIGTERM){
             kill(targetId, SIGTERM);
         }else if (sig == SIGUSR1){

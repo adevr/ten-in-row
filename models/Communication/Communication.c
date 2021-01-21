@@ -26,7 +26,7 @@ char *initMessageModel(int PID, int messageCode, char *message) {
 
 void listeningResponse(int fileDescriptor, char *buffer) {
     int messageLength = 0;
-
+    
     read(fileDescriptor, &messageLength, sizeof(int));
     read(fileDescriptor, buffer, messageLength);
 }

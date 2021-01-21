@@ -17,6 +17,8 @@ int getNumberDigits(int number);
 char *getNumberInString(int number);
 long stringToNumber(char *string);
 void freeTheArrayAllocatedMemory(Array *array);
-
+void printContent(char *stringToDisplay, int fdToCompare);
+void initRandom();
+int intUniformRnd(int min, int max);
 #endif
 

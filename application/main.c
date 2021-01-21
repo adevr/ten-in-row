@@ -8,26 +8,35 @@
 #include <stdlib.h>
 #include <string.h>
 #include <signal.h>
+
 #include "Game.h"
+#include "../helpers/helpers.h"
+#include "../models/Communication/Communication.h"
 
 Game *game;
 
-void welcomeMenu() {
-    printf("\n\t ############################################ \n");
-    printf("\t ###### Bem vindo ao jogo 10-em-linha! ###### \n");
-    printf("\t ##### O jogo favorito da tua infancia ###### \n");
-    printf("\t ############################################ \n");
-    printf("\t ################## Regras ################## \n");
-    printf("\t #      -> 1 Linha completa = 1 ponto       # \n");
-    printf("\t #      -> Maximo de 2 utilizadores         # \n");
-    printf("\t #      -> 2 tipos de caracteres: `*` `º`   # \n");
-    printf("\t #      -> Uma jogada de cada vez           # \n");
-    printf("\t ############################################ \n");
-    printf("\t # O jogo termina, assim que acabar o tempo # \n");
-    printf("\t ############################################ \n");
-    printf("\t ##### (A) Avançar ########## (S) Sair ###### \n");
-    printf("\t ############################################ \n");
-    printf("\t ##### Selecione opção: ");
+void getArgsValues(int argc, char *argv[]) {
+    if (argc == 1) {
+        return;
+    }
+
+    if (argc == 2) {
+        perror("Incorrect set of arguments passed to the program.\n"
+        "Must use: ./{games program} {file descriptor to read} {file descriptor to write}\n");
+
+        exit(0);
+    }
+
+    game->readFd = stringToNumber(argv[1]);
+    game->writeFd = stringToNumber(argv[2]);
+}
+
+void setFileDescriptors() {
+    dup2(game->readFd, 0);
+    dup2(game->writeFd, 1);
+
+    close(game->readFd);
+    close(game->writeFd);
 }
 
 
@@ -35,70 +44,42 @@ void gameSig_handler(int signo){
     if (signo == SIGUSR1){
         // todo: get sig user 1
         // send the points to the client
-        printf("\n PID: %i", game->PID);
-        printf("\n POINTS: %i \n", game->points);
+        
+        //printf("\n PID: %i", game->PID);
+        //printf("\n POINTS: %i \n", game->points);
+        
         exit(game->points);
     }
-
-    if (signo == SIGTERM || signo == SIGINT){
-        exit(0);
-    }
-
 }
 
+/*
+    TODO 
+        if there are 0 arguments, run the game normaly
+        if not, the game should work by instructions:
+            -> getWelcomeMessage;
+            -> startGame;
+
+*/
 int main(int argc, char *argv[]) {
-    int column = 0;
-    int playsCounter = 1;
-    char selection;
-
-    welcomeMenu();
-
-    scanf("%c", &selection);
-    if(selection != 'A' && selection != 'a'){
-        exit(1);
-    }
+    int runningAsChildProcess = 0;
 
     game = createGame();
-    initGame(game);
-    
+    getArgsValues(argc, argv);
+
     if (signal(SIGUSR1, gameSig_handler) == (sig_t)SIG_ERR)
-        printf("\ncan't catch SIGINT\n");
+        perror("\ncan't catch SIGUSR1\n");
 
-    //printf("%i", game->PID);
-
-    if (signal(SIGINT, gameSig_handler) == (sig_t)SIG_ERR)
-        printf("\ncan't catch SIGINT\n");
-
-
-    while (1) {
-        
-        char* pieceToPlay = (playsCounter % 2 == 0) ? PIECE_O : PIECE_X;
-
-        showGameTable(game);
-
-        if(strcmp (pieceToPlay, PIECE_X) == 0){
-            printf("\t # Peça: "); 
-            printf("\e[38;5;82m");
-            printf("%s", pieceToPlay);
-            printf("\033[0m|");
-            printf(". Coluna (1 - %i): ", NR_OF_COLUMNS);
-        }else{
-            printf("\t # Peça: "); 
-            printf("\033[22;34m");
-            printf("%s", pieceToPlay);
-            printf("\033[0m|");
-            printf(". Coluna (1 - %i): ", NR_OF_COLUMNS);
-        }
-
-        
-        scanf("%i", &column);
-        if(column == 0){
-            exit(1);
-        }
-        doPlay(game, pieceToPlay,column - 1);
-
-        playsCounter ++;
-        system("clear");
+    if (argc > 2) {
+        runningAsChildProcess = 1;
+        setFileDescriptors();
     }
+
+    if(!runningAsChildProcess) {
+        initGame(game);
+        return 0;
+    }
+
+    initGameChildProcess(game);
+
     return 0;
 }

@@ -6,7 +6,9 @@
 #ifndef TEN_IN_ROW_COMMUNICATION_H
 #define TEN_IN_ROW_COMMUNICATION_H
 
-#endif //TEN_IN_ROW_COMMUNICATION_H
+#define REQUEST_CODE_INIT_GAME "IG"
+#define REQUEST_CODE_GET_GAME_ROULES "GR"
+#define REQUEST_CODE_GET_GAME_INFO "GI"
 
 enum COMMUNICATION_PROTOTYPE_ENUM {
     PROCESS_ID,
@@ -29,3 +31,5 @@ char *initMessageModel(int PID, int messageCode, char *message);
 
 void listeningResponse(int descriptor, char *buffer);
 void sendMessage(int destDescriptor, char *message);
+
+#endif

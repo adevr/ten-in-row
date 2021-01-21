@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "helpers.h"
 #include "../constants/constants.h"
@@ -60,4 +61,22 @@ void freeTheArrayAllocatedMemory(Array *array) {
     //}
     free(array->array);
     array->length = 0;
+}
+
+void printContent(char *stringToDisplay, int fdToCompare) {
+    if (fdToCompare != -1) {
+        int stringLength = strlen(stringToDisplay);
+        printf("%i\n", stringLength);
+    }
+
+    printf("%s", stringToDisplay);
+    fflush(stdout);
+}
+
+void initRandom(){
+    srand(time(NULL));
+}
+
+int intUniformRnd(int min, int max){
+    return min + rand()%(max-min+1);
 }
