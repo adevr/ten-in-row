@@ -214,10 +214,8 @@ void initGameChildProcess(Game *game) {
     {
         char* pieceToPlay = (game->playsCounter % 2 == 0) ? PIECE_O : PIECE_X;
 
-        if (game->state) {
-            showGameTable(game);
-        }
-        
+        memset(requestMessage, 0, sizeof(requestMessage));
+
         scanf("%2s", requestMessage); 
 
         if (!game->state && !strcmp(requestMessage, REQUEST_CODE_GET_GAME_ROULES))
@@ -229,19 +227,31 @@ void initGameChildProcess(Game *game) {
         if (!game->state && !strcmp(requestMessage, REQUEST_CODE_INIT_GAME))
         {
             game->state = 1;
+            cleanBoard(game);
+            showGameTable(game);
             continue;
         }
 
         if (!strcmp(requestMessage, REQUEST_CODE_GET_GAME_INFO))
         {
-            printContent("REQUEST_CODE_GET_GAME_INFO", game->writeFd);
+            printContent("GAME INFO", game->writeFd);
             continue;
         }
 
         column = stringToNumber(requestMessage);
 
+        if (game->state && (column <= 0 || column > 10))
+        {
+            printContent("Coluna invalida. Apenas são aceites números entre 1 e 10", game->writeFd);
+            continue;
+        }
+        
         doPlay(game, pieceToPlay, column - 1);
         game->playsCounter ++;
+
+        if (game->state) {
+            showGameTable(game);
+        }
     }
     
 }

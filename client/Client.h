@@ -15,10 +15,17 @@ typedef struct Client {
 
     /*
      * 0 - Unconnected
-     * 1 - Connected with the moderator
+     * 1 - Connected to the moderator
+     * 2 - Connected waiting to start
      * */
     int status;
 } Client;
+
+enum CLIENT_STATUS_TYPES {
+    UNCONNECTED,
+    CONNECTED_WAITING_TO_START,
+    RUNNING
+};
 
 Client initClient();
 

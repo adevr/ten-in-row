@@ -20,7 +20,7 @@ void signalHandler(int signal) {
         printf("O campeonato foi encerrado.\n");
     }
 
-    if (client.status) {
+    if (client.status != UNCONNECTED) {
         sendMessage(client.pipeModeratorDescriptor, initMessageModel(client.pid, REQUEST_QUIT, "\0"));
     }
 
@@ -35,7 +35,6 @@ int main(int argc, char *argv[]) {
     client = initClient();
 
     signal(SIGTERM, signalHandler);
-    signal(SIGINT, signalHandler);
     signal(SIGUSR1, signalHandler);
 
     createClientPipe(&client);
@@ -45,10 +44,22 @@ int main(int argc, char *argv[]) {
         memset(userInput, 0, sizeof(userInput));
         memset(moderatorResponseMessage, 0, sizeof(moderatorResponseMessage));
 
-        if (client.status) {
+        if (client.status == RUNNING) {
             printf("\n$ ->: ");
             scanf("%29s", userInput);
-        } else {
+        }
+        else if (client.status == CONNECTED_WAITING_TO_START)
+        {
+            client.pipeDescriptor = open(client.pipePath, O_RDONLY);
+            printf("### A aguardar começo do campeonato....\n");
+
+            handleModeratorResponse(&client, moderatorResponseMessage);
+            close(client.pipeDescriptor);
+
+            client.status = RUNNING;
+            continue;
+        }
+        else {
             userNameInput(&client);
         }
 

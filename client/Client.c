@@ -24,7 +24,7 @@ Client initClient() {
 
     client.pipeDescriptor = -1;
     client.pipeModeratorDescriptor = -1;
-    client.status = 0;
+    client.status = UNCONNECTED;
 
     return client;
 }
@@ -68,7 +68,7 @@ void onExit(Client *client) {
 void handleUserInput(Client client, char *userInput) {
     int messageCode = GAME_MOVE;
 
-    if(!client.status) {
+    if(client.status == UNCONNECTED) {
         sendMessage(client.pipeModeratorDescriptor, initMessageModel(client.pid, CONNECTION_REQUEST, client.user));
         return;
     }
@@ -98,7 +98,7 @@ void handleModeratorResponse(Client *client, char *moderatorResponseMessage) {
     }
 
     if (messageCode == CONNECTION_ACCEPTED) {
-        client->status = 1;
+        client->status = CONNECTED_WAITING_TO_START;
     }
 
     printf("%s\n", responseArray.array[MESSAGE]);

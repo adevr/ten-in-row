@@ -32,7 +32,7 @@ typedef struct Moderator {
     char *pipePath;
     int pipeDescriptor;
     int anonymousPipeFd[2];
-    
+
     /*
         * 0 -> not started and waiting for players
         * 1 -> started
@@ -49,13 +49,11 @@ typedef struct Moderator {
 
 Moderator initModerator();
 
-void readEnvVariables();
-void printInitialInformation(int waiting_time, int duration);
-
 void *addGameApp(Moderator *Moderator, char *name, char *path);
 GameApps *getRandomGameApp(Moderator *Moderator);
 
 Client *addClient(Moderator *Moderator, int clientPid, char *user, char *pipeLocation);
+Client *getClientByPid(Moderator *Moderator, int clientPid);
 void removeClient(Moderator *Moderator, int clientPid);
 
 void handleClientRequest(Moderator *Moderator, char *message);
@@ -66,6 +64,9 @@ void handleConnectionRequest(Moderator *moderator, Array messageSplited, char *c
 void displayClients(Moderator *Moderator);
 void displayGames(Moderator *Moderator);
 
+void readEnvVariables();
+void printInitialInformation(int waiting_time, int duration);
 void sendSignal(int sig, int targetId);
 
+void startChampionship(Moderator *Moderator);
 #endif

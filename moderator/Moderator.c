@@ -143,6 +143,25 @@ Client *addClient(Moderator *Moderator, int clientPid, char *user, char *pipeLoc
     Moderator->connectedClientsLength ++;
     return &newConnectedClients->client;
 }
+
+Client *getClientByPid(Moderator *Moderator, int clientPid) {
+    ConnectedClients *auxConnectedClient = Moderator->connectedClients;
+    Client *auxClient;
+
+    while (Moderator->connectedClients != NULL)
+    {
+        if (clientPid == Moderator->connectedClients->client.pid) {
+            auxClient = &Moderator->connectedClients->client;
+            break;
+        }
+
+        Moderator->connectedClients = Moderator->connectedClients->prox;
+    }
+    
+    Moderator->connectedClients = auxConnectedClient;
+    return auxClient;
+}
+
 void removeClient(Moderator *Moderator, int clientPid) {
     ConnectedClients *auxConnectedClients = Moderator->connectedClients;
 
@@ -186,20 +205,19 @@ void handleCommand(Moderator *moderator, Array messageSplited, int clientFileDes
     sendMessage(clientFileDescriptor, initMessageModel(moderator->pid, INFO, response));
 }
 
-// TODO get a random game and connect to a client with "makeConnection"
 void handleConnectionRequest(Moderator *moderator, Array messageSplited, char *clientNamedPipe, int clientFileDesciptor) {
-    if (moderator->connectedClientsLength >= maxPlayers) {
+    if (moderator->championStatus) {
         sendMessage(
-            clientFileDesciptor,
-            initMessageModel(moderator->pid, CONNECTION_REFUSED, "Capacidade maxima de jogadores atingida.")
+                clientFileDesciptor,
+                initMessageModel(moderator->pid, CONNECTION_REFUSED, "O campeonato já foi iniciado.\n")
         );
         return;
     }
 
-    if (moderator->championStatus) {
+    if (moderator->connectedClientsLength >= maxPlayers) {
         sendMessage(
-                clientFileDesciptor,
-                initMessageModel(moderator->pid, CONNECTION_REFUSED, "O campeonato já foi iniciado.")
+            clientFileDesciptor,
+            initMessageModel(moderator->pid, CONNECTION_REFUSED, "Capacidade maxima de jogadores atingida.")
         );
         return;
     }
@@ -221,18 +239,22 @@ void handleConnectionRequest(Moderator *moderator, Array messageSplited, char *c
 
     printf("O cliente [%s:%s] conectou-se com sucesso.\n", messageSplited.array[MESSAGE], messageSplited.array[PROCESS_ID]);
 
-    char gameRoules[STRING_BUFFER] = "\0";
-    sendMessage(
-        client->gameChildProcess->writeDescriptor,
-        REQUEST_CODE_GET_GAME_ROULES
-    );
-    listeningResponse(
-        client->gameChildProcess->readDescriptor,
-        gameRoules
-    );
+    char gameRoulesBuffer[STRING_BUFFER] = "\0";
+
+    sendMessage(client->gameChildProcess->writeDescriptor, REQUEST_CODE_GET_GAME_ROULES);
+    listeningResponse(client->gameChildProcess->readDescriptor, gameRoulesBuffer);
+
+    /*communicateWithChildProcess(
+            client->gameChildProcess->writeDescriptor,
+            client->gameChildProcess->readDescriptor,
+            REQUEST_CODE_GET_GAME_ROULES,
+            gameRoulesBuffer
+        );*/
+
+
     sendMessage(
         clientFileDesciptor,
-        initMessageModel(moderator->pid, CONNECTION_ACCEPTED, gameRoules)
+        initMessageModel(moderator->pid, CONNECTION_ACCEPTED, gameRoulesBuffer)
     );
 
     /*sendMessage(
@@ -243,6 +265,8 @@ void handleConnectionRequest(Moderator *moderator, Array messageSplited, char *c
 
 // TODO
 void handleMessageByCode(Moderator *moderator, Array messageSplited, char *clientNamedPipe) {
+    Client *client;
+    char buffer[STRING_BUFFER] = "\0";
     int fd = open(clientNamedPipe, O_WRONLY);
 
     long messageCode = stringToNumber(messageSplited.array[MESSAGE_CODE]);
@@ -256,7 +280,19 @@ void handleMessageByCode(Moderator *moderator, Array messageSplited, char *clien
             handleConnectionRequest(moderator, messageSplited, clientNamedPipe, fd);
             break;
         case GAME_MOVE:
-            sendMessage(fd, initMessageModel(moderator->pid, INFO, "ARBITRO: É um movimento"));
+            client = getClientByPid(moderator, clientPid);
+            
+            //sendMessage(client->gameChildProcess->writeDescriptor, messageSplited.array[MESSAGE]);
+            //listeningResponse(client->gameChildProcess->readDescriptor, buffer);
+
+            communicateWithChildProcess(
+                client->gameChildProcess->writeDescriptor,
+                client->gameChildProcess->readDescriptor,
+                messageSplited.array[MESSAGE],
+                buffer
+            );
+
+            sendMessage(fd, initMessageModel(moderator->pid, INFO, buffer));
             break;
         case REQUEST_QUIT:
             removeClient(moderator, clientPid);
@@ -366,4 +402,33 @@ void sendSignal(int sig, int targetId){
             kill(targetId, SIGUSR1);
         }
     }
+}
+
+void startChampionship(Moderator *Moderator) {
+    ConnectedClients *auxConnectedClient = Moderator->connectedClients;
+    char buffer[STRING_BUFFER] = "\0";
+    int clientFd = 0;
+
+    Moderator->championStatus = 1;
+
+    while (Moderator->connectedClients != NULL)
+    {
+        sendMessage(Moderator->connectedClients->client.gameChildProcess->writeDescriptor, REQUEST_CODE_INIT_GAME);
+        listeningResponse(Moderator->connectedClients->client.gameChildProcess->readDescriptor, buffer);
+        /*/communicateWithChildProcess(
+            Moderator->connectedClients->client.gameChildProcess->writeDescriptor,
+            Moderator->connectedClients->client.gameChildProcess->readDescriptor,
+            REQUEST_CODE_INIT_GAME,
+            buffer
+        );*/
+        
+        clientFd = open(Moderator->connectedClients->client.pipeLocation, O_WRONLY);
+        sendMessage(clientFd, initMessageModel(Moderator->pid, INFO, buffer));
+        close(clientFd);
+
+        memset(buffer, 0, sizeof(buffer));
+
+        Moderator->connectedClients = Moderator->connectedClients->prox;
+    }
+    Moderator->connectedClients = auxConnectedClient;
 }

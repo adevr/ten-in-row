@@ -65,8 +65,9 @@ void freeTheArrayAllocatedMemory(Array *array) {
 
 void printContent(char *stringToDisplay, int fdToCompare) {
     if (fdToCompare != -1) {
-        int stringLength = strlen(stringToDisplay);
-        printf("%i\n", stringLength);
+        int stringLength = strlen(stringToDisplay) + 1;
+        printf("%i", stringLength);
+        fflush(stdout);
     }
 
     printf("%s", stringToDisplay);

@@ -97,6 +97,8 @@ void *commandReaderListener(void *pointerToData) {
 void *championshipTimerThread(void *pointerToData) {
     Moderator *Moderator = pointerToData;
 
+    pthread_join(Moderator->threads.championshipWaitingTimeThreadID, NULL);
+
     printf("\n## Campeonato iniciado!");fflush(stdout);
     sleep(championship_duration);
     printf("\n## O campeonato terminou!\n");fflush(stdout);
@@ -111,8 +113,12 @@ void *championshipTimerThread(void *pointerToData) {
 void *championshipWaitingTimeThread(void *pointerToData) {
     Moderator *Moderator = pointerToData;
 
+    printf("\n## Pelo menos 2 players foram conectados.\n");
+    printf("## O campeonato inicia em %i segundos.\n", waiting_time);
+
     sleep(waiting_time);
-    moderator.championStatus = 1;
+
+    startChampionship(Moderator);
 
     pthread_create(&moderator.threads.championshipTimerThreadID, NULL, championshipTimerThread, &moderator);
     pthread_exit(NULL);
@@ -146,7 +152,9 @@ void buildGamesApps(Moderator *moderator, int numberOfGamesToBuild) {
 }
 
 /* TODO
- * During the champion, on client request, get the client info by PID and redirect the info to the related game process.
+ * During the champion, on client request, get the client info by PID and redirect the info to the related game process. (WITH BUGS)
+ * Create a function to send and get info from anonymous pipes (Moderator <-> Game)
+ * (Client <-> Moderator) comm should follow the existing standard
  * 
  * Create the threads to:
  *      -> control the waiting time
@@ -179,7 +187,7 @@ int main(int argc, char *argv[]) {
         handleClientRequest(&moderator, responseBuffer);
 
         if (!moderator.championStatus && moderator.connectedClientsLength == 2) {
-            //pthread_create(&moderator.threads.championshipWaitingTimeThreadID, NULL, championshipWaitingTimeThread, &moderator);
+            pthread_create(&moderator.threads.championshipWaitingTimeThreadID, NULL, championshipWaitingTimeThread, &moderator);
         }
 
         memset(responseBuffer, 0, sizeof(responseBuffer));
