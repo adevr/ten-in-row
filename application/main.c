@@ -27,6 +27,7 @@ void getArgsValues(int argc, char *argv[]) {
         exit(0);
     }
 
+    game->name = strdup(argv[0]);
     game->readFd = stringToNumber(argv[1]);
     game->writeFd = stringToNumber(argv[2]);
 }
@@ -38,7 +39,6 @@ void setFileDescriptors() {
     close(game->readFd);
     close(game->writeFd);
 }
-
 
 void gameSig_handler(int signo){
     if (signo == SIGUSR1){

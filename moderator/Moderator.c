@@ -30,7 +30,7 @@ Moderator initModerator(){
     Moderator.connectedClients = NULL;
     Moderator.connectedClientsLength = 0;
 
-    Moderator.championStatus = 0;
+    Moderator.championStatus = WAITING_FOR_PLAYERS;
 
     Moderator.gameApps = NULL;
     Moderator.gameAppsLength = 0;
@@ -193,20 +193,24 @@ void removeClient(Moderator *Moderator, int clientPid) {
 }
 
 void handleCommand(Moderator *moderator, Array messageSplited, int clientFileDescriptor) {
+    int clientPID = stringToNumber(messageSplited.array[PROCESS_ID]);
+    Client *client = getClientByPid(moderator, clientPID);
+
     char *command = messageSplited.array[MESSAGE];
-    char *response;
+    char response[STRING_BUFFER] = "\0";
 
     if (!strcmp(command, "#mygame")){
-        response = "ARBITRO: Comando ainda em desenvolvimento";
+        communicateWithChildProcess(client->gameChildProcess->writeDescriptor, client->gameChildProcess->readDescriptor, REQUEST_CODE_GET_GAME_INFO, response);
     } else {
-        response = "ARBITRO: Comando indisponivel";
+        strcat(response, "ARBITRO: Comando indisponivel");
     }
 
     sendMessage(clientFileDescriptor, initMessageModel(moderator->pid, INFO, response));
+    memset(response, 0, sizeof(response));
 }
 
 void handleConnectionRequest(Moderator *moderator, Array messageSplited, char *clientNamedPipe, int clientFileDesciptor) {
-    if (moderator->championStatus) {
+    if (moderator->championStatus == CHAMPION_STARTED) {
         sendMessage(
                 clientFileDesciptor,
                 initMessageModel(moderator->pid, CONNECTION_REFUSED, "O campeonato já foi iniciado.\n")
@@ -409,11 +413,12 @@ void startChampionship(Moderator *Moderator) {
     char buffer[STRING_BUFFER] = "\0";
     int clientFd = 0;
 
-    Moderator->championStatus = 1;
+    Moderator->championStatus = CHAMPION_STARTED;
 
     while (Moderator->connectedClients != NULL)
     {
-        sendMessage(Moderator->connectedClients->client.gameChildProcess->writeDescriptor, REQUEST_CODE_INIT_GAME);
+        //sendMessage(Moderator->connectedClients->client.gameChildProcess->writeDescriptor, REQUEST_CODE_INIT_GAME);
+        sendMessageToChildProcess(Moderator->connectedClients->client.gameChildProcess->writeDescriptor, REQUEST_CODE_INIT_GAME);
         listeningResponse(Moderator->connectedClients->client.gameChildProcess->readDescriptor, buffer);
         /*/communicateWithChildProcess(
             Moderator->connectedClients->client.gameChildProcess->writeDescriptor,

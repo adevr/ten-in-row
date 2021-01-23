@@ -10,6 +10,8 @@
 #include <stdlib.h>
 #include <signal.h>
 #include "Client.h"
+
+#include "../helpers/helpers.h"
 #include "../constants/constants.h"
 #include "../models/Communication/Communication.h"
 
@@ -17,7 +19,20 @@ Client client;
 
 void signalHandler(int signal) {
     if (signal == SIGUSR1) {
-        printf("O campeonato foi encerrado.\n");
+        char messageBuffer[STRING_BUFFER] = "\0";
+
+        int myFd = open(client.pipePath, O_RDONLY);
+        listeningResponse(myFd, messageBuffer);
+        close(myFd);
+
+        Array responseArray = splitString(messageBuffer);
+
+        printf("\nO campeonato encerrou!\n"
+        "A sua pontuação final foi de %s pontos.\n", responseArray.array[MESSAGE]);
+    }
+
+    if (signal == SIGUSR2) {
+        printf("\nO campeonato foi interrompido.\n");
     }
 
     if (client.status != UNCONNECTED) {
@@ -36,6 +51,7 @@ int main(int argc, char *argv[]) {
 
     signal(SIGTERM, signalHandler);
     signal(SIGUSR1, signalHandler);
+    signal(SIGUSR2, signalHandler);
 
     createClientPipe(&client);
 

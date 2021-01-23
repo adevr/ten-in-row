@@ -7,6 +7,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <sys/stat.h>
+#include <sys/wait.h> 
 #include <fcntl.h>
 #include <unistd.h>
 #include <pthread.h>
@@ -58,7 +59,7 @@ void signalHandler(int signal) {
     while (moderator.connectedClients != NULL) {
         ConnectedClients *auxConnectedClients = moderator.connectedClients->prox;
 
-        kill(moderator.connectedClients->client.pid, SIGUSR1);
+        kill(moderator.connectedClients->client.pid, SIGUSR2);
         free(moderator.connectedClients);
 
         moderator.connectedClients = auxConnectedClients;
@@ -99,14 +100,36 @@ void *championshipTimerThread(void *pointerToData) {
 
     pthread_join(Moderator->threads.championshipWaitingTimeThreadID, NULL);
 
+    ConnectedClients *auxConnectedClient = Moderator->connectedClients;
+    int gamePoints = 0, clientFd;
+    char *gamePointsString;
+
     printf("\n## Campeonato iniciado!");fflush(stdout);
     sleep(championship_duration);
     printf("\n## O campeonato terminou!\n");fflush(stdout);
-    // TODO
-    //  Finish the games
-    //  Return the pontuation to the Clients
-    //  Disconnect the clients
-    //  Close the program
+
+    Moderator->championStatus = FINISHED;
+
+    while (Moderator->connectedClients != NULL) {
+        kill(Moderator->connectedClients->client.gameChildProcess->pid, SIGUSR1);
+        
+        wait(&gamePoints);
+
+        kill(Moderator->connectedClients->client.pid, SIGUSR1);
+
+        clientFd = open(Moderator->connectedClients->client.pipeLocation, O_WRONLY);
+
+        gamePoints = gamePoints/256;
+
+        gamePointsString = strdup(getNumberInString(gamePoints));
+        sendMessage(clientFd, initMessageModel(Moderator->pid, INFO, gamePointsString));
+        close(clientFd);
+
+        Moderator->connectedClients = Moderator->connectedClients->prox;
+    }
+
+    Moderator->connectedClients = auxConnectedClient;
+
     kill(Moderator->pid, SIGTERM);
 }
 
@@ -182,16 +205,18 @@ int main(int argc, char *argv[]) {
     printf("\t### A aguardar por clientes... ###\n");
     printf("-----------------------------------------------\n");
 
-    while (1) {
+    while (moderator.championStatus != FINISHED) {
         listeningResponse(moderator.pipeDescriptor, responseBuffer);
         handleClientRequest(&moderator, responseBuffer);
 
-        if (!moderator.championStatus && moderator.connectedClientsLength == 2) {
+        if (moderator.championStatus == WAITING_FOR_PLAYERS && moderator.connectedClientsLength == 2) {
             pthread_create(&moderator.threads.championshipWaitingTimeThreadID, NULL, championshipWaitingTimeThread, &moderator);
         }
 
         memset(responseBuffer, 0, sizeof(responseBuffer));
     }
+
+    pthread_join(moderator.threads.championshipTimerThreadID, NULL);
 
     close(moderator.pipeDescriptor);
     return 0;

@@ -32,6 +32,7 @@ char *initMessageModel(int PID, int messageCode, char *message);
 void listeningResponse(int descriptor, char *buffer);
 void sendMessage(int destDescriptor, char *message);
 
+void sendMessageToChildProcess(int writeFileDescriptor, char *message);
 void communicateWithChildProcess(int writeFileDescriptor, int readFileDescriptor, char *messageToSend, char *responseBuffer);
 
 #endif

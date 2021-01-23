@@ -12,6 +12,7 @@
 #include <unistd.h>
 
 #include "../helpers/helpers.h"
+#include "../constants/constants.h"
 #include "../models/Communication/Communication.h"
 
 Game *createGame()
@@ -168,6 +169,23 @@ void showGameTable(Game *game)
     printContent(buffer, game->writeFd);
 }
 
+void showGameInfo(Game *game) {
+    char buffer[STRING_BUFFER] = "\0";
+    char *pointsStr = getNumberInString(game->points);
+    char *playsStr = getNumberInString(game->playsCounter);
+
+    strcat(buffer, "\nNome do jogo:\t\t");
+    strcat(buffer, game->name);
+    strcat(buffer, "\nPontos atuais:\t\t");
+    strcat(buffer, pointsStr);
+    strcat(buffer, "\nJogadas executadas:\t");
+    strcat(buffer, playsStr);
+
+    printContent(buffer, game->writeFd);
+
+    memset(buffer, 0, sizeof(game));
+}
+
 void initGame(Game *game)
 {
     if (game == NULL)
@@ -201,20 +219,18 @@ void initGame(Game *game)
     }
 }
 
-// TODO REQUEST_CODE_GET_GAME_INFO Command!!
 void initGameChildProcess(Game *game) {
     if (game == NULL) {
         return;
     }
 
-    char requestMessage[2] = "\0";
-    int column = 0;
-
     while (1)
     {
         char* pieceToPlay = (game->playsCounter % 2 == 0) ? PIECE_O : PIECE_X;
+        char requestMessage[2] = "\0";
+        int column = 0;
 
-        memset(requestMessage, 0, sizeof(requestMessage));
+        fflush(stdin);
 
         scanf("%2s", requestMessage); 
 
@@ -234,13 +250,13 @@ void initGameChildProcess(Game *game) {
 
         if (!strcmp(requestMessage, REQUEST_CODE_GET_GAME_INFO))
         {
-            printContent("GAME INFO", game->writeFd);
+            showGameInfo(game);
             continue;
         }
 
         column = stringToNumber(requestMessage);
 
-        if (game->state && (column <= 0 || column > 10))
+        if (game->state && (column < 1 || column > 10))
         {
             printContent("Coluna invalida. Apenas são aceites números entre 1 e 10", game->writeFd);
             continue;

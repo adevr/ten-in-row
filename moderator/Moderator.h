@@ -14,6 +14,12 @@
 int maxPlayers;
 char *gameDir;
 
+enum CHAMPION_STATUS_TYPES {
+    WAITING_FOR_PLAYERS,
+    CHAMPION_STARTED,
+    FINISHED    
+};
+
 typedef struct GameApps {
     struct GameApps *prev;
     char *name;
