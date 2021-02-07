@@ -29,10 +29,16 @@ void signalHandler(int signal) {
 
         printf("\nO campeonato encerrou!\n"
         "A sua pontuação final foi de %s pontos.\n", responseArray.array[MESSAGE]);
+
+        onExit(&client);
+        return;
     }
 
     if (signal == SIGUSR2) {
-        printf("\nO campeonato foi interrompido.\n");
+        printf("\nFoste expulso do campeonato.\n");
+
+        onExit(&client);
+        return;
     }
 
     if (client.status != UNCONNECTED) {

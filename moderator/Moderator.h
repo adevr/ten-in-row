@@ -60,7 +60,10 @@ GameApps *getRandomGameApp(Moderator *Moderator);
 
 Client *addClient(Moderator *Moderator, int clientPid, char *user, char *pipeLocation);
 Client *getClientByPid(Moderator *Moderator, int clientPid);
+Client *getClientByName(Moderator *Moderator, char *userName);
 void removeClient(Moderator *Moderator, int clientPid);
+void kickPlayer(Moderator *Moderator, char *playerName);
+void changeClientCommunicationStatus(Moderator *Moderator, char *playerName, int communicationStatus);
 
 void handleClientRequest(Moderator *Moderator, char *message);
 void handleMessageByCode(Moderator *moderator, Array messageSplited, char *clientNamedPipe);

@@ -14,6 +14,7 @@ Client initClient(int clientPid, Game *game, char *user, char *pipeLocation) {
     client.pipeLocation = pipeLocation;
     client.pipeDescriptor = -1;
 
+    client.communicationsInterrupted = 0;
     client.gameChildProcess = game;
 
     return client;

@@ -146,11 +146,29 @@ Client *addClient(Moderator *Moderator, int clientPid, char *user, char *pipeLoc
 
 Client *getClientByPid(Moderator *Moderator, int clientPid) {
     ConnectedClients *auxConnectedClient = Moderator->connectedClients;
-    Client *auxClient;
+    Client *auxClient = NULL;
 
     while (Moderator->connectedClients != NULL)
     {
         if (clientPid == Moderator->connectedClients->client.pid) {
+            auxClient = &Moderator->connectedClients->client;
+            break;
+        }
+
+        Moderator->connectedClients = Moderator->connectedClients->prox;
+    }
+    
+    Moderator->connectedClients = auxConnectedClient;
+    return auxClient;
+}
+
+Client *getClientByName(Moderator *Moderator, char *userName) {
+    ConnectedClients *auxConnectedClient = Moderator->connectedClients;
+    Client *auxClient = NULL;
+
+    while (Moderator->connectedClients != NULL)
+    {
+        if (!strcmp(Moderator->connectedClients->client.userName, userName)){ 
             auxClient = &Moderator->connectedClients->client;
             break;
         }
@@ -190,6 +208,31 @@ void removeClient(Moderator *Moderator, int clientPid) {
 
     Moderator->connectedClients = auxConnectedClients;
     Moderator->connectedClientsLength--;
+}
+
+void kickPlayer(Moderator *Moderator, char *playerName) {
+    Client *client = getClientByName(Moderator, playerName);
+
+    if (client == NULL) {
+        printf("O player com o nome %s não existe.\n", playerName);
+        return;
+    }
+
+    kill(client->pid, SIGUSR2);
+    removeClient(Moderator, client->pid);
+
+    printf("\nO player %s foi expulso com sucesso.\n", playerName);
+}
+
+void changeClientCommunicationStatus(Moderator *Moderator, char *playerName, int communicationStatus) {
+    Client *client = getClientByName(Moderator, playerName);
+
+    if (client == NULL) {
+        printf("O player com o nome %s não existe.\n", playerName);
+        return;
+    }
+
+    client->communicationsInterrupted = communicationStatus;
 }
 
 void handleCommand(Moderator *moderator, Array messageSplited, int clientFileDescriptor) {
@@ -270,6 +313,7 @@ void handleConnectionRequest(Moderator *moderator, Array messageSplited, char *c
 // TODO
 void handleMessageByCode(Moderator *moderator, Array messageSplited, char *clientNamedPipe) {
     Client *client;
+    
     char buffer[STRING_BUFFER] = "\0";
     int fd = open(clientNamedPipe, O_WRONLY);
 
@@ -285,9 +329,13 @@ void handleMessageByCode(Moderator *moderator, Array messageSplited, char *clien
             break;
         case GAME_MOVE:
             client = getClientByPid(moderator, clientPid);
-            
             //sendMessage(client->gameChildProcess->writeDescriptor, messageSplited.array[MESSAGE]);
             //listeningResponse(client->gameChildProcess->readDescriptor, buffer);
+
+            if (client->communicationsInterrupted) {
+                sendMessage(fd, initMessageModel(moderator->pid, INFO, "Está com as comunicações interrompidas!\n"));
+                break;
+            }
 
             communicateWithChildProcess(
                 client->gameChildProcess->writeDescriptor,

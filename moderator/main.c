@@ -70,12 +70,14 @@ void signalHandler(int signal) {
     exit(0);
 }
 
+// TODO commands with prints
 void *commandReaderListener(void *pointerToData) {
     Moderator *Moderator = pointerToData;
     char command[INPUT_BUFFER];
 
     while (1) {
         scanf("%29s", command);
+        int commandLength = strlen(command);
 
         if (!strcmp(command, "players")) {
             displayClients(Moderator);
@@ -83,11 +85,29 @@ void *commandReaderListener(void *pointerToData) {
         else if (!strcmp(command, "games")) {
             displayGames(Moderator);
         }
-        else if (!strcmp(command, "quit")) {
-            kill(moderator.pid, SIGTERM);
-        }
         else if (command[0] == 'k') {
-            printf("Kickar jogador\n");
+            char playerName[29] = "\0";
+
+            strncpy(playerName, command + 1, commandLength-1);
+            kickPlayer(Moderator, playerName);
+        }
+        else if (command[0] == 's') {
+            char playerName[29] = "\0";
+
+            strncpy(playerName, command + 1, commandLength-1);
+            changeClientCommunicationStatus(Moderator, playerName, 1);
+        }
+        else if (command[0] == 'r') {
+            char playerName[29] = "\0";
+
+            strncpy(playerName, command + 1, commandLength-1);
+            changeClientCommunicationStatus(Moderator, playerName, 0);
+        }
+        else if (!strcmp(command, "end")) {
+            printf("Concluir o campeonato imediatamente\n");
+        }
+        else if (!strcmp(command, "exit")) {
+            kill(moderator.pid, SIGTERM);
         }
         else {
             printf("Comando indisponivel\n");
@@ -197,7 +217,7 @@ int main(int argc, char *argv[]) {
     buildGamesApps(&moderator, numberOfGames);
     
     signal(SIGTERM, signalHandler);
-    signal(SIGINT, signalHandler);
+    //signal(SIGINT, signalHandler);
 
     pthread_create(&moderator.threads.administratorCommandsReaderThreadID, NULL, commandReaderListener, &moderator);
 

@@ -47,7 +47,7 @@ void gameSig_handler(int signo){
         
         //printf("\n PID: %i", game->PID);
         //printf("\n POINTS: %i \n", game->points);
-        
+
         exit(game->points);
     }
 }
