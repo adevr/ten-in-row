@@ -37,3 +37,26 @@ void sendMessage(int fileDescriptor, char *message) {
     write(fileDescriptor, &messageLength, sizeof(int));
     write(fileDescriptor, message, messageLength);
 }
+
+void sendMessageToChildProcess(int writeFileDescriptor, char *message) {
+    char *auxMessage = strdup(message);
+    
+    strcat(auxMessage, "\n");
+
+    int messageLength = strlen(auxMessage);
+
+    write(writeFileDescriptor, auxMessage, messageLength);
+
+}
+
+void communicateWithChildProcess(int writeFileDescriptor, int readFileDescriptor, char *messageToSend, char *responseBuffer) {
+    int messageLength = 0;
+    char messageLengthBuffer[STRING_BUFFER] = "\0";
+
+    sendMessageToChildProcess(writeFileDescriptor, messageToSend);
+    //write(writeFileDescriptor, messageToSend, strlen(messageToSend) + 1);
+    read(readFileDescriptor, messageLengthBuffer, sizeof(int));
+    
+    messageLength = stringToNumber(messageLengthBuffer);
+    read(readFileDescriptor, responseBuffer, messageLength);
+}

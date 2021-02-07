@@ -7,6 +7,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <sys/stat.h>
+#include <sys/wait.h> 
 #include <fcntl.h>
 #include <unistd.h>
 #include <pthread.h>
@@ -58,7 +59,7 @@ void signalHandler(int signal) {
     while (moderator.connectedClients != NULL) {
         ConnectedClients *auxConnectedClients = moderator.connectedClients->prox;
 
-        kill(moderator.connectedClients->client.pid, SIGUSR1);
+        kill(moderator.connectedClients->client.pid, SIGUSR2);
         free(moderator.connectedClients);
 
         moderator.connectedClients = auxConnectedClients;
@@ -69,12 +70,14 @@ void signalHandler(int signal) {
     exit(0);
 }
 
+// TODO commands with prints
 void *commandReaderListener(void *pointerToData) {
     Moderator *Moderator = pointerToData;
     char command[INPUT_BUFFER];
 
     while (1) {
         scanf("%29s", command);
+        int commandLength = strlen(command);
 
         if (!strcmp(command, "players")) {
             displayClients(Moderator);
@@ -82,11 +85,29 @@ void *commandReaderListener(void *pointerToData) {
         else if (!strcmp(command, "games")) {
             displayGames(Moderator);
         }
-        else if (!strcmp(command, "quit")) {
-            kill(moderator.pid, SIGTERM);
-        }
         else if (command[0] == 'k') {
-            printf("Kickar jogador\n");
+            char playerName[29] = "\0";
+
+            strncpy(playerName, command + 1, commandLength-1);
+            kickPlayer(Moderator, playerName);
+        }
+        else if (command[0] == 's') {
+            char playerName[29] = "\0";
+
+            strncpy(playerName, command + 1, commandLength-1);
+            changeClientCommunicationStatus(Moderator, playerName, 1);
+        }
+        else if (command[0] == 'r') {
+            char playerName[29] = "\0";
+
+            strncpy(playerName, command + 1, commandLength-1);
+            changeClientCommunicationStatus(Moderator, playerName, 0);
+        }
+        else if (!strcmp(command, "end")) {
+            printf("Concluir o campeonato imediatamente\n");
+        }
+        else if (!strcmp(command, "exit")) {
+            kill(moderator.pid, SIGTERM);
         }
         else {
             printf("Comando indisponivel\n");
@@ -97,22 +118,50 @@ void *commandReaderListener(void *pointerToData) {
 void *championshipTimerThread(void *pointerToData) {
     Moderator *Moderator = pointerToData;
 
+    pthread_join(Moderator->threads.championshipWaitingTimeThreadID, NULL);
+
+    ConnectedClients *auxConnectedClient = Moderator->connectedClients;
+    int gamePoints = 0, clientFd;
+    char *gamePointsString;
+
     printf("\n## Campeonato iniciado!");fflush(stdout);
     sleep(championship_duration);
     printf("\n## O campeonato terminou!\n");fflush(stdout);
-    // TODO
-    //  Finish the games
-    //  Return the pontuation to the Clients
-    //  Disconnect the clients
-    //  Close the program
+
+    Moderator->championStatus = FINISHED;
+
+    while (Moderator->connectedClients != NULL) {
+        kill(Moderator->connectedClients->client.gameChildProcess->pid, SIGUSR1);
+        
+        wait(&gamePoints);
+
+        kill(Moderator->connectedClients->client.pid, SIGUSR1);
+
+        clientFd = open(Moderator->connectedClients->client.pipeLocation, O_WRONLY);
+
+        gamePoints = gamePoints/256;
+
+        gamePointsString = strdup(getNumberInString(gamePoints));
+        sendMessage(clientFd, initMessageModel(Moderator->pid, INFO, gamePointsString));
+        close(clientFd);
+
+        Moderator->connectedClients = Moderator->connectedClients->prox;
+    }
+
+    Moderator->connectedClients = auxConnectedClient;
+
     kill(Moderator->pid, SIGTERM);
 }
 
 void *championshipWaitingTimeThread(void *pointerToData) {
     Moderator *Moderator = pointerToData;
 
+    printf("\n## Pelo menos 2 players foram conectados.\n");
+    printf("## O campeonato inicia em %i segundos.\n", waiting_time);
+
     sleep(waiting_time);
-    moderator.championStatus = 1;
+
+    startChampionship(Moderator);
 
     pthread_create(&moderator.threads.championshipTimerThreadID, NULL, championshipTimerThread, &moderator);
     pthread_exit(NULL);
@@ -146,7 +195,9 @@ void buildGamesApps(Moderator *moderator, int numberOfGamesToBuild) {
 }
 
 /* TODO
- * During the champion, on client request, get the client info by PID and redirect the info to the related game process.
+ * During the champion, on client request, get the client info by PID and redirect the info to the related game process. (WITH BUGS)
+ * Create a function to send and get info from anonymous pipes (Moderator <-> Game)
+ * (Client <-> Moderator) comm should follow the existing standard
  * 
  * Create the threads to:
  *      -> control the waiting time
@@ -166,7 +217,7 @@ int main(int argc, char *argv[]) {
     buildGamesApps(&moderator, numberOfGames);
     
     signal(SIGTERM, signalHandler);
-    signal(SIGINT, signalHandler);
+    //signal(SIGINT, signalHandler);
 
     pthread_create(&moderator.threads.administratorCommandsReaderThreadID, NULL, commandReaderListener, &moderator);
 
@@ -174,16 +225,18 @@ int main(int argc, char *argv[]) {
     printf("\t### A aguardar por clientes... ###\n");
     printf("-----------------------------------------------\n");
 
-    while (1) {
+    while (moderator.championStatus != FINISHED) {
         listeningResponse(moderator.pipeDescriptor, responseBuffer);
         handleClientRequest(&moderator, responseBuffer);
 
-        if (!moderator.championStatus && moderator.connectedClientsLength == 2) {
-            //pthread_create(&moderator.threads.championshipWaitingTimeThreadID, NULL, championshipWaitingTimeThread, &moderator);
+        if (moderator.championStatus == WAITING_FOR_PLAYERS && moderator.connectedClientsLength == 2) {
+            pthread_create(&moderator.threads.championshipWaitingTimeThreadID, NULL, championshipWaitingTimeThread, &moderator);
         }
 
         memset(responseBuffer, 0, sizeof(responseBuffer));
     }
+
+    pthread_join(moderator.threads.championshipTimerThreadID, NULL);
 
     close(moderator.pipeDescriptor);
     return 0;

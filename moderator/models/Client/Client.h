@@ -14,6 +14,8 @@ typedef struct Client {
     char *pipeLocation;
     int pipeDescriptor;
 
+    int communicationsInterrupted;
+
     Game *gameChildProcess;
 } Client;
 

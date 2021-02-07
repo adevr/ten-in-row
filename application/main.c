@@ -27,6 +27,7 @@ void getArgsValues(int argc, char *argv[]) {
         exit(0);
     }
 
+    game->name = strdup(argv[0]);
     game->readFd = stringToNumber(argv[1]);
     game->writeFd = stringToNumber(argv[2]);
 }
@@ -39,7 +40,6 @@ void setFileDescriptors() {
     close(game->writeFd);
 }
 
-
 void gameSig_handler(int signo){
     if (signo == SIGUSR1){
         // todo: get sig user 1
@@ -47,7 +47,7 @@ void gameSig_handler(int signo){
         
         //printf("\n PID: %i", game->PID);
         //printf("\n POINTS: %i \n", game->points);
-        
+
         exit(game->points);
     }
 }

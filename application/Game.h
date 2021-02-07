@@ -15,7 +15,8 @@
 
 typedef struct Game {
     int PID;
-    
+    char *name;
+
     int readFd;
     int writeFd;
 
@@ -44,6 +45,7 @@ void showGameTable(Game *game);
 void cleanBoard(Game *game);
 void initGame(Game *game);
 void initGameChildProcess(Game *game);
+void showGameInfo(Game *game);
 
 
 #endif //TENINROW_GAME_H

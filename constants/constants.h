@@ -9,7 +9,7 @@
 
 #define MAX_PLAYERS 30
 
-#define STRING_BUFFER 1500
+#define STRING_BUFFER 3500
 #define INPUT_BUFFER 30
 
 #define RM_TEMP_ROOT_PATH "rm -r /tmp/ten-in-row"

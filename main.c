@@ -13,7 +13,9 @@
 int main(int argc, char *argv[])
 {
     char option;
-
+    
+    // TODO Colocar num ficheiro bash!
+    // Colocar valores default caso n sejam carregadas
     setenv("GAMEDIR", "application/", 0);
     setenv("MAXPLAYERS", "30", 0);
 

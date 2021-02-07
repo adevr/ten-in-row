@@ -13,7 +13,7 @@ all: arbitro cliente #jogo
 	gcc -o teninrow -pthread constants/constants.h main.c
 
 clean:
-	#rm application/g_*
+	rm application/g_*
 	rm client/client
 	rm moderator/moderator
 	rm teninrow
