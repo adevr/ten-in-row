@@ -55,6 +55,8 @@ typedef struct Moderator {
 
 Moderator initModerator();
 
+void endChampionship(Moderator * Moderator);
+
 void *addGameApp(Moderator *Moderator, char *name, char *path);
 GameApps *getRandomGameApp(Moderator *Moderator);
 

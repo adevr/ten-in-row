@@ -35,7 +35,7 @@ void signalHandler(int signal) {
     }
 
     if (signal == SIGUSR2) {
-        printf("\nFoste expulso do campeonato.\n");
+        printf("\nFoste expulso do campeonatoo.\n");
 
         onExit(&client);
         return;
@@ -55,6 +55,7 @@ int main(int argc, char *argv[]) {
 
     client = initClient();
 
+    signal(SIGINT, signalHandler);
     signal(SIGTERM, signalHandler);
     signal(SIGUSR1, signalHandler);
     signal(SIGUSR2, signalHandler);

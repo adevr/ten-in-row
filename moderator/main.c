@@ -59,7 +59,10 @@ void signalHandler(int signal) {
     while (moderator.connectedClients != NULL) {
         ConnectedClients *auxConnectedClients = moderator.connectedClients->prox;
 
+        kill(moderator.connectedClients->client.gameChildProcess->pid, SIGUSR1);
         kill(moderator.connectedClients->client.pid, SIGUSR2);
+        
+        free(moderator.connectedClients->client.gameChildProcess);
         free(moderator.connectedClients);
 
         moderator.connectedClients = auxConnectedClients;
@@ -105,6 +108,7 @@ void *commandReaderListener(void *pointerToData) {
         }
         else if (!strcmp(command, "end")) {
             printf("Concluir o campeonato imediatamente\n");
+            endChampionship(Moderator);
         }
         else if (!strcmp(command, "exit")) {
             kill(moderator.pid, SIGTERM);
@@ -120,37 +124,11 @@ void *championshipTimerThread(void *pointerToData) {
 
     pthread_join(Moderator->threads.championshipWaitingTimeThreadID, NULL);
 
-    ConnectedClients *auxConnectedClient = Moderator->connectedClients;
-    int gamePoints = 0, clientFd;
-    char *gamePointsString;
-
-    printf("\n## Campeonato iniciado!");fflush(stdout);
+    printf("\n## Campeonato iniciado!\n");fflush(stdout);
     sleep(championship_duration);
     printf("\n## O campeonato terminou!\n");fflush(stdout);
 
-    Moderator->championStatus = FINISHED;
-
-    while (Moderator->connectedClients != NULL) {
-        kill(Moderator->connectedClients->client.gameChildProcess->pid, SIGUSR1);
-        
-        wait(&gamePoints);
-
-        kill(Moderator->connectedClients->client.pid, SIGUSR1);
-
-        clientFd = open(Moderator->connectedClients->client.pipeLocation, O_WRONLY);
-
-        gamePoints = gamePoints/256;
-
-        gamePointsString = strdup(getNumberInString(gamePoints));
-        sendMessage(clientFd, initMessageModel(Moderator->pid, INFO, gamePointsString));
-        close(clientFd);
-
-        Moderator->connectedClients = Moderator->connectedClients->prox;
-    }
-
-    Moderator->connectedClients = auxConnectedClient;
-
-    kill(Moderator->pid, SIGTERM);
+    endChampionship(Moderator);
 }
 
 void *championshipWaitingTimeThread(void *pointerToData) {
@@ -217,7 +195,7 @@ int main(int argc, char *argv[]) {
     buildGamesApps(&moderator, numberOfGames);
     
     signal(SIGTERM, signalHandler);
-    //signal(SIGINT, signalHandler);
+    signal(SIGINT, signalHandler);
 
     pthread_create(&moderator.threads.administratorCommandsReaderThreadID, NULL, commandReaderListener, &moderator);
 

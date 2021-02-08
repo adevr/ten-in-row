@@ -5,6 +5,8 @@
 
 #include <stddef.h>
 #include <stdlib.h>
+#include <sys/stat.h>
+#include <sys/wait.h> 
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -201,6 +203,7 @@ void removeClient(Moderator *Moderator, int clientPid) {
             Moderator->connectedClients->prev->prox = Moderator->connectedClients->prox;
         }
 
+        free(Moderator->connectedClients->client.gameChildProcess);
         free(Moderator->connectedClients);
 
         break;
@@ -349,7 +352,11 @@ void handleMessageByCode(Moderator *moderator, Array messageSplited, char *clien
         case REQUEST_QUIT:
             removeClient(moderator, clientPid);
             printf("\nO cliente [%s] abandonou.\n", messageSplited.array[PROCESS_ID]);
-            sendMessage(fd, initMessageModel(moderator->pid, INFO, "ARBITRO: Saiu com sucesso"));
+            
+            if (moderator->connectedClientsLength <= 1) {
+                endChampionship(moderator);
+            }
+            //sendMessage(fd, initMessageModel(moderator->pid, INFO, "ARBITRO: Saiu com sucesso"));
             break;
         default:
             sendMessage(fd, initMessageModel(moderator->pid, INFO, "ARBITRO: Código não reconhecido"));
@@ -484,4 +491,43 @@ void startChampionship(Moderator *Moderator) {
         Moderator->connectedClients = Moderator->connectedClients->prox;
     }
     Moderator->connectedClients = auxConnectedClient;
+}
+
+void endChampionship(Moderator * Moderator) {
+    ConnectedClients *auxConnectedClient;
+    int gamePoints = 0, clientFd;
+    char *gamePointsString;
+
+    Moderator->championStatus = FINISHED;
+
+    while (Moderator->connectedClients != NULL) {
+        kill(Moderator->connectedClients->client.gameChildProcess->pid, SIGUSR1);
+        
+        wait(&gamePoints);
+
+        gamePoints = gamePoints/256;
+        gamePointsString = strdup(getNumberInString(gamePoints));
+
+        kill(Moderator->connectedClients->client.pid, SIGUSR1);
+
+        clientFd = open(Moderator->connectedClients->client.pipeLocation, O_WRONLY);
+
+        sendMessage(clientFd, initMessageModel(Moderator->pid, INFO, gamePointsString));
+        close(clientFd);
+
+        auxConnectedClient = Moderator->connectedClients->prox;
+
+        free(Moderator->connectedClients->client.gameChildProcess);
+        free(Moderator->connectedClients);
+
+        Moderator->connectedClients = auxConnectedClient;
+        Moderator->connectedClientsLength --;
+    }
+    
+    // TODO 
+    /*
+        Resetar clients;
+        
+    */
+    kill(Moderator->pid, SIGTERM);
 }
