@@ -5,12 +5,13 @@ Para fazer a build do trabalho e necessario correr o seguinte comando
 
 * make all
 
-Para correr o programa e necessario correr o seguinte comando
+Para correr o programa e necessario correr os seguintes comandos
 
+* source ./setEnvVars.sh
 * ./teninrow
 
-Para correr o jogo e necessario correr o seguinte comando
-* ./application/game
+Para correr o cliente e necessario correr o seguinte comando
+* ./client/client
 
 
 
