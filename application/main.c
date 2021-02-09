@@ -21,8 +21,8 @@ void getArgsValues(int argc, char *argv[]) {
     }
 
     if (argc == 2) {
-        perror("Incorrect set of arguments passed to the program.\n"
-        "Must use: ./{games program} {file descriptor to read} {file descriptor to write}\n");
+        perror("Argumentos incorretos.\n"
+        "Deve de seguir a estrutura: ./{games program} {file descriptor to read} {file descriptor to write}\n");
 
         exit(0);
     }
@@ -42,24 +42,10 @@ void setFileDescriptors() {
 
 void gameSig_handler(int signo){
     if (signo == SIGUSR1){
-        // todo: get sig user 1
-        // send the points to the client
-        
-        //printf("\n PID: %i", game->PID);
-        //printf("\n POINTS: %i \n", game->points);
-
         exit(game->points);
     }
 }
 
-/*
-    TODO 
-        if there are 0 arguments, run the game normaly
-        if not, the game should work by instructions:
-            -> getWelcomeMessage;
-            -> startGame;
-
-*/
 int main(int argc, char *argv[]) {
     int runningAsChildProcess = 0;
 

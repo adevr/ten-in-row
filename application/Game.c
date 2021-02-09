@@ -3,8 +3,6 @@
  * Diogo Barbosa - 2018012425
  */
 
-// handle do sinal que o arbitro manda e efetuar ações
-
 #include "Game.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -48,9 +46,14 @@ void cleanBoard(Game *game)
 }
 
 void gameRoulesInfo(Game *game) {
-    printContent(
+        char buffer[STRING_BUFFER] = "\n\0";
+
+    strcat(buffer, "\t ############################################ \n");
+    strcat(buffer, "\t ###############   JOGO: ");
+    strcat(buffer, game->name);
+    strcat(buffer, "   ##############");
+    strcat(buffer, 
         "\n"
-        "\t ############################################ \n"
         "\t ###### Bem vindo ao jogo 10-em-linha! ###### \n"
         "\t ##### O jogo favorito da tua infancia ###### \n"
         "\t ############################################ \n"
@@ -61,12 +64,19 @@ void gameRoulesInfo(Game *game) {
         "\t ############################################ \n"
         "\t # O jogo termina, assim que acabar o tempo # \n"
         "\t ############################################ \n"
-    , game->writeFd);
+    );
+
+    printContent(buffer, game->writeFd);
 }
 
 void gameRoulesInfoMenu(Game *game) {
-    printContent(
-        "\n\t ############################################ \n"
+    char buffer[STRING_BUFFER] = "\n\0";
+
+    strcat(buffer, "\t ############################################ \n");
+    strcat(buffer, "\t ######### JOGO: ");
+    strcat(buffer, game->name);
+    strcat(buffer, 
+        "\n"
         "\t ###### Bem vindo ao jogo 10-em-linha! ###### \n"
         "\t ##### O jogo favorito da tua infancia ###### \n"
         "\t ############################################ \n"
@@ -80,7 +90,9 @@ void gameRoulesInfoMenu(Game *game) {
         "\t ##### (A) Avançar ########## (S) Sair ###### \n"
         "\t ############################################ \n"
         "\t ##### Selecione opção: "
-    , game->writeFd);
+    );
+
+    printContent(buffer, game->writeFd);
 }
 
 void doPlay(Game *game, char *piece, int column)
@@ -171,6 +183,7 @@ void showGameTable(Game *game)
 
 void showGameInfo(Game *game) {
     char buffer[STRING_BUFFER] = "\0";
+
     char *pointsStr = getNumberInString(game->points);
     char *playsStr = getNumberInString(game->playsCounter);
 
@@ -209,9 +222,6 @@ void initGame(Game *game)
         showGameTable(game);
         
         scanf("%i", &column);
-        /*if(column == 0){
-            exit(1);
-        }*/
         doPlay(game, pieceToPlay, column - 1);
 
         game->playsCounter ++;

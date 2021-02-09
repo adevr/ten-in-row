@@ -12,6 +12,9 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <signal.h>
+#include <dirent.h>
+#include <errno.h>
+#include <sys/types.h>
 
 #include "Moderator.h"
 #include "../helpers/helpers.h"
@@ -29,7 +32,7 @@ void setTempPaths() {
 
 void getArgsValues(int argc, char *argv[]) {
     if (argc < 5) {
-        perror("Incorrect set of arguments passed to the program. Must use: \n");
+        perror("Conjunto de argumentos incorreto. Deve de usar: \n");
         perror("./moderator -d {championship duration} -w {waiting time}\n");
         exit(0);
     }
@@ -55,16 +58,19 @@ void getArgsValues(int argc, char *argv[]) {
 void signalHandler(int signal) {
     close(moderator.pipeDescriptor);
     unlink(TEMP_MODERATOR_NAMED_PIPE);
-
+    system(RM_TEMP_ROOT_PATH);
+    
     while (moderator.connectedClients != NULL) {
         ConnectedClients *auxConnectedClients = moderator.connectedClients->prox;
 
+        kill(moderator.connectedClients->client.gameChildProcess->pid, SIGUSR1);
         kill(moderator.connectedClients->client.pid, SIGUSR2);
+        
+        free(moderator.connectedClients->client.gameChildProcess);
         free(moderator.connectedClients);
 
         moderator.connectedClients = auxConnectedClients;
     }
-    system(RM_TEMP_ROOT_PATH);
 
     moderator.connectedClients = NULL;
     exit(0);
@@ -90,21 +96,29 @@ void *commandReaderListener(void *pointerToData) {
 
             strncpy(playerName, command + 1, commandLength-1);
             kickPlayer(Moderator, playerName);
+            printf("O jogador %s foi expulso com sucesso.\n", playerName);
+
+            if (Moderator->connectedClientsLength <= 1 && Moderator->championStatus == 1) {
+                endChampionship(Moderator);
+            }
         }
         else if (command[0] == 's') {
             char playerName[29] = "\0";
 
             strncpy(playerName, command + 1, commandLength-1);
             changeClientCommunicationStatus(Moderator, playerName, 1);
+            printf("Comunicações do jogador %s interrompidas.\n", playerName);
         }
         else if (command[0] == 'r') {
             char playerName[29] = "\0";
 
             strncpy(playerName, command + 1, commandLength-1);
             changeClientCommunicationStatus(Moderator, playerName, 0);
+            printf("Comunicações do jogador %s reestabelecidas.\n", playerName);
         }
         else if (!strcmp(command, "end")) {
-            printf("Concluir o campeonato imediatamente\n");
+            printf("A concluir o campeonato imediatamente\n");
+            endChampionship(Moderator);
         }
         else if (!strcmp(command, "exit")) {
             kill(moderator.pid, SIGTERM);
@@ -120,37 +134,11 @@ void *championshipTimerThread(void *pointerToData) {
 
     pthread_join(Moderator->threads.championshipWaitingTimeThreadID, NULL);
 
-    ConnectedClients *auxConnectedClient = Moderator->connectedClients;
-    int gamePoints = 0, clientFd;
-    char *gamePointsString;
-
-    printf("\n## Campeonato iniciado!");fflush(stdout);
+    printf("\n## Campeonato iniciado!\n");
     sleep(championship_duration);
-    printf("\n## O campeonato terminou!\n");fflush(stdout);
+    printf("\n## O campeonato terminou!\n");
 
-    Moderator->championStatus = FINISHED;
-
-    while (Moderator->connectedClients != NULL) {
-        kill(Moderator->connectedClients->client.gameChildProcess->pid, SIGUSR1);
-        
-        wait(&gamePoints);
-
-        kill(Moderator->connectedClients->client.pid, SIGUSR1);
-
-        clientFd = open(Moderator->connectedClients->client.pipeLocation, O_WRONLY);
-
-        gamePoints = gamePoints/256;
-
-        gamePointsString = strdup(getNumberInString(gamePoints));
-        sendMessage(clientFd, initMessageModel(Moderator->pid, INFO, gamePointsString));
-        close(clientFd);
-
-        Moderator->connectedClients = Moderator->connectedClients->prox;
-    }
-
-    Moderator->connectedClients = auxConnectedClient;
-
-    kill(Moderator->pid, SIGTERM);
+    endChampionship(Moderator);
 }
 
 void *championshipWaitingTimeThread(void *pointerToData) {
@@ -167,42 +155,44 @@ void *championshipWaitingTimeThread(void *pointerToData) {
     pthread_exit(NULL);
 }
 
-void buildGamesApps(Moderator *moderator, int numberOfGamesToBuild) {
+/*
+    Função disponibilizada pelo professor Durães.
+*/
+void getGameApps(char *path)
+{
+    char *dirname;
+    char gamePath[STRING_BUFFER] = "\0";
+    DIR *dir;
+    struct dirent *entrada;
 
-    char command[100] = "\0";
-    char gameName[20] = "\0";
-    char gamePath[100] = "\0";
-
-    for (int i = 0; i < numberOfGamesToBuild && i < 1000; i++)
+    if ((dir = opendir(path)) == NULL)
+        perror("\nerro em opendir()");
+    else
     {
-        strcat(command, "make jogo GAME_NUMBER=");
-        strcat(command, getNumberInString(i+1));
+        while ((entrada = readdir(dir)) != NULL) {
 
-        strcat(gameName, "g_");
-        strcat(gameName, getNumberInString(i+1));
-        strcat(gamePath, "./");
-        strcat(gamePath, gameDir);
-        strcat(gamePath, gameName);
+            if (entrada->d_name[0] == 'g' && entrada->d_name[1] == '_')
+            {
+                strcat(gamePath, "./");
+                strcat(gamePath, gameDir);
+                strcat(gamePath, entrada->d_name);
 
-        addGameApp(moderator, gameName, gamePath);
+                addGameApp(&moderator, entrada->d_name, gamePath);
 
-        system(command);
+                memset(gamePath, 0, sizeof(gamePath));
+            }
+        }
 
-        memset(command, 0, sizeof(command));
-        memset(gameName, 0, sizeof(gameName));
-        memset(gamePath, 0, sizeof(gamePath));
+        closedir(dir);
+    }
+
+    if (moderator.gameAppsLength <= 0) {
+        printf("\nErro: Não é possivel executar o arbitro pois não existem jogos na pasta |%s|.\n"
+        "Execute o comando createSixGames.sh para criar 6 jogos.\n", gameDir);
+        kill(getpid(), SIGTERM);
     }
 }
 
-/* TODO
- * During the champion, on client request, get the client info by PID and redirect the info to the related game process. (WITH BUGS)
- * Create a function to send and get info from anonymous pipes (Moderator <-> Game)
- * (Client <-> Moderator) comm should follow the existing standard
- * 
- * Create the threads to:
- *      -> control the waiting time
- *      -> handle the CHAMPION duration and interrupt the games and clients when the counter fisnishes,sending the pontuation
- */
 int main(int argc, char *argv[]) {
     char responseBuffer[STRING_BUFFER] = "\0";
     int numberOfGames = 4;
@@ -214,10 +204,11 @@ int main(int argc, char *argv[]) {
     moderator = initModerator();
     moderator.pipeDescriptor = open(moderator.pipePath, O_RDWR);
 
-    buildGamesApps(&moderator, numberOfGames);
+    getGameApps(gameDir);
     
     signal(SIGTERM, signalHandler);
-    //signal(SIGINT, signalHandler);
+    signal(SIGINT, signalHandler);
+    signal(SIGALRM, signalHandler);
 
     pthread_create(&moderator.threads.administratorCommandsReaderThreadID, NULL, commandReaderListener, &moderator);
 

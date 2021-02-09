@@ -13,6 +13,7 @@
 #define INPUT_BUFFER 30
 
 #define RM_TEMP_ROOT_PATH "rm -r /tmp/ten-in-row"
+#define RM_TEMP_MODERATOR_PATH "rm -r /tmp/ten-in-row/moderator"
 #define TEMP_ROOT_PATH "/tmp/ten-in-row"
 #define TEMP_MODERATOR_PATH "/tmp/ten-in-row/moderator/"
 #define TEMP_CLIENTS_PATH "/tmp/ten-in-row/clients/"

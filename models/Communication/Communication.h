@@ -24,7 +24,8 @@ enum MESSAGE_CODE_TYPES {
     INVALID_USERNAME,
     CONNECTION_REQUEST,
     CONNECTION_ACCEPTED,
-    CONNECTION_REFUSED
+    CONNECTION_REFUSED,
+    RESTART
 };
 
 char *initMessageModel(int PID, int messageCode, char *message);

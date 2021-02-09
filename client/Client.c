@@ -38,6 +38,7 @@ void userNameInput(Client *client) {
 
     printf("\nInsira o seu nome de jogador: ");
     scanf("%29s", userName);
+    fflush(stdin);
 
     client->user = malloc(strlen(userName) * sizeof(char));
     strcpy(client->user, userName);
@@ -49,7 +50,7 @@ void createClientPipe(Client *client) {
     strcat(clientNamedPipePath, getNumberInString(client->pid));
 
     if(mkfifo(clientNamedPipePath,0777) == -1) {
-        perror("On client named pipe creation: The moderator isn't running at the moment");
+        perror("A criar o named pipe: O arbitro não está a correr no momento.");
         exit(1);
     }
 

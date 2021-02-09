@@ -13,11 +13,7 @@
 int main(int argc, char *argv[])
 {
     char option;
-    
-    // TODO Colocar num ficheiro bash!
-    // Colocar valores default caso n sejam carregadas
-    setenv("GAMEDIR", "application/", 0);
-    setenv("MAXPLAYERS", "30", 0);
+    int charFlag;
 
     printf("\t########## SISTEMA CHAMPION ##########\n");
     printf("Iniciar: \n");
@@ -26,16 +22,19 @@ int main(int argc, char *argv[])
 
     while (1) {
         printf("\nOPCAO $: ");
+
         scanf(" %c", &option);
+
+        while( ( charFlag = getchar()) != '\n' && charFlag != EOF);
 
         if (option == '1') {
             char duration[INPUT_BUFFER];
             char waitTime[INPUT_BUFFER];
 
-            printf("\nIntroduzir duracao do campeonato: ");
+            printf("\nIntroduzir duracao do campeonato(segundos): \n");
             scanf("%29s", duration);
 
-            printf("\nIntroduzir tempo de espera do campeonato: ");
+            printf("Introduzir tempo de espera do campeonato(segundos): \n");
             scanf("%29s", waitTime);
 
             execl("./moderator/moderator", "moderator", "-d", duration, "-w", waitTime, NULL);
