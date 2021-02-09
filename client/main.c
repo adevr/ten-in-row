@@ -21,21 +21,33 @@ void signalHandler(int signal) {
     if (signal == SIGUSR1) {
         char messageBuffer[STRING_BUFFER] = "\0";
 
-        int myFd = open(client.pipePath, O_RDONLY);
+        int myFd;
+        
+        myFd = open(client.pipePath, O_RDONLY);
         listeningResponse(myFd, messageBuffer);
         close(myFd);
 
         Array responseArray = splitString(messageBuffer);
+        printf("%s\n", responseArray.array[MESSAGE]);
+        memset(messageBuffer, 0, sizeof(messageBuffer));
 
-        printf("\nO campeonato encerrou!\n"
-        "A sua pontuação final foi de %s pontos.\n", responseArray.array[MESSAGE]);
+        long messageCode = stringToNumber(responseArray.array[MESSAGE_CODE]);
+
+        if ( messageCode == RESTART) {
+            close(client.pipeModeratorDescriptor);
+            close(client.pipeDescriptor);
+
+            client.status == UNCONNECTED;
+            return;
+        }
 
         onExit(&client);
         return;
+        
     }
 
     if (signal == SIGUSR2) {
-        printf("\nFoste expulso do campeonatoo.\n");
+        printf("\nFoste expulso do campeonato.\n");
 
         onExit(&client);
         return;
@@ -74,7 +86,8 @@ int main(int argc, char *argv[]) {
         else if (client.status == CONNECTED_WAITING_TO_START)
         {
             client.pipeDescriptor = open(client.pipePath, O_RDONLY);
-            printf("### A aguardar começo do campeonato....\n");
+            printf("### A aguardar o começo do campeonato....\nPrima ctrl + C para sair.\n");
+            fflush(stdin);
 
             handleModeratorResponse(&client, moderatorResponseMessage);
             close(client.pipeDescriptor);

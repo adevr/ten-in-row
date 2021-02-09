@@ -3,8 +3,6 @@
  * Diogo Barbosa - 2018012425
  */
 
-// handle do sinal que o arbitro manda e efetuar ações
-
 #include "Game.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -224,9 +222,6 @@ void initGame(Game *game)
         showGameTable(game);
         
         scanf("%i", &column);
-        /*if(column == 0){
-            exit(1);
-        }*/
         doPlay(game, pieceToPlay, column - 1);
 
         game->playsCounter ++;

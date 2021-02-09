@@ -12,12 +12,6 @@ typedef struct Client {
     char *pipePath;
     int pipeDescriptor;
     int pipeModeratorDescriptor;
-
-    /*
-     * 0 - Unconnected
-     * 1 - Connected to the moderator
-     * 2 - Connected waiting to start
-     * */
     int status;
 } Client;
 

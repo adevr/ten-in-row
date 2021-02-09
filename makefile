@@ -9,7 +9,7 @@ cliente:
 jogo:
 	gcc -o application/g_$(GAME_NUMBER) -pthread constants/constants.h helpers/helpers.c  models/Communication/Communication.c application/Game.c application/main.c
 
-all: arbitro cliente #jogo
+all: arbitro cliente jogo
 	gcc -o teninrow -pthread constants/constants.h main.c
 
 clean:

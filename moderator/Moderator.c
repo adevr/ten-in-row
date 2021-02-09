@@ -37,7 +37,12 @@ Moderator initModerator(){
     Moderator.gameApps = NULL;
     Moderator.gameAppsLength = 0;
 
-    mkfifo(Moderator.pipePath, 0777);
+    /*if(mkfifo(Moderator.pipePath,0777) == -1) {
+        perror("Já se encontra um arbitro a correr no momento. Tente mais tarde\n");
+        exit(1);
+    }*/
+    mkfifo(Moderator.pipePath,0777);
+
     pipe(Moderator.anonymousPipeFd);
 
     return Moderator;
@@ -50,7 +55,7 @@ void *addGameApp(Moderator *Moderator, char *name, char *path) {
     newCreatedGame = malloc(sizeof(GameApps));
 
     if (newCreatedGame == NULL) {
-        perror("On new game creation: Exception during memory allocation");
+        perror("A criar o jogo: Exceção ao alocar memoria");
         exit(1);
     }
 
@@ -84,7 +89,7 @@ void *addGameApp(Moderator *Moderator, char *name, char *path) {
 
 GameApps *getRandomGameApp(Moderator *Moderator) {
     if (Moderator->gameAppsLength <= 0) {
-        perror("Error: getRandomGameApp getting a random GameApp. There is no game created");
+        perror("Erro: getRandomGameApp: Não existem jogos criados");
     }
 
     int randomGameIndex = intUniformRnd(1, Moderator->gameAppsLength);
@@ -112,7 +117,7 @@ Client *addClient(Moderator *Moderator, int clientPid, char *user, char *pipeLoc
     newConnectedClients = malloc(sizeof(ConnectedClients));
 
     if (newConnectedClients == NULL) {
-        perror("On add client: Exception during memory allocation");
+        perror("Ao adicionar cliente: Exceção ao alocar memoria.");
         exit(1);
     }
     
@@ -203,6 +208,7 @@ void removeClient(Moderator *Moderator, int clientPid) {
             Moderator->connectedClients->prev->prox = Moderator->connectedClients->prox;
         }
 
+        kill(Moderator->connectedClients->client.gameChildProcess->pid, SIGUSR1);
         free(Moderator->connectedClients->client.gameChildProcess);
         free(Moderator->connectedClients);
 
@@ -223,8 +229,6 @@ void kickPlayer(Moderator *Moderator, char *playerName) {
 
     kill(client->pid, SIGUSR2);
     removeClient(Moderator, client->pid);
-
-    printf("\nO player %s foi expulso com sucesso.\n", playerName);
 }
 
 void changeClientCommunicationStatus(Moderator *Moderator, char *playerName, int communicationStatus) {
@@ -293,27 +297,12 @@ void handleConnectionRequest(Moderator *moderator, Array messageSplited, char *c
 
     sendMessage(client->gameChildProcess->writeDescriptor, REQUEST_CODE_GET_GAME_ROULES);
     listeningResponse(client->gameChildProcess->readDescriptor, gameRoulesBuffer);
-
-    /*communicateWithChildProcess(
-            client->gameChildProcess->writeDescriptor,
-            client->gameChildProcess->readDescriptor,
-            REQUEST_CODE_GET_GAME_ROULES,
-            gameRoulesBuffer
-        );*/
-
-
     sendMessage(
         clientFileDesciptor,
         initMessageModel(moderator->pid, CONNECTION_ACCEPTED, gameRoulesBuffer)
     );
-
-    /*sendMessage(
-        clientFileDesciptor,
-        initMessageModel(moderator->pid, CONNECTION_ACCEPTED, "Arbitro: Conectado com sucesso")
-    );*/
 }
 
-// TODO
 void handleMessageByCode(Moderator *moderator, Array messageSplited, char *clientNamedPipe) {
     Client *client;
     
@@ -353,7 +342,7 @@ void handleMessageByCode(Moderator *moderator, Array messageSplited, char *clien
             removeClient(moderator, clientPid);
             printf("\nO cliente [%s] abandonou.\n", messageSplited.array[PROCESS_ID]);
             
-            if (moderator->connectedClientsLength <= 1) {
+            if (moderator->connectedClientsLength <= 1 && moderator->championStatus == 1) {
                 endChampionship(moderator);
             }
             //sendMessage(fd, initMessageModel(moderator->pid, INFO, "ARBITRO: Saiu com sucesso"));
@@ -425,12 +414,11 @@ void displayGames(Moderator *Moderator) {
     printf("#########################\n");
 }
 
-// TODO verify if the gameDirExists
 void readEnvVariables() {
     char *tempMaxPlayer = getenv("MAXPLAYERS"), *tempGameDir = getenv("GAMEDIR");
 
     if (tempGameDir == NULL || tempMaxPlayer == NULL) {
-        printf("Error: MAXPLAYERS or GAMEDIR env variable are not defined **\n");
+        printf("Erro: As variáveis de ambiente MAXPLAYERS e GAMEDIR não estão definidas.\nExecute primeiro o ficheiro setEnvVars.sh através do comando source setEnvVars.sh antes de executar o Arbitro\n");
         exit(0);
     }
 
@@ -472,15 +460,8 @@ void startChampionship(Moderator *Moderator) {
 
     while (Moderator->connectedClients != NULL)
     {
-        //sendMessage(Moderator->connectedClients->client.gameChildProcess->writeDescriptor, REQUEST_CODE_INIT_GAME);
         sendMessageToChildProcess(Moderator->connectedClients->client.gameChildProcess->writeDescriptor, REQUEST_CODE_INIT_GAME);
         listeningResponse(Moderator->connectedClients->client.gameChildProcess->readDescriptor, buffer);
-        /*/communicateWithChildProcess(
-            Moderator->connectedClients->client.gameChildProcess->writeDescriptor,
-            Moderator->connectedClients->client.gameChildProcess->readDescriptor,
-            REQUEST_CODE_INIT_GAME,
-            buffer
-        );*/
         
         clientFd = open(Moderator->connectedClients->client.pipeLocation, O_WRONLY);
         sendMessage(clientFd, initMessageModel(Moderator->pid, INFO, buffer));
@@ -494,40 +475,65 @@ void startChampionship(Moderator *Moderator) {
 }
 
 void endChampionship(Moderator * Moderator) {
-    ConnectedClients *auxConnectedClient;
-    int gamePoints = 0, clientFd;
-    char *gamePointsString;
+    ConnectedClients *auxConnectedClient = Moderator->connectedClients;
+    int gamePoints = 0, winnerPoints = 0;
+    char *pointsString, *winnerName;
+    char messageBuffer[STRING_BUFFER] = "\0";
+
+    int points[Moderator->connectedClientsLength];
 
     Moderator->championStatus = FINISHED;
+    winnerPoints = gamePoints;
+    winnerName = strdup(Moderator->connectedClients->client.userName);
 
-    while (Moderator->connectedClients != NULL) {
+    for (int i = 0; i < Moderator->connectedClientsLength || Moderator->connectedClients != NULL; i++){
         kill(Moderator->connectedClients->client.gameChildProcess->pid, SIGUSR1);
         
         wait(&gamePoints);
 
         gamePoints = gamePoints/256;
-        gamePointsString = strdup(getNumberInString(gamePoints));
+
+        points[i] = gamePoints;
+
+        if (gamePoints > winnerPoints) {
+            winnerPoints = gamePoints;
+            winnerName = strdup(Moderator->connectedClients->client.userName);
+        }
+
+        free(Moderator->connectedClients->client.gameChildProcess);
+
+        Moderator->connectedClients = Moderator->connectedClients->prox;
+    }
+    
+    Moderator->connectedClients = auxConnectedClient;
+    auxConnectedClient = NULL;
+
+    for (int i = 0; i < Moderator->connectedClientsLength || Moderator->connectedClients != NULL; i++) {
+        memset(messageBuffer, 0, sizeof(messageBuffer));
+        
+        strcat(messageBuffer, "\nO vencedor do campeonato é o jogador ");
+        strcat(messageBuffer, winnerName);
+        strcat(messageBuffer, " com ");
+        strcat(messageBuffer, getNumberInString(winnerPoints));
+        strcat(messageBuffer, " pontos.\n");
+        strcat(messageBuffer, "A sua pontuação final foi de ");
+        strcat(messageBuffer, getNumberInString(points[i]));
+        strcat(messageBuffer, " pontos.\n");
 
         kill(Moderator->connectedClients->client.pid, SIGUSR1);
 
-        clientFd = open(Moderator->connectedClients->client.pipeLocation, O_WRONLY);
-
-        sendMessage(clientFd, initMessageModel(Moderator->pid, INFO, gamePointsString));
+        int clientFd = open(Moderator->connectedClients->client.pipeLocation, O_WRONLY);
+        sendMessage(clientFd, initMessageModel(Moderator->pid, INFO, messageBuffer));
         close(clientFd);
 
         auxConnectedClient = Moderator->connectedClients->prox;
 
-        free(Moderator->connectedClients->client.gameChildProcess);
         free(Moderator->connectedClients);
 
         Moderator->connectedClients = auxConnectedClient;
         Moderator->connectedClientsLength --;
     }
-    
-    // TODO 
-    /*
-        Resetar clients;
-        
-    */
+
+    memset(messageBuffer, 0, sizeof(messageBuffer));
     kill(Moderator->pid, SIGTERM);
 }
