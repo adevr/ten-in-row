@@ -54,7 +54,6 @@ void getArgsValues(int argc, char *argv[]) {
     printInitialInformation(waiting_time, championship_duration);
 }
 
-// TODO close the games (SIGUSR1), wait the points, send to the client and close the connections
 void signalHandler(int signal) {
     close(moderator.pipeDescriptor);
     unlink(TEMP_MODERATOR_NAMED_PIPE);
@@ -76,7 +75,6 @@ void signalHandler(int signal) {
     exit(0);
 }
 
-// TODO commands with prints
 void *commandReaderListener(void *pointerToData) {
     Moderator *Moderator = pointerToData;
     char command[INPUT_BUFFER];
