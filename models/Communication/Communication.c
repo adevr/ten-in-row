@@ -54,7 +54,6 @@ void communicateWithChildProcess(int writeFileDescriptor, int readFileDescriptor
     char messageLengthBuffer[STRING_BUFFER] = "\0";
 
     sendMessageToChildProcess(writeFileDescriptor, messageToSend);
-    //write(writeFileDescriptor, messageToSend, strlen(messageToSend) + 1);
     read(readFileDescriptor, messageLengthBuffer, sizeof(int));
     
     messageLength = stringToNumber(messageLengthBuffer);

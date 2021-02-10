@@ -321,8 +321,6 @@ void handleMessageByCode(Moderator *moderator, Array messageSplited, char *clien
             break;
         case GAME_MOVE:
             client = getClientByPid(moderator, clientPid);
-            //sendMessage(client->gameChildProcess->writeDescriptor, messageSplited.array[MESSAGE]);
-            //listeningResponse(client->gameChildProcess->readDescriptor, buffer);
 
             if (client->communicationsInterrupted) {
                 sendMessage(fd, initMessageModel(moderator->pid, INFO, "Está com as comunicações interrompidas!\n"));
@@ -345,7 +343,7 @@ void handleMessageByCode(Moderator *moderator, Array messageSplited, char *clien
             if (moderator->connectedClientsLength <= 1 && moderator->championStatus == 1) {
                 endChampionship(moderator);
             }
-            //sendMessage(fd, initMessageModel(moderator->pid, INFO, "ARBITRO: Saiu com sucesso"));
+
             break;
         default:
             sendMessage(fd, initMessageModel(moderator->pid, INFO, "ARBITRO: Código não reconhecido"));
@@ -418,7 +416,7 @@ void readEnvVariables() {
     char *tempMaxPlayer = getenv("MAXPLAYERS"), *tempGameDir = getenv("GAMEDIR");
 
     if (tempGameDir == NULL || tempMaxPlayer == NULL) {
-        printf("Erro: As variáveis de ambiente MAXPLAYERS e GAMEDIR não estão definidas.\nExecute primeiro o ficheiro setEnvVars.sh através do comando source setEnvVars.sh antes de executar o Arbitro\n");
+        printf("Erro: As variáveis de ambiente MAXPLAYERS e GAMEDIR não estão definidas.\nExecute primeiro o ficheiro setEnvVars.sh através do comando [source ./setEnvVars.sh] antes de executar o Arbitro\n");
         exit(0);
     }
 
